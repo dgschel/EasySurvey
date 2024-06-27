@@ -26,4 +26,8 @@ export class FormControlInputComponent implements OnInit {
   ngOnInit(): void {
     this.parentFormGroup.addControl(this.inputControlName(), this.nnfb.control<string>(''));
   }
+
+  ngOnDestroy(): void {
+    this.parentFormGroup.removeControl(this.inputControlName())
+  }
 }
