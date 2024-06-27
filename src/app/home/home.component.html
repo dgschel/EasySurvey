@@ -1,3 +1,13 @@
 <app-basic-card>
-  Hello
+  My basic Form control input test
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <app-form-control-input inputControlName="myNewFormControl">
+      <span slot="label" class="label-text">My Label</span>
+    </app-form-control-input>
+
+    <app-form-control-input inputControlName="myNewFormControl_test">
+      <span slot="label" class="label-text">My Label</span>
+    </app-form-control-input>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 </app-basic-card>
