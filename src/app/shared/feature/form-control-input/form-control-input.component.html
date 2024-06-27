@@ -1,1 +1,7 @@
-<p>form-control-input works!</p>
+<label [for]="inputControlName()" class="form-control w-full max-w-xs">
+  <div class="label">
+    <ng-content select="[slot='label']" />
+  </div>
+  <input type="text" [id]="inputControlName()" class="input input-bordered w-full max-w-xs"
+    [placeholder]="inputPlaceholder() || 'placeholder'" />
+</label>
