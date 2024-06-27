@@ -17,17 +17,17 @@ export class FormControlInputComponent implements OnInit {
   inputPlaceholder = input<string>();
   parentContainer = inject(ControlContainer);
 
-  private nnfb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.inputControlName(), this.nnfb.control<string>(''));
+    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>(''));
   }
 
   ngOnDestroy(): void {
-    this.parentFormGroup.removeControl(this.inputControlName())
+    this.parentFormGroup.removeControl(this.inputControlName());
   }
 }
