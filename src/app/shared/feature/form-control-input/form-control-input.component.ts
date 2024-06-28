@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, input } from '@angular/core';
-import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-form-control-input',
@@ -15,6 +15,7 @@ import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule } from '@
 export class FormControlInputComponent implements OnInit {
   inputControlName = input.required<string>();
   inputPlaceholder = input<string>();
+  inputValidatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
 
   private fb = inject(FormBuilder);
@@ -24,7 +25,7 @@ export class FormControlInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>(''));
+    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>('', { validators: this.inputValidatorsFn() }));
   }
 
   ngOnDestroy(): void {
