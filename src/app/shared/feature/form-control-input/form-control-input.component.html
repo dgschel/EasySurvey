@@ -3,8 +3,10 @@
     <ng-content select="[slot='label']" />
   </div>
   <input type="text" [id]="inputControlName()" [formControlName]="inputControlName()"
-    class="input input-bordered input-sm w-full max-w-xs" [placeholder]="inputPlaceholder() || 'placeholder'" />
-  @if (control?.errors) {
-  {{control?.errors | json}}
+    class="input input-bordered input-sm w-full max-w-xs" [placeholder]="inputPlaceholder() || 'placeholder'"
+    [ngClass]="{'input-error': control?.errors}" />
+
+  @for (message of validationErrors; track $index) {
+  <app-form-control-error [message]="message" />
   }
 </label>

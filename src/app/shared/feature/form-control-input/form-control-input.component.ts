@@ -31,7 +31,7 @@ export class FormControlInputComponent implements OnInit {
     return this.parentFormGroup.get(this.inputControlName());
   }
 
-  get validationErrors() {
+  get validationErrors(): string[] | null {
     const errors = this.control?.errors
     return errors ? Object.values(errors) : null;
   }
