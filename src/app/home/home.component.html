@@ -3,7 +3,7 @@
     <app-basic-card>
       <h2 class="text-base font-semibold leading-8">Profile</h2>
       <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
-      <app-form-control-input inputControlName="first">
+      <app-form-control-input inputControlName="first" [inputValidatorsFn]="fieldValidators">
         <span slot="label" class="label-text">My Label</span>
       </app-form-control-input>
     </app-basic-card>
