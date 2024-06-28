@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
-import { customRequiredValidator } from '../shared/form-validator/required';
+import { customRequiredValidator, customMinLengthValidator } from '../shared/form-validator/validators';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { FormControlInputComponent } from '../shared/feature/form-control-input/form-control-input.component';
 
@@ -15,7 +15,7 @@ import { FormControlInputComponent } from '../shared/feature/form-control-input/
 })
 export class HomeComponent {
   form: FormGroup = new FormGroup({});
-  fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator()];
+  fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator(), customMinLengthValidator(3)];
 
   submit() {
     console.log(this.form);
