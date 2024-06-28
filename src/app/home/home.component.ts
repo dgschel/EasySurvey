@@ -15,7 +15,7 @@ import { FormControlInputComponent } from '../shared/feature/form-control-input/
 })
 export class HomeComponent {
   form: FormGroup = new FormGroup({});
-  fieldValidators: ValidatorFn[] = [customRequiredValidator()];
+  fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator()];
 
   submit() {
     console.log(this.form);
