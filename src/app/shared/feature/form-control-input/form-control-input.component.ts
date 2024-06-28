@@ -1,10 +1,11 @@
 import { Component, OnInit, inject, input } from '@angular/core';
-import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { JsonPipe, NgClass, NgIf } from '@angular/common';
+import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-form-control-input',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, JsonPipe],
   templateUrl: './form-control-input.component.html',
   styleUrl: './form-control-input.component.scss',
   viewProviders: [{ // viewProviders is used to provide the parent form group to the child component. Useful for content projection
@@ -22,6 +23,10 @@ export class FormControlInputComponent implements OnInit {
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
+  }
+
+  get control() {
+    return this.parentFormGroup.get(this.inputControlName());
   }
 
   ngOnInit(): void {

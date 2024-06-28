@@ -4,4 +4,7 @@
   </div>
   <input type="text" [id]="inputControlName()" [formControlName]="inputControlName()"
     class="input input-bordered input-sm w-full max-w-xs" [placeholder]="inputPlaceholder() || 'placeholder'" />
+  @if (control?.errors) {
+  {{control?.errors | json}}
+  }
 </label>
