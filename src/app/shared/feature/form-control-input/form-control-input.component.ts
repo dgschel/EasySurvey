@@ -37,8 +37,7 @@ export class FormControlInputComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>('', { validators: this.inputValidatorsFn() }));
+    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>('', { validators: this.inputValidatorsFn(), updateOn: 'blur' }));
   }
 
   ngOnDestroy(): void {
