@@ -5,7 +5,7 @@ import { Component, input } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <div class="p-1 text-sm text-error font-semibold">{{ message() }}</div>
+    <div class="mx-1 my-2 text-sm text-error font-semibold">{{ message() }}</div>
   `,
 })
 export class FormControlErrorComponent {
