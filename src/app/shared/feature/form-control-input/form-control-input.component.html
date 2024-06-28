@@ -6,10 +6,12 @@
 
   <input type="text" [id]="inputControlName()" [formControlName]="inputControlName()"
     class="input input-bordered input-sm w-full max-w-xs" [placeholder]="inputPlaceholder() || 'placeholder'"
-    [ngClass]="{'input-error': validationErrors}" />
+    [ngClass]="{'input-error': isInvalidAndTouchedOrDirty}" />
 
-  @for (message of validationErrors; track $index) {
-    <app-form-control-error [message]="message" />
+  @if (isInvalidAndTouchedOrDirty) {
+    @for (message of validationErrors; track $index) {
+      <app-form-control-error [message]="message" />
+    }
   }
 
 </label>

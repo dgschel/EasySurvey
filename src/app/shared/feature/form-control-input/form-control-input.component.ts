@@ -36,6 +36,10 @@ export class FormControlInputComponent implements OnInit {
     return errors ? Object.values(errors) : null;
   }
 
+  get isInvalidAndTouchedOrDirty() {
+    return this.control?.invalid && (this.control?.dirty || this.control?.touched);
+  }
+
   ngOnInit(): void {
     this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>('', { validators: this.inputValidatorsFn(), updateOn: 'blur' }));
   }
