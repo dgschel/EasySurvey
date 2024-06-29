@@ -1,15 +1,38 @@
 <div class="max-w-screen-sm mx-auto">
   <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
-    <app-basic-card>
+    <!-- <app-basic-card>
       <h2 class="text-base font-semibold leading-8">Profile</h2>
       <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
       <app-form-control-input inputControlName="first" [inputValidatorsFn]="fieldValidatorsFn">
         <span slot="label" class="label-text">My Label</span>
       </app-form-control-input>
-    </app-basic-card>
+    </app-basic-card> -->
 
+    <ng-container *ngFor="let section of sections; let i = index"
+      [ngTemplateOutlet]="section.type === 'text' ? customInput : customSelect"
+      [ngTemplateOutletContext]="{ index: i }"></ng-container>
+
+    <ng-template #customSelect>
+      <app-basic-card>
+        <p class="mt-1 text-sm leading-6">My Select Control</p>
+        <app-form-control-select [controlKey]="'test'"></app-form-control-select>
+      </app-basic-card>
+    </ng-template>
+
+    <ng-template #customInput let-index="index">
+      <app-basic-card>
+        <h2 class="text-base font-semibold leading-8">Profile</h2>
+        <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
+        <app-form-control-input [inputControlName]="'first' + index" [inputValidatorsFn]="fieldValidatorsFn">
+          <span slot="label" class="label-text">My Label</span>
+        </app-form-control-input>
+      </app-basic-card>
+    </ng-template>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 
+<button class="btn btn-secondary" (click)="add()">add new section</button>
+
 {{ form.value | json }}
+{{ sections | json }}
