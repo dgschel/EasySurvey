@@ -2,7 +2,8 @@
   <div class="label">
     <ng-content select="[slot='label']" />
   </div>
-  <select [id]="formControlKey()" ngDefaultControl [formControlName]="formControlKey()" class="select select-bordered select-sm">
+  <select [id]="formControlKey()" [formControlName]="formControlKey()"
+    class="select select-bordered select-sm" [ngClass]="{'select-error': isInvalidAndTouchedOrDirty}">
     <ng-content></ng-content>
   </select>
 </label>
