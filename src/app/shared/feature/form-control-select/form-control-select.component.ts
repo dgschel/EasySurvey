@@ -13,7 +13,7 @@ import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule } from '@
   }]
 })
 export class FormControlSelectComponent {
-  controlKey = input.required<string>();
+  formControlKey = input.required<string>();
   parentContainer = inject(ControlContainer);
 
   private fb = inject(FormBuilder);
@@ -23,10 +23,10 @@ export class FormControlSelectComponent {
   }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.controlKey(), this.fb.control(''));
+    this.parentFormGroup.addControl(this.formControlKey(), this.fb.control(''));
   }
 
   ngOnDestroy(): void {
-    this.parentFormGroup.removeControl(this.controlKey());
+    this.parentFormGroup.removeControl(this.formControlKey());
   }
 }

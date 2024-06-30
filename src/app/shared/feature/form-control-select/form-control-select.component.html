@@ -1,13 +1,8 @@
-<label [attr.for]="controlKey()" class="form-control w-full max-w-xs">
+<label [attr.for]="formControlKey()" class="form-control w-full max-w-xs">
   <div class="label">
     <ng-content select="[slot='label']" />
   </div>
-  <select [id]="controlKey()" [formControlName]="controlKey()" class="select select-bordered">
-    <option disabled selected>Pick one</option>
-    <option>Star Wars</option>
-    <option>Harry Potter</option>
-    <option>Lord of the Rings</option>
-    <option>Planet of the Apes</option>
-    <option>Star Trek</option>
+  <select [id]="formControlKey()" ngDefaultControl [formControlName]="formControlKey()" class="select select-bordered select-sm">
+    <ng-content></ng-content>
   </select>
 </label>
