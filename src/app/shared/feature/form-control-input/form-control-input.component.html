@@ -5,9 +5,10 @@
   </div>
 
   <input type="text" [id]="inputControlName()" [formControlName]="inputControlName()"
-    class="input input-bordered input-sm w-full max-w-xs" [placeholder]="inputPlaceholder() || 'placeholder'"
+    class="input input-bordered input-sm" [placeholder]="inputPlaceholder() || 'placeholder'"
     [ngClass]="{'input-error': isInvalidAndTouchedOrDirty}" />
 
+    <!-- TODO: create a reuseable error component  -->
   @if (isInvalidAndTouchedOrDirty) {
     @for (message of validationErrors; track $index) {
       <app-form-control-error [message]="message" />
