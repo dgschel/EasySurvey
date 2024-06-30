@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule, JsonPipe, NgForOf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
@@ -17,8 +17,10 @@ import { FormControlSelectComponent } from '../shared/feature/form-control-selec
 export class HomeComponent {
   form: FormGroup = new FormGroup({});
   fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator(), customMinLengthValidator(3)];
+  validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
 
-  sections: { type: string }[] = [{ type: 'text' }];
+  sections: FormSurveyElement[] = [];
+  options = [{ value: '1', label: 'Option 1' }, { value: '2', label: 'Option 2' }]
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -38,8 +40,10 @@ export class HomeComponent {
     return randomIndex + 1;
   }
 
-  add() {
-    this.sections.push({ type: this.getValue() === 1 ? 'text' : 'select' });
-
+  add(sectionType: FormSurveyElement) {
+    this.sections.push(sectionType);
   }
+
 }
+
+type FormSurveyElement = 'customInput' | 'customSelect';

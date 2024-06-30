@@ -1,21 +1,20 @@
-<div class="max-w-screen-sm mx-auto">
+<div class="grid grid-flow-col gap-4 max-w-screen-sm mx-auto" style="grid-template-columns: 1fr;">
+  <!-- TODO: Move to new component -->
   <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
-    <!-- <app-basic-card>
-      <h2 class="text-base font-semibold leading-8">Profile</h2>
-      <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
-      <app-form-control-input inputControlName="first" [inputValidatorsFn]="fieldValidatorsFn">
-        <span slot="label" class="label-text">My Label</span>
-      </app-form-control-input>
-    </app-basic-card> -->
-
     <ng-container *ngFor="let section of sections; let i = index"
-      [ngTemplateOutlet]="section.type === 'text' ? customInput : customSelect"
+      [ngTemplateOutlet]="section === 'customInput' ? customInput : customSelect"
       [ngTemplateOutletContext]="{ index: i }"></ng-container>
 
-    <ng-template #customSelect>
+    <ng-template #customSelect let-index="index">
       <app-basic-card>
         <p class="mt-1 text-sm leading-6">My Select Control</p>
-        <app-form-control-select [controlKey]="'test'"></app-form-control-select>
+        <app-form-control-select [formControlKey]="'my_select'  + index" [validatorsFn]="validatorRequiredFn">
+          <span slot="label" class="label-text">My Label</span>
+          <option value selected disabled>Select option</option>
+          @for (option of options; track $index) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </app-form-control-select>
       </app-basic-card>
     </ng-template>
 
@@ -30,9 +29,11 @@
     </ng-template>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  <div class="join join-vertical">
+    <button class="btn join-item" (click)="add('customInput')">Textbox</button>
+    <button class="btn join-item" (click)="add('customSelect')">Select</button>
+  </div>
 </div>
 
-<button class="btn btn-secondary" (click)="add()">add new section</button>
-
-{{ form.value | json }}
-{{ sections | json }}
+<div>values {{ form.value | json }}</div>
+<div>sections {{ sections | json }}</div>
