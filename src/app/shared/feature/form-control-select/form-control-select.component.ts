@@ -1,11 +1,12 @@
 import { Component, inject, input } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 
 @Component({
   selector: 'app-form-control-select',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, FormControlErrorComponent],
   templateUrl: './form-control-select.component.html',
   styleUrl: './form-control-select.component.scss',
   viewProviders: [{ // viewProviders is used to provide the parent form group to the child component. Useful for content projection
@@ -26,6 +27,11 @@ export class FormControlSelectComponent {
 
   get control() {
     return this.parentFormGroup.get(this.formControlKey());
+  }
+
+  get validationErrors(): string[] | null {
+    const errors = this.control?.errors
+    return errors ? Object.values(errors) : null;
   }
 
   get isInvalidAndTouchedOrDirty() {
