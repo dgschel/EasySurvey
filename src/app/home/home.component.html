@@ -2,6 +2,15 @@
   <!-- TODO: Move to new component -->
   <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
     <app-basic-card>
+      <h2 class="text-base font-semibold leading-8">Profile</h2>
+      <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
+      <app-form-control-input controlKeyName="my_input_key" [validatorsFn]="fieldValidatorsFn">
+        <span slot="label" class="label-text">My Label</span>
+      </app-form-control-input>
+    </app-basic-card>
+
+
+    <app-basic-card>
       <p class="mt-1 text-sm leading-6">My Select Control</p>
       <app-form-control-select controlKeyName="my_select_key" [validatorsFn]="validatorRequiredFn">
         <span slot="label" class="label-text">My Label</span>
