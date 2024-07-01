@@ -3,7 +3,7 @@ import { NgClass } from '@angular/common';
 import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { BaseFormControl } from '../../../core/model/base-form-control';
+import { FormSelectControl } from '../../class/form-select-control';
 
 @Component({
   selector: 'app-form-control-select',
@@ -41,11 +41,5 @@ export class FormControlSelectComponent {
 
   ngOnDestroy(): void {
     this.parentFormGroup.removeControl(this.controlKeyName());
-  }
-}
-
-class FormSelectControl extends BaseFormControl {
-  constructor(form: FormGroup, validatorsFn: ValidatorFn[] = [], controlName: string = 'customSelect') {
-    super(form, () => validatorsFn, controlName);
   }
 }
