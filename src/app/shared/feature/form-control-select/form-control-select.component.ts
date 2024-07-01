@@ -3,7 +3,7 @@ import { NgClass } from '@angular/common';
 import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { SurveyFormControl } from '../../class/form-select-control';
+import { SurveyFormControl } from '../../model/survey-form-control';
 
 @Component({
   selector: 'app-form-control-select',
