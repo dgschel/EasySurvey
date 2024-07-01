@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { JsonPipe, NgClass } from '@angular/common';
-import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
+import { SurveyFormControl } from '../../model/survey-form-control';
 
 @Component({
   selector: 'app-form-control-input',
@@ -16,35 +17,30 @@ import { FormControlErrorComponent } from '../../ui/form-control-error/form-cont
   }]
 })
 export class FormControlInputComponent implements OnInit {
-  inputControlName = input.required<string>();
+  controlKeyName = input.required<string>();
   inputPlaceholder = input<string>();
-  inputValidatorsFn = input<ValidatorFn[]>();
+  validatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
 
-  private fb = inject(FormBuilder);
+  surveyFormControl: SurveyFormControl | null = null;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
 
-  get control() {
-    return this.parentFormGroup.get(this.inputControlName());
+  get isFormControlValid() {
+    return this.surveyFormControl?.isValid
   }
 
-  get validationErrors(): string[] | null {
-    const errors = this.control?.errors
-    return errors ? Object.values(errors) : null;
-  }
-
-  get isInvalidAndTouchedOrDirty() {
-    return this.control?.invalid && (this.control?.dirty || this.control?.touched);
+  get validationErrors() {
+    return this.surveyFormControl?.validationErrors
   }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.inputControlName(), this.fb.control<string>('', { validators: this.inputValidatorsFn(), updateOn: 'blur' }));
+    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
   }
 
   ngOnDestroy(): void {
-    this.parentFormGroup.removeControl(this.inputControlName());
+    this.parentFormGroup.removeControl(this.controlKeyName());
   }
 }

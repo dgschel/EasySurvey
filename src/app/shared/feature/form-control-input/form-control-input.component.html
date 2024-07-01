@@ -1,15 +1,14 @@
-<label [attr.for]="inputControlName()" class="form-control w-full max-w-xs">
+<label [attr.for]="controlKeyName()" class="form-control w-full max-w-xs">
 
   <div class="label">
     <ng-content select="[slot='label']" />
   </div>
 
-  <input type="text" [id]="inputControlName()" [formControlName]="inputControlName()"
-    class="input input-bordered input-sm" [placeholder]="inputPlaceholder() || 'placeholder'"
-    [ngClass]="{'input-error': isInvalidAndTouchedOrDirty}" />
+  <input type="text" [id]="controlKeyName()" [formControlName]="controlKeyName()" class="input input-bordered input-sm"
+    [placeholder]="inputPlaceholder() || 'placeholder'" [ngClass]="{'input-error': isFormControlValid}" />
 
-    <!-- TODO: create a reuseable error component  -->
-  @if (isInvalidAndTouchedOrDirty) {
+  <!-- TODO: create a reuseable error component  -->
+  @if (isFormControlValid) {
     @for (message of validationErrors; track $index) {
       <app-form-control-error [message]="message" />
     }
