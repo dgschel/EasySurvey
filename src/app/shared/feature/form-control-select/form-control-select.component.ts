@@ -1,7 +1,9 @@
 import { Component, inject, input } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ControlContainer, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
+import { BaseFormControl } from '../../../core/model/base-form-control';
 
 @Component({
   selector: 'app-form-control-select',
@@ -15,34 +17,35 @@ import { FormControlErrorComponent } from '../../ui/form-control-error/form-cont
   }]
 })
 export class FormControlSelectComponent {
-  formControlKey = input.required<string>();
+  controlKeyName = input.required<string>();
   validatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
 
-  private fb = inject(FormBuilder);
+  formControl: FormSelectControl | undefined;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
 
-  get control() {
-    return this.parentFormGroup.get(this.formControlKey());
+  get isFormControlValid() {
+    return this.formControl?.isValid
   }
 
-  get validationErrors(): string[] | null {
-    const errors = this.control?.errors
-    return errors ? Object.values(errors) : null;
-  }
-
-  get isInvalidAndTouchedOrDirty() {
-    return this.control?.invalid && (this.control?.dirty || this.control?.touched);
+  get validationErrors() {
+    return this.formControl?.validationErrors
   }
 
   ngOnInit(): void {
-    this.parentFormGroup.addControl(this.formControlKey(), this.fb.control('', { validators: this.validatorsFn(), updateOn: 'blur' }));
+    this.formControl = new FormSelectControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
   }
 
   ngOnDestroy(): void {
-    this.parentFormGroup.removeControl(this.formControlKey());
+    this.parentFormGroup.removeControl(this.controlKeyName());
+  }
+}
+
+class FormSelectControl extends BaseFormControl {
+  constructor(form: FormGroup, validatorsFn: ValidatorFn[] = [], controlName: string = 'customSelect') {
+    super(form, () => validatorsFn, controlName);
   }
 }
