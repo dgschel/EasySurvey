@@ -3,7 +3,7 @@ import { NgClass } from '@angular/common';
 import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { FormSelectControl } from '../../class/form-select-control';
+import { SurveyFormControl } from '../../class/form-select-control';
 
 @Component({
   selector: 'app-form-control-select',
@@ -21,22 +21,22 @@ export class FormControlSelectComponent {
   validatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
 
-  formControl: FormSelectControl | undefined;
+  surveyFormControl: SurveyFormControl | null = null;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
 
   get isFormControlValid() {
-    return this.formControl?.isValid
+    return this.surveyFormControl?.isValid
   }
 
   get validationErrors() {
-    return this.formControl?.validationErrors
+    return this.surveyFormControl?.validationErrors
   }
 
   ngOnInit(): void {
-    this.formControl = new FormSelectControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
   }
 
   ngOnDestroy(): void {

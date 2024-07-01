@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 /**
  * Represents a base form control
  */
-interface IBaseFormControl {
+interface BaseFormControl {
   formGroup: FormGroup;
   validatorsFn: () => ValidatorFn[];
 }
@@ -11,7 +11,7 @@ interface IBaseFormControl {
 /**
  * Represents a base form control.
  */
-export class BaseFormControl implements IBaseFormControl {
+export class BaseSurveyFormControl implements BaseFormControl {
   /**
    * Initializes a new instance of the BaseFormControl class.
    * @param formGroup The parent form group.
