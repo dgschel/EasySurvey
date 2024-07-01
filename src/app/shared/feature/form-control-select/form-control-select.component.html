@@ -1,12 +1,12 @@
-<label [attr.for]="formControlKey()" class="form-control w-full max-w-xs">
+<label [attr.for]="controlKeyName()" class="form-control w-full max-w-xs">
   <div class="label">
     <ng-content select="[slot='label']" />
   </div>
-  <select [id]="formControlKey()" [formControlName]="formControlKey()" class="select select-bordered select-sm"
-    [ngClass]="{'select-error': isInvalidAndTouchedOrDirty}">
+  <select [id]="controlKeyName()" [name]="controlKeyName()" [formControlName]="controlKeyName()"
+    class="select select-bordered select-sm" [ngClass]="{'select-error': isFormControlValid}">
     <ng-content></ng-content>
   </select>
-  @if (isInvalidAndTouchedOrDirty) {
+  @if (isFormControlValid) {
     @for (message of validationErrors; track $index) {
       <app-form-control-error [message]="message" />
     }
