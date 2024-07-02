@@ -38,8 +38,6 @@ export class HomeComponent {
     }
   ];
 
-  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
-  @ViewChild('component') template!: TemplateRef<any>;
   options = [{ value: '1', label: 'Option 1' }, { value: '2', label: 'Option 2' }]
 
   constructor(private cdr: ChangeDetectorRef) { }
@@ -52,17 +50,14 @@ export class HomeComponent {
     console.log(this.form);
   }
 
-  add(component: FormControlType) {
-    const componentToCreate = formControlComponentMap[component];
+  addFormControl(controlType: FormControlType) {
+    const component = formControlComponentMap[controlType];
 
-    console.log({
-      component,
-      componentToCreate
-    })
     this.components.push({
-      component: componentToCreate,
+      component,
       inputs: {
         controlKeyName: Date.now().toString(),
+        validatorsFn: this.validatorRequiredFn,
       }
     })
   }
