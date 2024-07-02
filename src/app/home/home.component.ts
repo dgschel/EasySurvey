@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, InputSignal, TemplateRef, Type, ViewChild, ViewContainerRef, input, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { CommonModule, JsonPipe, NgForOf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
@@ -6,7 +6,7 @@ import { customRequiredValidator, customMinLengthValidator } from '../shared/for
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { FormControlInputComponent } from '../shared/feature/form-control-input/form-control-input.component';
 import { FormControlSelectComponent } from '../shared/feature/form-control-select/form-control-select.component';
-import { ComponentType, FormSurveyComponent, mappedComponents } from '../util/type/survey-type';
+import { DynamicComponentType, FormControlType, formControlComponentMap } from '../util/type/survey-type';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +20,7 @@ export class HomeComponent {
   fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator(), customMinLengthValidator(3)];
   validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
 
-  components: ComponentType<FormControlInputComponent | FormControlSelectComponent>[] = [
+  components: DynamicComponentType<FormControlInputComponent | FormControlSelectComponent>[] = [
     {
       component: FormControlInputComponent,
       inputs: {
@@ -52,8 +52,8 @@ export class HomeComponent {
     console.log(this.form);
   }
 
-  add(component: FormSurveyComponent) {
-    const componentToCreate = mappedComponents[component];
+  add(component: FormControlType) {
+    const componentToCreate = formControlComponentMap[component];
 
     console.log({
       component,
