@@ -20,6 +20,7 @@ export class FormControlSelectComponent {
   parentContainer = inject(ControlContainer);
   controlKeyName = input.required<string>();
   options = input<string[]>([]);
+  label = input<string>();
   validatorsFn = input<ValidatorFn[]>();
   surveyFormControl: SurveyFormControl | null = null;
 

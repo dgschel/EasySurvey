@@ -17,11 +17,11 @@ import { SurveyFormControl } from '../../model/survey-form-control';
   }]
 })
 export class FormControlInputComponent implements OnInit {
+  parentContainer = inject(ControlContainer);
   controlKeyName = input.required<string>();
+  label = input<string>();
   inputPlaceholder = input<string>();
   validatorsFn = input<ValidatorFn[]>();
-  parentContainer = inject(ControlContainer);
-
   surveyFormControl: SurveyFormControl | null = null;
 
   get parentFormGroup() {

@@ -1,9 +1,11 @@
 <label [attr.for]="controlKeyName()" class="form-control w-full max-w-xs">
 
-  <div class="label">
-    <ng-content select="[slot='label']" />
-  </div>
-
+  @if (label()) {
+    <div class="label">
+      <span class="label-text"></span>
+    </div>
+  }
+  
   <input type="text" [id]="controlKeyName()" [formControlName]="controlKeyName()" class="input input-bordered input-sm"
     [placeholder]="inputPlaceholder() || 'placeholder'" [ngClass]="{'input-error': isFormControlValid}" />
 

@@ -1,7 +1,11 @@
 <label [attr.for]="controlKeyName()" class="form-control w-full max-w-xs">
-  <div class="label">
-    <ng-content select="[slot='label']" />
-  </div>
+  
+  @if (label()) {
+    <div class="label">
+      <span class="label-text"></span>
+    </div>
+  }
+  
   <select [id]="controlKeyName()" [name]="controlKeyName()" [formControlName]="controlKeyName()"
     class="select select-bordered select-sm" [ngClass]="{'select-error': isFormControlValid}">
     <option value selected disabled>Select option</option>
@@ -9,9 +13,11 @@
     <option [value]="option">{{ option }}</option>
     }
   </select>
+  
   @if (isFormControlValid) {
-  @for (message of validationErrors; track $index) {
-  <app-form-control-error [message]="message" />
+    @for (message of validationErrors; track $index) {
+    <app-form-control-error [message]="message" />
+    }
   }
-  }
+  
 </label>
