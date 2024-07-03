@@ -2,10 +2,10 @@
 
   @if (label()) {
     <div class="label">
-      <span class="label-text"></span>
+      <span class="label-text">{{ label() }}</span>
     </div>
   }
-  
+
   <input type="text" [id]="controlKeyName()" [formControlName]="controlKeyName()" class="input input-bordered input-sm"
     [placeholder]="inputPlaceholder() || 'placeholder'" [ngClass]="{'input-error': isFormControlValid}" />
 
