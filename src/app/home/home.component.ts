@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { CommonModule, JsonPipe, NgForOf, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
+import { CommonModule, JsonPipe, NgComponentOutlet, NgForOf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { customRequiredValidator, customMinLengthValidator } from '../shared/form-validator/validators';
@@ -11,7 +11,7 @@ import { DynamicComponentType, FormControlType, formControlComponentMap } from '
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule, FormControlSelectComponent, NgForOf, NgTemplateOutlet, CommonModule, BasicCardComponent, FormControlInputComponent, JsonPipe, NgTemplateOutlet],
+  imports: [ReactiveFormsModule, FormControlSelectComponent, NgComponentOutlet, BasicCardComponent, FormControlInputComponent, JsonPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -19,6 +19,7 @@ export class HomeComponent {
   form: FormGroup = new FormGroup({});
   fieldValidatorsFn: ValidatorFn[] = [customRequiredValidator(), customMinLengthValidator(3)];
   validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
+  options = signal(['Option 1', 'Option 2', 'Option 3']);
 
   components: DynamicComponentType<FormControlInputComponent | FormControlSelectComponent>[] = [
     {
@@ -26,7 +27,7 @@ export class HomeComponent {
       inputs: {
         controlKeyName: 'customInput',
         inputPlaceholder: 'Input placeholder',
-        validatorsFn: this.fieldValidatorsFn
+        validatorsFn: this.fieldValidatorsFn,
       }
     },
     {
@@ -37,8 +38,6 @@ export class HomeComponent {
       }
     }
   ];
-
-  options = [{ value: '1', label: 'Option 1' }, { value: '2', label: 'Option 2' }]
 
   constructor(private cdr: ChangeDetectorRef) { }
 
@@ -58,6 +57,7 @@ export class HomeComponent {
       inputs: {
         controlKeyName: Date.now().toString(),
         validatorsFn: this.validatorRequiredFn,
+        label: 'New control'
       }
     })
   }
