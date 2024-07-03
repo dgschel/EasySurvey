@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
@@ -20,8 +20,8 @@ export class FormControlSelectComponent {
   controlKeyName = input.required<string>();
   validatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
-
   surveyFormControl: SurveyFormControl | null = null;
+  options = new FormArray<FormControl>([]);
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -38,6 +38,11 @@ export class FormControlSelectComponent {
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
   }
+
+  addNewOption() {
+    this.options.push(new FormControl(''))
+  }
+
 
   ngOnDestroy(): void {
     this.parentFormGroup.removeControl(this.controlKeyName());
