@@ -5,11 +5,10 @@
   <select [id]="controlKeyName()" [name]="controlKeyName()" [formControlName]="controlKeyName()"
     class="select select-bordered select-sm" [ngClass]="{'select-error': isFormControlValid}">
     <option value selected disabled>Select option</option>
-    @for (option of options.controls; track $index; let i=$index) {
-    <option [value]="i">{{ i }}</option>
+    @for (option of options(); track $index; let i=$index) {
+    <option [value]="option">{{ option }}</option>
     }
   </select>
-  <button type="button" class="btn" (click)="addNewOption()">add new</button>
   @if (isFormControlValid) {
   @for (message of validationErrors; track $index) {
   <app-form-control-error [message]="message" />
