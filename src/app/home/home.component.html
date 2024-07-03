@@ -1,49 +1,20 @@
 <div class="grid grid-flow-col gap-4 max-w-screen-sm mx-auto" style="grid-template-columns: 1fr;">
   <!-- TODO: Move to new component -->
   <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
-    <ng-template #input>
-      <app-basic-card>
-        <h2 [contentEditable]="true" class="text-base font-semibold leading-8">Profile</h2>
-        <p class="mt-1 text-sm leading-6">This information will be displayed publicly</p>
-        <app-form-control-input controlKeyName="my_input_key" [validatorsFn]="fieldValidatorsFn">
-          <span slot="label" class="label-text">My Label</span>
-        </app-form-control-input>
-      </app-basic-card>
-    </ng-template>
 
-    <ng-template #select>
-      <app-basic-card>
-        <p class="mt-1 text-sm leading-6">My Select Control</p>
-        <app-form-control-select controlKeyName="my_select_key" [validatorsFn]="validatorRequiredFn">
-          <span slot="label" class="label-text">My Label</span>
-          <option value selected disabled>Select option</option>
-          @for (option of options; track $index) {
-          <option [value]="option.value">{{ option.label }}</option>
-          }
-        </app-form-control-select>
-      </app-basic-card>
-    </ng-template>
-
-    <!-- 
-    <ng-container [ngComponentOutlet]="c"
-      [ngComponentOutletInputs]="{controlKeyName: 'test', validatorsFn: fieldValidatorsFn}" /> -->
-    <!-- 
-    <ng-container *ngFor="let component of components">
-      <ng-container [ngComponentOutlet]="component.component" [ngComponentOutletInputs]="component.inputs">
-      </ng-container>
-    </ng-container> -->
-
-    <ng-container *ngFor="let element of components">
-      <ng-container [ngComponentOutlet]="element.component" [ngComponentOutletInputs]="element.inputs">
-      </ng-container>
-    </ng-container>
+    @for (element of components; track $index) {
+      <ng-container [ngComponentOutlet]="element.component" [ngComponentOutletInputs]="element.inputs" />
+    }
 
     <button type="submit" class="btn btn-primary">Submit</button>
+
   </form>
+
   <div class="join join-vertical">
     <button class="btn join-item" (click)="addFormControl('input')">Textbox</button>
     <button class="btn join-item" (click)="addFormControl('select')">Select</button>
   </div>
+
 </div>
 
 <div>values {{ form.value | json }}</div>

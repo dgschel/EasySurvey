@@ -17,10 +17,11 @@ import { SurveyFormControl } from '../../model/survey-form-control';
   }]
 })
 export class FormControlSelectComponent {
-  controlKeyName = input.required<string>();
-  validatorsFn = input<ValidatorFn[]>();
   parentContainer = inject(ControlContainer);
-
+  controlKeyName = input.required<string>();
+  options = input<string[]>([]);
+  label = input<string>();
+  validatorsFn = input<ValidatorFn[]>();
   surveyFormControl: SurveyFormControl | null = null;
 
   get parentFormGroup() {
@@ -38,6 +39,7 @@ export class FormControlSelectComponent {
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
   }
+
 
   ngOnDestroy(): void {
     this.parentFormGroup.removeControl(this.controlKeyName());
