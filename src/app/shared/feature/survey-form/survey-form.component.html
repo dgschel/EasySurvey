@@ -1,0 +1,8 @@
+<form [formGroup]="form">
+  <app-basic-card>
+    <ng-container #component></ng-container>
+  </app-basic-card>
+</form>
+
+{{ form.value | json }}
+valid {{ form.valid }}
