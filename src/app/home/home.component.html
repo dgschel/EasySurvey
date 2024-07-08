@@ -1,20 +1,3 @@
 <div class="grid grid-flow-col gap-4 max-w-screen-sm mx-auto" style="grid-template-columns: 1fr;">
-  <!-- TODO: Move to new component -->
-  <form class="grid gap-4" [formGroup]="form" (ngSubmit)="submit()">
-
-    @for (element of components; track $index) {
-      <ng-container [ngComponentOutlet]="element.component" [ngComponentOutletInputs]="element.inputs" />
-    }
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-
-  </form>
-
-  <div class="join join-vertical">
-    <button class="btn join-item" (click)="addFormControl('input')">Textbox</button>
-    <button class="btn join-item" (click)="addFormControl('select')">Select</button>
-  </div>
-
+  <app-survey-form></app-survey-form>
 </div>
-
-<div>values {{ form.value | json }}</div>
