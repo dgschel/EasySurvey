@@ -2,6 +2,7 @@ import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/c
 import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 
+import { TestControlComponent } from '../../ui/test-control/test-control.component';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
 
 @Component({
@@ -24,5 +25,10 @@ export class SurveyFormComponent {
 
   get sections() {
     return this.form.get('sections') as FormArray;
+  }
+
+  addSection() {
+    const compRef = this.componentContainer.createComponent(TestControlComponent);
+    this.comps.push(compRef);
   }
 }
