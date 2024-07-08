@@ -1,4 +1,4 @@
-import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 
@@ -10,9 +10,11 @@ import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
   standalone: true,
   imports: [ReactiveFormsModule, BasicCardComponent, JsonPipe],
   templateUrl: './survey-form.component.html',
-  styleUrl: './survey-form.component.scss'
+  styleUrl: './survey-form.component.scss',
 })
 export class SurveyFormComponent {
+  fb = inject(FormBuilder);
+
   form: FormGroup = this.fb.group({
     sections: new FormArray([])
   })
@@ -21,8 +23,6 @@ export class SurveyFormComponent {
 
   comps: ComponentRef<any>[] = [];
 
-  constructor(private fb: FormBuilder) { }
-
   get sections() {
     return this.form.get('sections') as FormArray;
   }
@@ -30,5 +30,6 @@ export class SurveyFormComponent {
   addSection() {
     const compRef = this.componentContainer.createComponent(TestControlComponent);
     this.comps.push(compRef);
+    compRef.changeDetectorRef.detectChanges();
   }
 }
