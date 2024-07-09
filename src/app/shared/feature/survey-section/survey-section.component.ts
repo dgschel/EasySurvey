@@ -1,28 +1,33 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { ControlContainer, FormBuilder, FormGroup, FormArray, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup, FormArray, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { NgComponentOutlet } from '@angular/common';
+
+import { FormControlInputComponent } from '../form-control-input/form-control-input.component';
+import { FormControlSelectComponent } from '../form-control-select/form-control-select.component';
+import { customRequiredValidator } from '../../form-validator/validators';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-survey-section',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, BasicCardComponent],
+  imports: [ReactiveFormsModule, NgComponentOutlet, BasicCardComponent, FormControlInputComponent],
   templateUrl: './survey-section.component.html',
   styleUrl: './survey-section.component.scss'
 })
 export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
   fb = inject(FormBuilder);
+  controlKeyName: string = 'name';
+  validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
 
-  section: FormGroup = this.fb.group({
-    name: ''
-  });
+  inputs = {
+    controlKeyName: this.controlKeyName,
+    validatorsFn: this.validatorRequiredFn
+  }
+
+  component: typeof FormControlInputComponent | typeof FormControlSelectComponent = FormControlInputComponent;
 
   @ViewChild('mySelect') mySelect!: ElementRef;
-
-  ngOnInit() {
-    this.sections.push(this.section);
-  }
 
   get form() {
     return this.formParentContainer.control as FormGroup;
@@ -32,21 +37,8 @@ export class SurveySectionComponent {
     return this.form.get('sections') as FormArray;
   }
 
-  get control() {
-    return this.section.get('name') as FormControl;
-  }
-
-  toggleRequired(checked: boolean) {
-    if (checked) {
-      this.control.setValidators(Validators.required);
-    }
-    else {
-      this.control.clearValidators();
-    }
-    this.control.updateValueAndValidity();
-  }
-
   trackChange() {
+    this.component = this.mySelect.nativeElement.value === '1' ? FormControlInputComponent : FormControlSelectComponent
     console.log("trackChange", this.mySelect.nativeElement.value);
   }
 }
