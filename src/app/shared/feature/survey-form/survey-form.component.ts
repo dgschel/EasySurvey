@@ -22,10 +22,6 @@ export class SurveyFormComponent {
 
   comps: ComponentRef<any>[] = [];
 
-  get sections() {
-    return this.form.get('sections') as FormArray;
-  }
-
   addSection() {
     const compRef = this.componentContainer.createComponent(SurveySectionComponent);
     this.comps.push(compRef);
