@@ -3,12 +3,11 @@ import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular
 import { JsonPipe } from '@angular/common';
 
 import { TestControlComponent } from '../../ui/test-control/test-control.component';
-import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
 
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [ReactiveFormsModule, BasicCardComponent, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe],
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss',
 })

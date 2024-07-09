@@ -1,7 +1,5 @@
-<form [formGroup]="form">
-  <app-basic-card>
-    <ng-container #component />
-  </app-basic-card>
+<form class="grid gap-4" [formGroup]="form">
+  <ng-container #component />
 </form>
 <button class="btn btn-circle" type="button" (click)="addSection()">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
