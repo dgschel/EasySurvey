@@ -2,7 +2,7 @@ import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@a
 import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 
-import { TestControlComponent } from '../../ui/test-control/test-control.component';
+import { SurveySectionComponent } from '../survey-section/survey-section.component';
 
 @Component({
   selector: 'app-survey-form',
@@ -27,7 +27,7 @@ export class SurveyFormComponent {
   }
 
   addSection() {
-    const compRef = this.componentContainer.createComponent(TestControlComponent);
+    const compRef = this.componentContainer.createComponent(SurveySectionComponent);
     this.comps.push(compRef);
     compRef.changeDetectorRef.detectChanges();
   }
