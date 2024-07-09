@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { JsonPipe, NgClass } from '@angular/common';
-import { ControlContainer, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
@@ -19,10 +19,8 @@ import { SurveyFormControl } from '../../model/survey-form-control';
 export class FormControlInputComponent implements OnInit {
   parentContainer = inject(ControlContainer);
   controlKeyName = input.required<string>();
-  label = input<string>();
-  inputPlaceholder = input<string>();
   validatorsFn = input<ValidatorFn[]>();
-  surveyFormControl: SurveyFormControl | null = null;
+  surveyFormControl!: SurveyFormControl;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -36,11 +34,20 @@ export class FormControlInputComponent implements OnInit {
     return this.surveyFormControl?.validationErrors
   }
 
+  get sections() {
+    return this.parentFormGroup.get('sections') as FormArray;
+  }
+
+  get control() {
+    return this.surveyFormControl.control;
+  }
+
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validatorsFn(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormControl(this.sections, this.validatorsFn(), this.controlKeyName());
   }
 
   ngOnDestroy(): void {
+    // TODO: Check if the control gets removed
     this.parentFormGroup.removeControl(this.controlKeyName());
   }
 }
