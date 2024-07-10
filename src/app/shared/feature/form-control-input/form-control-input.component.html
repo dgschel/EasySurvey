@@ -1,11 +1,10 @@
-<label [attr.for]="controlKeyName()" class="form-control w-full max-w-xs">
-  <input type="text" [id]="controlKeyName()" [formControl]="control" class="input input-bordered input-sm"
+<label class="form-control w-full max-w-xs">
+  <input type="text" [formControl]="control" class="input input-bordered input-sm"
     [ngClass]="{'input-error': isFormControlValid}" />
 
   @if (isFormControlValid) {
-  @for (message of validationErrors; track $index) {
-  <app-form-control-error [message]="message" />
+    @for (message of validationErrors; track $index) {
+      <app-form-control-error [message]="message" />
+    }
   }
-  }
-
 </label>
