@@ -1,7 +1,6 @@
-import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
-
 import { SurveySectionComponent } from '../survey-section/survey-section.component';
 
 @Component({
@@ -12,19 +11,25 @@ import { SurveySectionComponent } from '../survey-section/survey-section.compone
   styleUrl: './survey-form.component.scss',
 })
 export class SurveyFormComponent {
-  fb = inject(FormBuilder);
+  @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
+  comps: ComponentRef<SurveySectionComponent>[] = [];
 
-  form: FormGroup = this.fb.group({
+  form: FormGroup = new FormGroup({
     sections: new FormArray([])
   })
 
-  @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
-
-  comps: ComponentRef<any>[] = [];
-
   addSection() {
     const compRef = this.componentContainer.createComponent(SurveySectionComponent);
+    compRef.instance.remove.subscribe(() => this.removeSurveySection(compRef));
     this.comps.push(compRef);
     compRef.changeDetectorRef.detectChanges();
+  }
+
+  removeSurveySection(compRef: ComponentRef<SurveySectionComponent>) {
+    const index = this.comps.indexOf(compRef);
+    if (index !== -1) {
+      this.comps.splice(index, 1);
+      compRef.destroy();
+    }
   }
 }
