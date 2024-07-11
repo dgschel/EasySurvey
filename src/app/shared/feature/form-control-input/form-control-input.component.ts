@@ -18,9 +18,9 @@ import { SurveyFormControl } from '../../model/survey-form-control';
 })
 export class FormControlInputComponent implements OnInit {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input.required<string>();
+  controlKeyName = input<string>();
   validatorsFn = input<ValidatorFn[]>();
-  surveyFormControl!: SurveyFormControl;
+  surveyFormControl: SurveyFormControl | undefined;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -39,7 +39,7 @@ export class FormControlInputComponent implements OnInit {
   }
 
   get control() {
-    return this.surveyFormControl.control;
+    return this.surveyFormControl?.control;
   }
 
   ngOnInit(): void {
@@ -47,7 +47,11 @@ export class FormControlInputComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // TODO: Check if the control gets removed
-    this.parentFormGroup.removeControl(this.controlKeyName());
+    if (this.surveyFormControl?.fg) {
+      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.fg);
+      if (formGroupIndex !== -1) {
+        this.sections.removeAt(formGroupIndex);
+      }
+    }
   }
 }
