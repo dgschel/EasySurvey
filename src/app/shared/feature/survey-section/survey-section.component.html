@@ -1,0 +1,10 @@
+<app-basic-card>
+  <div class="grid gap-4 p-4 bg-red-300">
+    <select class="select" #mySelect (change)="trackChange()" name="" id="">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+    <ng-container [ngComponentOutlet]="component" />
+  </div>
+  <button type="button" (click)="remove.emit()">remove</button>
+</app-basic-card>

@@ -1,36 +1,34 @@
-import { FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 
 /**
- * Represents a base form control
+ * Represents a base form control for a survey.
  */
-interface BaseFormControl {
-  formGroup: FormGroup;
-  validatorsFn: () => ValidatorFn[];
-}
+export class BaseSurveyFormControl {
+  fg = new FormGroup({});
 
-/**
- * Represents a base form control.
- */
-export class BaseSurveyFormControl implements BaseFormControl {
   /**
    * Initializes a new instance of the BaseFormControl class.
-   * @param formGroup The parent form group.
+   * @param formArray The parent form array.
    * @param validatorsFn A function that returns an array of validator functions.
    * @param controlName The name of the control.
    */
-  constructor(public formGroup: FormGroup, public validatorsFn: () => ValidatorFn[], public controlName: string) {
-    this.formGroup.addControl(this.controlName, new FormControl('', { validators: this.validatorsFn(), updateOn: 'blur' }));
+  constructor(public formArray: FormArray, public validatorsFn: () => ValidatorFn[], public controlName: string) {
+    const control = new FormControl('', { validators: this.validatorsFn(), updateOn: 'blur' })
+    this.fg.addControl(controlName, control);
+    this.formArray.push(this.fg);
   }
 
   /**
    * Gets the control associated with the form control.
+   * @returns The control associated with the form control.
    */
   get control() {
-    return this.formGroup.get(this.controlName);
+    return this.fg.get(this.controlName) as FormControl;
   }
 
   /**
    * Gets a value indicating whether the control is valid.
+   * @returns A value indicating whether the control is valid.
    */
   get isValid() {
     return this.control?.invalid && (this.control?.dirty || this.control?.touched);
@@ -38,6 +36,7 @@ export class BaseSurveyFormControl implements BaseFormControl {
 
   /**
    * Gets the validation errors associated with the control.
+   * @returns The validation errors associated with the control.
    */
   get validationErrors() {
     const errors = this.control?.errors;
