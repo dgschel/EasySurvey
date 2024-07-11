@@ -34,6 +34,5 @@ export class SurveySectionComponent {
 
   trackChange() {
     this.component = this.mySelect.nativeElement.value === '1' ? FormControlInputComponent : FormControlSelectComponent
-    console.log("trackChange", this.mySelect.nativeElement.value);
   }
 }
