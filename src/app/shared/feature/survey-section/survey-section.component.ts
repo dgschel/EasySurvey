@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ComponentRef, ElementRef, inject, output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup, FormArray, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
@@ -16,18 +16,13 @@ import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
 })
 export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
-  fb = inject(FormBuilder);
+  remove = output<void>();
   controlKeyName: string = 'name';
   validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
 
-  inputs = {
-    controlKeyName: this.controlKeyName,
-    validatorsFn: this.validatorRequiredFn
-  }
+  @ViewChild('mySelect') mySelect!: ElementRef;
 
   component: typeof FormControlInputComponent | typeof FormControlSelectComponent = FormControlInputComponent;
-
-  @ViewChild('mySelect') mySelect!: ElementRef;
 
   get form() {
     return this.formParentContainer.control as FormGroup;

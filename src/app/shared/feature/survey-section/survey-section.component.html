@@ -4,6 +4,7 @@
       <option value="1">1</option>
       <option value="2">2</option>
     </select>
-    <ng-container [ngComponentOutlet]="component" [ngComponentOutletInputs]="inputs" />
+    <!-- <ng-container [ngComponentOutlet]="component" [ngComponentOutletInputs]="inputs" /> -->
   </div>
+  <button type="button" (click)="remove.emit()">remove</button>
 </app-basic-card>
