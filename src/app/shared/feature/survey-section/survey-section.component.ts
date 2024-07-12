@@ -18,7 +18,7 @@ export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
   controlKeyName: string = 'name';
-  validatorRequiredFn: ValidatorFn[] = [customRequiredValidator()];
+  fnValidators: ValidatorFn[] = [customRequiredValidator()];
 
   @ViewChild('mySelect') mySelect!: ElementRef;
 
