@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { JsonPipe, NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
@@ -47,8 +47,8 @@ export class FormControlInputComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    if (this.surveyFormControl?.fg) {
-      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.fg);
+    if (this.surveyFormControl?.formGroup) {
+      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.formGroup);
       if (formGroupIndex !== -1) {
         this.sections.removeAt(formGroupIndex);
       }

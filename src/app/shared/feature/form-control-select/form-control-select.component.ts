@@ -49,8 +49,8 @@ export class FormControlSelectComponent {
   }
 
   ngOnDestroy(): void {
-    if (this.surveyFormControl?.fg) {
-      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.fg);
+    if (this.surveyFormControl?.formGroup) {
+      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.formGroup);
       if (formGroupIndex !== -1) {
         this.sections.removeAt(formGroupIndex);
       }

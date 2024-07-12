@@ -4,7 +4,7 @@ import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
  * Represents a base form control for a survey.
  */
 export class BaseSurveyFormControl {
-  fg = new FormGroup({});
+  private fg = new FormGroup({});
 
   /**
    * Initializes a new instance of the BaseFormControl class.
@@ -24,6 +24,14 @@ export class BaseSurveyFormControl {
    */
   get control() {
     return this.fg.get(this.controlName) as FormControl;
+  }
+
+  /**
+    * Gets the parent form group associated with the form control.
+    * @returns The parent form group associated with the form control.
+    */
+  get formGroup() {
+    return this.fg;
   }
 
   /**
