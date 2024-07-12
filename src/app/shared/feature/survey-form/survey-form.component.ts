@@ -1,4 +1,4 @@
-import { Component, ComponentRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SurveySectionComponent } from '../survey-section/survey-section.component';
@@ -11,6 +11,7 @@ import { SurveySectionComponent } from '../survey-section/survey-section.compone
   styleUrl: './survey-form.component.scss',
 })
 export class SurveyFormComponent {
+  private cdr = inject(ChangeDetectorRef);
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   comps: ComponentRef<SurveySectionComponent>[] = [];
 
@@ -23,6 +24,7 @@ export class SurveyFormComponent {
     compRef.instance.remove.subscribe(() => this.removeSurveySection(compRef));
     this.comps.push(compRef);
     compRef.changeDetectorRef.detectChanges();
+    this.cdr.detectChanges();
   }
 
   removeSurveySection(compRef: ComponentRef<SurveySectionComponent>) {
