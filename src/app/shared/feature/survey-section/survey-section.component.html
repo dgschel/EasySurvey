@@ -1,8 +1,9 @@
 <app-basic-card>
   <div class="card-body grid gap-4 p-4 bg-red-300">
-    <select class="select" #mySelect (change)="trackChange()">
-      <option value="1">1</option>
-      <option value="2">2</option>
+    <select class="select" #mySelect (change)="trackChange(mySelect.value)">
+      <option value="input">1</option>
+      <option value="select">2</option>
+      <option value="form-select">3</option>
     </select>
     <ng-container [ngComponentOutlet]="component" />
     <div class="card-actions items-center justify-end">
