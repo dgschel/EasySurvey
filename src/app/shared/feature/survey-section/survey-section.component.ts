@@ -1,11 +1,12 @@
-import { Component, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, output, signal, ViewChild } from '@angular/core';
 import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { FormControlInputComponent } from '../form-control-input/form-control-input.component';
 import { customRequiredValidator } from '../../form-validator/validators';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormSelectComponent } from '../form-select/form-select.component';
+import { FormControlType, SupportedComponents } from '../../../util/type/survey-type';
+import { createFormControlComponent } from '../../../util/component/create';
 
 @Component({
   selector: 'app-survey-section',
@@ -14,16 +15,17 @@ import { FormSelectComponent } from '../form-select/form-select.component';
   templateUrl: './survey-section.component.html',
   styleUrl: './survey-section.component.scss'
 })
-export class SurveySectionComponent {
+export class SurveySectionComponent implements OnInit {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
   controlKeyName: string = 'name';
   isRequired = signal<boolean>(false);
   fnValidators: ValidatorFn[] = [customRequiredValidator()];
 
-  @ViewChild('mySelect') mySelect!: ElementRef;
+  cmpType: FormControlType = 'input';
+  component: SupportedComponents = FormControlInputComponent;
 
-  component: typeof FormControlInputComponent | typeof FormSelectComponent = FormControlInputComponent;
+  @ViewChild('mySelect') mySelect!: ElementRef;
 
   get form() {
     return this.formParentContainer.control as FormGroup;
@@ -33,7 +35,11 @@ export class SurveySectionComponent {
     return this.form.get('sections') as FormArray;
   }
 
-  trackChange() {
-    this.component = this.mySelect.nativeElement.value === '1' ? FormControlInputComponent : FormSelectComponent
+  ngOnInit() {
+    this.component = createFormControlComponent(this.cmpType);
+  }
+
+  trackChange(controlType: string) {
+    this.component = createFormControlComponent(controlType as FormControlType);
   }
 }
