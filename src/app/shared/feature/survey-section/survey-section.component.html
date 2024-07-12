@@ -9,7 +9,7 @@
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Required</span>
-          <input type="checkbox" class="toggle toggle-sm" checked="checked" />
+          <input type="checkbox" class="toggle toggle-sm" #required (change)="isRequired.set(required.checked)" />
         </label>
       </div>
       <button type="button" class="btn btn-ghost" (click)="remove.emit()"><svg xmlns="http://www.w3.org/2000/svg"

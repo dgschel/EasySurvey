@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, output, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
 import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
@@ -18,6 +18,7 @@ export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
   controlKeyName: string = 'name';
+  isRequired = signal<boolean>(false);
   fnValidators: ValidatorFn[] = [customRequiredValidator()];
 
   @ViewChild('mySelect') mySelect!: ElementRef;
