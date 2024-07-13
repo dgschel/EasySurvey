@@ -4,7 +4,7 @@ import { FormControlComponentType, FormControlType } from '../../../util/type/su
 
 /**
  * Represents the CreateComponentComponent class.
- * This component is responsible for creating a form component.
+ * This component is responsible for creating form control components dynamically.
  */
 @Component({
   selector: 'app-create-component',
@@ -16,7 +16,7 @@ import { FormControlComponentType, FormControlType } from '../../../util/type/su
 })
 export class CreateComponentComponent implements AfterViewInit {
   private cmpService: CreateComponentService<FormControlComponentType>;
-  componentTypeOutput = output<Type<FormControlComponentType>>();
+  cmpTypeOutput = output<Type<FormControlComponentType>>();
 
   /**
    * Creates an instance of CreateComponentComponent.
@@ -31,7 +31,7 @@ export class CreateComponentComponent implements AfterViewInit {
    * Emits the created form component type using cmpTypeOutput.
    */
   ngAfterViewInit(): void {
-    this.componentTypeOutput.emit(this.cmpService.createFormComponentType());
+    this.cmpTypeOutput.emit(this.cmpService.createFormComponentType());
   }
 
   /**
@@ -41,6 +41,6 @@ export class CreateComponentComponent implements AfterViewInit {
    */
   updateFormControlType(controlType: string) {
     this.cmpService.setFormControlType(controlType as FormControlType);
-    this.componentTypeOutput.emit(this.cmpService.createFormComponentType());
+    this.cmpTypeOutput.emit(this.cmpService.createFormComponentType());
   }
 }
