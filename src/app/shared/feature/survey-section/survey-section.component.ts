@@ -50,8 +50,4 @@ export class SurveySectionComponent implements AfterViewInit {
     this.componentRef = this.componentContainer.createComponent(cmp);
     this.componentRef.changeDetectorRef.detectChanges();
   }
-
-  trackChange(controlType: string) {
-    this.createFormControlComponentInstance(controlType as FormControlType);
-  }
 }
