@@ -42,6 +42,12 @@ export class FormControlInputComponent implements OnInit {
     return this.surveyFormControl?.control;
   }
 
+  set validators(validators: ValidatorFn[]) {
+    if (this.surveyFormControl) {
+      this.surveyFormControl.validators = validators;
+    }
+  }
+
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.sections, this.validatorsFn(), this.controlKeyName());
   }

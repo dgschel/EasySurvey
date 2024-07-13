@@ -50,4 +50,14 @@ export class BaseSurveyFormControl {
     const errors = this.control?.errors;
     return errors ? Object.values(errors) : null;
   }
+
+  /**
+   * Sets the validators for the form control.
+   * 
+   * @param validators - An array of validator functions.
+   */
+  set validators(validators: ValidatorFn[]) {
+    this.control.setValidators(validators);
+    this.control.updateValueAndValidity();
+  }
 }
