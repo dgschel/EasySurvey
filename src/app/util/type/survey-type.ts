@@ -1,24 +1,13 @@
-import { Type } from "@angular/core";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
-import { InferObj } from "./inference-type";
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
 
-export type SupportedComponents = typeof FormControlInputComponent | typeof FormSelectComponent | typeof FormControlSelectComponent;
+export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
+export type FormComponentType = typeof FormSelectComponent;
 
-export type FormControlType = 'input' | 'form-select' | 'select';
+export type FormControlType = 'input' | 'select';
 
-/**
- * Represents a generic component type
- * @template T - The type of the component
- */
-export type DynamicComponentType<T> = {
-  component: Type<T>;
-  inputs: InferObj<T>
-};
-
-export const formControlComponentMap: Record<FormControlType, SupportedComponents> = {
+export const formControlComponentMap: Record<FormControlType, FormControlComponentType> = {
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
-  "form-select": FormSelectComponent
 }
