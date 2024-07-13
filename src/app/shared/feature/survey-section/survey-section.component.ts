@@ -1,11 +1,11 @@
-import { Component, ElementRef, inject, OnInit, output, signal, ViewChild } from '@angular/core';
-import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { AfterViewInit, Component, ComponentRef, ElementRef, inject, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { FormControlInputComponent } from '../form-control-input/form-control-input.component';
 import { customRequiredValidator } from '../../form-validator/validators';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormControlType, SupportedComponents } from '../../../util/type/survey-type';
+import { FormControlType } from '../../../util/type/survey-type';
 import { createFormControlComponent } from '../../../util/component/create';
 
 @Component({
@@ -15,17 +15,15 @@ import { createFormControlComponent } from '../../../util/component/create';
   templateUrl: './survey-section.component.html',
   styleUrl: './survey-section.component.scss'
 })
-export class SurveySectionComponent implements OnInit {
+export class SurveySectionComponent implements AfterViewInit {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
   controlKeyName: string = 'name';
-  isRequired = signal<boolean>(false);
-  fnValidators: ValidatorFn[] = [customRequiredValidator()];
-
-  cmpType: FormControlType = 'input';
-  component: SupportedComponents = FormControlInputComponent;
+  formControlType: FormControlType = 'input'; // default form control type
+  componentRef: ComponentRef<any> | undefined;
 
   @ViewChild('mySelect') mySelect!: ElementRef;
+  @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
 
   get form() {
     return this.formParentContainer.control as FormGroup;
@@ -35,11 +33,25 @@ export class SurveySectionComponent implements OnInit {
     return this.form.get('sections') as FormArray;
   }
 
-  ngOnInit() {
-    this.component = createFormControlComponent(this.cmpType);
+  ngAfterViewInit(): void {
+    this.createFormControlComponentInstance(this.formControlType);
+  }
+
+  setIsRequired(isRequired: boolean) {
+    const validatorFn = isRequired ? [customRequiredValidator()] : []
+    if (this.componentRef) {
+      this.componentRef.instance.validators = validatorFn;
+    }
+  }
+
+  createFormControlComponentInstance(controlType: FormControlType) {
+    this.componentContainer.clear();
+    const cmp = createFormControlComponent<FormControlInputComponent>(controlType);
+    this.componentRef = this.componentContainer.createComponent(cmp);
+    this.componentRef.changeDetectorRef.detectChanges();
   }
 
   trackChange(controlType: string) {
-    this.component = createFormControlComponent(controlType as FormControlType);
+    this.createFormControlComponentInstance(controlType as FormControlType);
   }
 }

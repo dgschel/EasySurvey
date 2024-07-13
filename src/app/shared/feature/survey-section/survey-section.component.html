@@ -5,12 +5,12 @@
       <option value="select">2</option>
       <option value="form-select">3</option>
     </select>
-    <ng-container [ngComponentOutlet]="component" />
+    <ng-container #component />
     <div class="card-actions items-center justify-end">
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Required</span>
-          <input type="checkbox" class="toggle toggle-sm" #required (change)="isRequired.set(required.checked)" />
+          <input type="checkbox" class="toggle toggle-sm" #required (change)="setIsRequired(required.checked)" />
         </label>
       </div>
       <button type="button" class="btn btn-ghost" (click)="remove.emit()"><svg xmlns="http://www.w3.org/2000/svg"
