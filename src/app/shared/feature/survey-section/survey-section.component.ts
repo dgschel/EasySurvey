@@ -46,7 +46,7 @@ export class SurveySectionComponent implements AfterViewInit {
 
   createFormControlComponentInstance(controlType: FormControlType) {
     this.componentContainer.clear();
-    const cmp = createFormControlComponent<FormControlInputComponent>(controlType);
+    const cmp = createFormControlComponent(controlType);
     this.componentRef = this.componentContainer.createComponent(cmp);
     this.componentRef.changeDetectorRef.detectChanges();
   }
