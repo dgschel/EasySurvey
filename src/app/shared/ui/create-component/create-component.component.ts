@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, Injector, output, Type } from '@angular/core';
+import { KeyValuePipe } from '@angular/common';
+
 import { CreateComponentService } from './create-component.service';
-import { FormControlComponentType, FormControlType } from '../../../util/type/survey-type';
+import { FormControlComponentType, FormControlNameMap, FormControlType } from '../../../util/type/survey-type';
 
 /**
  * Represents the CreateComponentComponent class.
@@ -9,7 +11,7 @@ import { FormControlComponentType, FormControlType } from '../../../util/type/su
 @Component({
   selector: 'app-create-component',
   standalone: true,
-  imports: [],
+  imports: [KeyValuePipe],
   providers: [CreateComponentService], // Provide service to the component. Every instance of the component will have its own instance of the service
   templateUrl: './create-component.component.html',
   styleUrl: './create-component.component.scss'
@@ -17,6 +19,7 @@ import { FormControlComponentType, FormControlType } from '../../../util/type/su
 export class CreateComponentComponent implements AfterViewInit {
   private cmpService: CreateComponentService<FormControlComponentType>;
   cmpTypeOutput = output<Type<FormControlComponentType>>();
+  controlTypeMap = FormControlNameMap;
 
   /**
    * Creates an instance of CreateComponentComponent.
