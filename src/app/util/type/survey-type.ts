@@ -11,3 +11,8 @@ export const formControlComponentMap: Record<FormControlType, FormControlCompone
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
 }
+
+export const FormControlNameMap: Record<FormControlType, string> = {
+  input: 'Textbox',
+  select: 'Dropdown',
+}
