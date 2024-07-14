@@ -1,28 +1,26 @@
-import { AfterViewInit, Component, ComponentRef, ElementRef, inject, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, inject, output, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { FormControlInputComponent } from '../form-control-input/form-control-input.component';
 import { customRequiredValidator } from '../../form-validator/validators';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormControlType } from '../../../util/type/survey-type';
-import { createFormControlComponent } from '../../../util/component/create';
+import { FormControlComponentType } from '../../../util/type/survey-type';
+import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 
 @Component({
   selector: 'app-survey-section',
   standalone: true,
-  imports: [ReactiveFormsModule, NgComponentOutlet, BasicCardComponent, FormControlInputComponent],
+  imports: [ReactiveFormsModule, NgComponentOutlet, BasicCardComponent, FormControlInputComponent, CreateComponentComponent],
   templateUrl: './survey-section.component.html',
   styleUrl: './survey-section.component.scss'
 })
-export class SurveySectionComponent implements AfterViewInit {
+export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
   controlKeyName: string = 'name';
-  formControlType: FormControlType = 'input'; // default form control type
   componentRef: ComponentRef<any> | undefined;
 
-  @ViewChild('mySelect') mySelect!: ElementRef;
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
 
   get form() {
@@ -33,10 +31,6 @@ export class SurveySectionComponent implements AfterViewInit {
     return this.form.get('sections') as FormArray;
   }
 
-  ngAfterViewInit(): void {
-    this.createFormControlComponentInstance(this.formControlType);
-  }
-
   setIsRequired(isRequired: boolean) {
     const validatorFn = isRequired ? [customRequiredValidator()] : []
     if (this.componentRef) {
@@ -44,14 +38,9 @@ export class SurveySectionComponent implements AfterViewInit {
     }
   }
 
-  createFormControlComponentInstance(controlType: FormControlType) {
+  onCreateComponent(componentType: Type<FormControlComponentType>) {
     this.componentContainer.clear();
-    const cmp = createFormControlComponent<FormControlInputComponent>(controlType);
-    this.componentRef = this.componentContainer.createComponent(cmp);
+    this.componentRef = this.componentContainer.createComponent(componentType);
     this.componentRef.changeDetectorRef.detectChanges();
-  }
-
-  trackChange(controlType: string) {
-    this.createFormControlComponentInstance(controlType as FormControlType);
   }
 }
