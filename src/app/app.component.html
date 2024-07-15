@@ -1,8 +1,12 @@
 <div class="grid">
   <header>
     my Header
+    <div role="tablist" class="tabs tabs-bordered max-w-xs mx-auto">
+      <a role="tab" class="tab" routerLink="home" routerLinkActive="tab-active">Create form</a>
+      <a role="tab" class="tab" routerLink="viewform" routerLinkActive="tab-active">View form</a>
+    </div>
   </header>
-  <main class="bg-[#e3edfd] min-h-svh">
+  <main class="bg-[#e3edfd] min-h-svh p-4">
     <router-outlet />
   </main>
 </div>
