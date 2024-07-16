@@ -1,1 +1,9 @@
-<p>view-survey-form works!</p>
+<form [formGroup]="form">
+  @for (group of surveyGroups; track $index) {
+  <div [formGroup]="group">
+    <input type="text" formControlName="text">
+    {{ group.status }}
+  </div>
+  }
+  {{ form.valid}}
+</form>
