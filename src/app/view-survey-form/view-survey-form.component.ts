@@ -3,11 +3,13 @@ import { SurveyDataService } from '../core/service/survey-data.service';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SurveyModel } from '../util/type/survey-type';
+import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
+import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 
 @Component({
   selector: 'app-view-survey-form',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, ViewSurveyGroupComponent, BasicCardComponent],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss'
 })

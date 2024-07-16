@@ -1,9 +1,13 @@
-<form [formGroup]="form">
+<form class="grid gap-4" [formGroup]="form">
   @for (group of surveyGroups; track $index) {
+  <app-basic-card>
+    <app-view-survey-group></app-view-survey-group>
+  </app-basic-card>
   <div [formGroup]="group">
     <input type="text" formControlName="text">
     {{ group.status }}
   </div>
   }
   {{ form.valid}}
+  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Save</button>
 </form>
