@@ -1,32 +1,22 @@
-import { Injectable, signal } from '@angular/core';
-import { BaseSurveyFormControl } from '../model/base-form-control';
+import { Injectable } from '@angular/core';
+import { SurveyModel } from '../../util/type/survey-type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SurveyDataService {
-  surveyDataState = signal<SurveyDataModel[]>([]);
+  // TODO: Get survey data from API
+  getSurveyData(): SurveyModel[] {
+    const data: SurveyModel[] = [{
+      type: 'input',
+      placeholder: 'Name',
+      required: true,
+    }, {
+      type: 'select',
+      required: true,
+      options: ['10-20', '20-30']
+    }];
 
-  saveModel(data: SurveyDataModel) {
-    this.surveyDataState.update(state => {
-      const index = state.findIndex(survey => survey.control === data.control);
-      if (index === -1) return [...state, data];
-
-      state[index] = data;
-      return state;
-    });
-    localStorage.setItem('surveyData', JSON.stringify(this.surveyDataState()));
+    return data;
   }
-
-  removeModel(model: SurveyDataModel) {
-    const filtered = this.surveyDataState().filter(s => s.control !== model.control)
-    this.surveyDataState.set(filtered);
-    localStorage.setItem('surveyData', JSON.stringify(this.surveyDataState()));
-  }
-}
-
-export type SurveyDataModel = {
-  text: string;
-  required: boolean;
-  control: BaseSurveyFormControl;
 }
