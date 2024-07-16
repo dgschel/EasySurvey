@@ -1,20 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { SurveyDataModel } from '../core/service/survey-data.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { SurveyDataService } from '../core/service/survey-data.service';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { JsonPipe } from '@angular/common';
+import { SurveyModel } from '../util/type/survey-type';
 
 @Component({
   selector: 'app-view-survey-form',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule, JsonPipe],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss'
 })
 export class ViewSurveyFormComponent implements OnInit {
-  surveyDataModel: SurveyDataModel[] = [];
+  private surveyDataService = inject(SurveyDataService);
+  fb = inject(FormBuilder);
+
+  form = this.fb.group({
+    sections: this.fb.array([])
+  });
+
+  get sections() {
+    return this.form.get('sections') as FormArray;
+  }
 
   ngOnInit(): void {
-    const data = localStorage.getItem('surveyData');
-    if (data) {
-      this.surveyDataModel = JSON.parse(data);
-    }
+    const formData = this.surveyDataService.getSurveyData();
+    const formGroups = this.createSurveyFormGroups(formData);
+    formGroups.forEach(group => this.sections.push(group));
+  }
+
+  get surveyGroups() {
+    return this.sections.controls as FormGroup[];
+  }
+
+  createSurveyFormGroups(models: SurveyModel[]): FormGroup[] {
+    return models.map(m => {
+      return this.fb.group({
+        text: ['', m.required ? Validators.required : null],
+      })
+    });
   }
 }
