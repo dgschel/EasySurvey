@@ -8,26 +8,26 @@ import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-g
 })
 export class SurveyDataStorageService {
   private dataStorageSubject = new BehaviorSubject<SurveyRefData[]>([]);
-  data$ = this.dataStorageSubject.asObservable();
+  surveyData$ = this.dataStorageSubject.asObservable();
 
   addData(surveyData: SurveyRefData) {
-    const currentDatas = this.dataStorageSubject.value;
-    this.dataStorageSubject.next([...currentDatas, surveyData])
+    const currentSurveyData = this.dataStorageSubject.value;
+    this.dataStorageSubject.next([...currentSurveyData, surveyData])
   }
 
-  updateData(ref: ComponentRef<CreateSurveyGroupComponent>, state: SurveyRefData) {
-    const updatedData = this.dataStorageSubject.value.map(current => {
-      return current.ref === ref ? { ...current, data: state.data } : current;
+  updateData(ref: ComponentRef<CreateSurveyGroupComponent>, surveyState: SurveyRefData) {
+    const updatedData = this.dataStorageSubject.value.map(refData => {
+      return refData.ref === ref ? { ...refData, data: surveyState.data } : refData;
     });
     this.dataStorageSubject.next(updatedData);
   }
 
-  removeData(ref: ComponentRef<CreateSurveyGroupComponent>) {
-    const filteredData = this.dataStorageSubject.value.filter(current => current.ref !== ref);
-    this.dataStorageSubject.next(filteredData);
+  removeData(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
+    const filteredEntries = this.dataStorageSubject.value.filter(entry => entry.ref !== cmpRef);
+    this.dataStorageSubject.next(filteredEntries);
   };
 
   getData$(): Observable<SurveyBaseType[]> {
-    return this.data$.pipe(map(data => data.map(d => d.data)))
+    return this.surveyData$.pipe(map(data => data.map(d => d.data)))
   }
 }
