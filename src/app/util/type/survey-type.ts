@@ -1,11 +1,18 @@
+import { ComponentRef } from "@angular/core";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
+import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-group/create-survey-group.component";
 
 export type SurveyBase = {
   title: string;
   description: string;
 };
+
+export type SurveyRefData = {
+  ref: ComponentRef<CreateSurveyGroupComponent>,
+  data: SurveyBase
+}
 
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
 export type FormComponentType = typeof FormSelectComponent;
