@@ -4,14 +4,14 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
 import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-group/create-survey-group.component";
 
-export type SurveyBase = {
+export type SurveyBaseType = {
   title: string;
   description: string;
 };
 
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
-  data: SurveyBase
+  data: SurveyBaseType
 }
 
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
@@ -33,12 +33,12 @@ export type SurveyInputModel = {
   type: 'input';
   placeholder?: string;
   required: boolean;
-} & SurveyBase
+} & SurveyBaseType
 
 export type SurveySelectModel = {
   type: 'select';
   options: string[];
   required: boolean;
-} & SurveyBase
+} & SurveyBaseType
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel;
