@@ -1,13 +1,7 @@
 <form class="grid gap-4" [formGroup]="form">
-  @for (group of surveyGroups; track $index) {
-  <app-basic-card>
-    <app-view-survey-group></app-view-survey-group>
-  </app-basic-card>
-  <div [formGroup]="group">
-    <input type="text" formControlName="text">
-    {{ group.status }}
-  </div>
+  @for (survey of surveyComponents; track $index) {
+    <app-view-survey-group [model]="survey"></app-view-survey-group>
   }
-  {{ form.valid}}
+  {{ form.value | json }}
   <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Save</button>
 </form>
