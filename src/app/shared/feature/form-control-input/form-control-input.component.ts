@@ -19,6 +19,7 @@ import { SurveyFormControl } from '../../model/survey-form-control';
 export class FormControlInputComponent implements OnInit {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>();
+  placeholder = input<string>();
   validatorsFn = input<ValidatorFn[]>();
   surveyFormControl: SurveyFormControl | undefined;
 

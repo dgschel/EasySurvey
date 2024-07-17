@@ -18,7 +18,6 @@ import { CreateComponentComponent } from "../../ui/create-component/create-compo
 export class SurveySectionComponent {
   formParentContainer = inject(ControlContainer);
   remove = output<void>();
-  controlKeyName: string = 'name';
   componentRef: ComponentRef<any> | undefined;
 
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;

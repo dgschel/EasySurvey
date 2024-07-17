@@ -1,12 +1,12 @@
+@if (control) {
 <label class="form-control w-full max-w-xs">
-  @if (control) {
-  <input type="text" [formControl]="control" class="input input-bordered input-sm"
+  <input type="text" [formControl]="control" [placeholder]="placeholder()" class="input input-bordered input-sm"
     [ngClass]="{'input-error': isFormControlValid}" />
-  }
 
   @if (isFormControlValid) {
-  @for (message of validationErrors; track $index) {
-  <app-form-control-error [message]="message" />
-  }
+    @for (message of validationErrors; track $index) {
+    <app-form-control-error [message]="message" />
+    }
   }
 </label>
+}
