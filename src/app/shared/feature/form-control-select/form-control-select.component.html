@@ -1,5 +1,5 @@
+@if (control) {
 <label class="form-control w-full max-w-xs">
-  @if (control) {
   <select [formControl]="control" class="select select-bordered select-sm"
     [ngClass]="{'select-error': isFormControlValid}">
     <option value selected disabled>Select option</option>
@@ -7,7 +7,6 @@
       <option [value]="option">{{ option }}</option>
     }
   </select>
-  }
 
   @if (isFormControlValid) {
     @for (message of validationErrors; track $index) {
@@ -15,3 +14,4 @@
     }
   }
 </label>
+}
