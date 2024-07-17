@@ -2,6 +2,11 @@ import { FormControlInputComponent } from "../../shared/feature/form-control-inp
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
 
+export type SurveyBase = {
+  title: string;
+  description: string;
+};
+
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
 export type FormComponentType = typeof FormSelectComponent;
 
@@ -21,12 +26,12 @@ export type SurveyInputModel = {
   type: 'input';
   placeholder?: string;
   required: boolean;
-}
+} & SurveyBase
 
 export type SurveySelectModel = {
   type: 'select';
   options: string[];
   required: boolean;
-}
+} & SurveyBase
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel;
