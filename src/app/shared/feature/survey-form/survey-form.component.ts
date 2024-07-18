@@ -23,7 +23,7 @@ export class SurveyFormComponent {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
     cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
-    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '', validators: [] } });
+    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '', validators: {} } });
     this.cmpRefs.push(cmpRef);
   }
 
