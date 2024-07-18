@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SurveyModel } from '../../util/type/survey-type';
-import { customRequiredValidator } from '../../shared/form-validator/validators';
+import { customMinLengthValidator, customRequiredValidator } from '../../shared/form-validator/validators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +14,17 @@ export class SurveyDataService {
       title: '',
       description: '',
       validator: {
-        required: customRequiredValidator('Name is required'),
+        required: customRequiredValidator(),
+        minLength: customMinLengthValidator()
       }
     }, {
       type: 'select',
       options: ['10-20', '20-30'],
       title: '',
       description: '',
-      validator: {}
+      validator: {
+        required: customRequiredValidator(),
+      }
     }];
 
     return data;
