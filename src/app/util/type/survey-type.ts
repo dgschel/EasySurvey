@@ -37,13 +37,11 @@ export const FormControlNameMap: Record<FormControlType, string> = {
 export type SurveyInputModel = {
   type: 'input';
   placeholder?: string;
-  required: boolean;
 } & SurveyBaseType
 
 export type SurveySelectModel = {
   type: 'select';
   options: string[];
-  required: boolean;
 } & SurveyBaseType
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel;
