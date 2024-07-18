@@ -1,6 +1,5 @@
 import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
@@ -9,7 +8,7 @@ import { SurveyRefData } from '../../../util/type/survey-type';
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [FormsModule, JsonPipe, CreateSurveyGroupComponent, AsyncPipe],
+  imports: [JsonPipe, CreateSurveyGroupComponent, AsyncPipe],
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss'
 })
