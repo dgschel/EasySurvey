@@ -27,6 +27,10 @@ export class SurveyDataStorageService {
     this.dataStorageSubject.next(filteredEntries);
   };
 
+  clearData() {
+    this.dataStorageSubject.next([]);
+  }
+
   getData$(): Observable<SurveyBaseType[]> {
     return this.surveyData$.pipe(map(data => data.map(d => d.data)))
   }
