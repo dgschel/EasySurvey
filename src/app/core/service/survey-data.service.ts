@@ -12,13 +12,15 @@ export class SurveyDataService {
       placeholder: 'Name',
       required: true,
       title: '',
-      description: ''
+      description: '',
+      validators: ['required', 'minLength']
     }, {
       type: 'select',
       required: true,
       options: ['10-20', '20-30'],
       title: '',
-      description: ''
+      description: '',
+      validators: ['required']
     }];
 
     return data;
