@@ -11,6 +11,12 @@ export type SurveyBaseType = {
   validator: Partial<SurveyValidatorMap>;
 };
 
+export type SurveyBaseStorage = {
+  title: string;
+  description: string;
+  validator: SurveyValidatorType[];
+};
+
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
   data: SurveyBaseType
