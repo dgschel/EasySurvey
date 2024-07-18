@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 
 import { SurveyBase } from '../../../core/model/survey-base';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { SurveyBaseType } from '../../../util/type/survey-type';
+import { SurveyBaseType, SurveyValidatorType } from '../../../util/type/survey-type';
+import { surveyValidatorMap } from '../../form-validator/validators';
 
 @Component({
   selector: 'app-create-survey-group',
@@ -23,5 +24,18 @@ export class CreateSurveyGroupComponent {
     effect(() => {
       this.stateChanged.emit(this.surveyBaseModel.state())
     })
+  }
+
+  // Can be moved to a service. For now, it's here for simplicity
+  setValidatorFn = (validatorType: SurveyValidatorType, checked: boolean) => {
+    const validatorFn = surveyValidatorMap[validatorType]
+    this.surveyBaseModel.validatorMap.update((prev) => {
+      if (checked) {
+        return { ...prev, [validatorType]: validatorFn }
+      } else {
+        delete prev[validatorType];
+        return { ...prev };
+      }
+    });
   }
 }

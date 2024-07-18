@@ -4,6 +4,7 @@ import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorF
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
+import { SurveyValidatorMap } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-control-select',
@@ -21,7 +22,7 @@ export class FormControlSelectComponent {
   controlKeyName = input<string>();
   options = input<string[]>([]);
   label = input<string>();
-  validatorsFn = input<ValidatorFn[]>();
+  validator = input<SurveyValidatorMap>({} as SurveyValidatorMap);
   surveyFormControl: SurveyFormControl | undefined;
 
   get parentFormGroup() {
@@ -51,7 +52,7 @@ export class FormControlSelectComponent {
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.sections, this.validatorsFn(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormControl(this.sections, this.validator(), this.controlKeyName());
   }
 
   ngOnDestroy(): void {

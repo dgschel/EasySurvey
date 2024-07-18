@@ -1,9 +1,9 @@
-import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, inject, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
+import { SurveyBaseStorage, SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
@@ -12,18 +12,28 @@ import { SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss'
 })
-export class SurveyFormComponent {
+export class SurveyFormComponent implements OnInit {
   private surveyStorage = inject(SurveyDataStorageService)
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
 
   data$ = this.surveyStorage.getData$();
 
+  ngOnInit(): void {
+    this.data$.subscribe((surveyList) => {
+      const surveyData = surveyList.map(survey => {
+        const validatorKeys = Object.keys(survey.validator);
+        return { ...survey, validator: validatorKeys } as SurveyBaseStorage;
+      })
+      localStorage.setItem('surveyData', JSON.stringify(surveyData));
+    })
+  }
+
   addSection() {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
     cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
-    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '' } });
+    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '', validator: {} } });
     this.cmpRefs.push(cmpRef);
   }
 
@@ -32,7 +42,8 @@ export class SurveyFormComponent {
       ref: cmpRef,
       data: {
         title: state.title,
-        description: state.description
+        description: state.description,
+        validator: state.validator
       }
     }
     this.surveyStorage.updateData(cmpRef, surveyRefData);

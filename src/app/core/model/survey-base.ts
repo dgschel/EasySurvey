@@ -1,13 +1,14 @@
 import { signal, computed } from "@angular/core"
-import { SurveyBaseType } from "../../util/type/survey-type"
+import { SurveyBaseType, SurveyValidatorMap } from "../../util/type/survey-type"
 
 export class SurveyBase {
   title = signal<string>('')
   description = signal<string>('')
-  hasDescription = signal<boolean>(false)
+  validatorMap = signal<SurveyValidatorMap>({} as SurveyValidatorMap);
 
   state = computed<SurveyBaseType>(() => ({
     title: this.title(),
-    description: this.description()
+    description: this.description(),
+    validator: this.validatorMap()
   }))
 }
