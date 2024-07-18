@@ -3,7 +3,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyRefData } from '../../../util/type/survey-type';
+import { SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
@@ -27,7 +27,7 @@ export class SurveyFormComponent {
     this.cmpRefs.push(cmpRef);
   }
 
-  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: any) {
+  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyBaseType) {
     const surveyRefData: SurveyRefData = {
       ref: cmpRef,
       data: {
