@@ -1,0 +1,18 @@
+<app-basic-card>
+  <div class="card-body grid gap-4 p-4 bg-red-300">
+    <div class="form-control">
+      title
+      <input type="text" class="input input-sm" [(ngModel)]="surveyBaseModel.title">
+    </div>
+    @if (hasDescription) {
+    <div class="form-control">
+      description
+      <input type="text" class="input input-sm" [(ngModel)]="surveyBaseModel.description">
+    </div>
+    }
+    <div class="form-control">
+      <input type="checkbox" class="checkbox checkbox-sm" [(ngModel)]="hasDescription">
+    </div>
+  </div>
+  <button (click)="remove.emit()">remove</button>
+</app-basic-card>

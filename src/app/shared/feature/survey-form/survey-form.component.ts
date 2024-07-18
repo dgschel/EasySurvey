@@ -1,37 +1,56 @@
-import { ChangeDetectorRef, Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { JsonPipe } from '@angular/common';
-import { SurveySectionComponent } from '../survey-section/survey-section.component';
+import { Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
+import { AsyncPipe, JsonPipe } from '@angular/common';
+
+import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
+import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
+import { SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [JsonPipe, CreateSurveyGroupComponent, AsyncPipe],
   templateUrl: './survey-form.component.html',
-  styleUrl: './survey-form.component.scss',
+  styleUrl: './survey-form.component.scss'
 })
 export class SurveyFormComponent {
-  private cdr = inject(ChangeDetectorRef);
+  private surveyStorage = inject(SurveyDataStorageService)
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
-  comps: ComponentRef<SurveySectionComponent>[] = [];
+  cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
 
-  form: FormGroup = new FormGroup({
-    sections: new FormArray([])
-  })
+  data$ = this.surveyStorage.getData$();
 
   addSection() {
-    const compRef = this.componentContainer.createComponent(SurveySectionComponent);
-    compRef.instance.remove.subscribe(() => this.removeSurveySection(compRef));
-    this.comps.push(compRef);
-    compRef.changeDetectorRef.detectChanges();
-    this.cdr.detectChanges();
+    const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
+    cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
+    cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
+    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '' } });
+    this.cmpRefs.push(cmpRef);
   }
 
-  removeSurveySection(compRef: ComponentRef<SurveySectionComponent>) {
-    const index = this.comps.indexOf(compRef);
-    if (index !== -1) {
-      this.comps.splice(index, 1);
-      compRef.destroy();
+  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyBaseType) {
+    const surveyRefData: SurveyRefData = {
+      ref: cmpRef,
+      data: {
+        title: state.title,
+        description: state.description
+      }
     }
+    this.surveyStorage.updateData(cmpRef, surveyRefData);
+  }
+
+  removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
+    const index = this.cmpRefs.indexOf(cmpRef);
+    if (index !== -1) {
+      this.cmpRefs.splice(index, 1);
+      cmpRef.destroy();
+    }
+    this.surveyStorage.removeData(cmpRef);
+  }
+
+  ngOnDestroy() {
+    this.cmpRefs.forEach((comp) => {
+      this.removeSurveySection(comp);
+      this.surveyStorage.clearData();
+    });
   }
 }

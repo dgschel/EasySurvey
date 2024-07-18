@@ -11,10 +11,14 @@ export class SurveyDataService {
       type: 'input',
       placeholder: 'Name',
       required: true,
+      title: '',
+      description: ''
     }, {
       type: 'select',
       required: true,
-      options: ['10-20', '20-30']
+      options: ['10-20', '20-30'],
+      title: '',
+      description: ''
     }];
 
     return data;

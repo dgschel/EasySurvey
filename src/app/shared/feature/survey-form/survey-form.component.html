@@ -1,7 +1,6 @@
-<form class="grid gap-4" [formGroup]="form">
-  <ng-container #component />
-  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Save</button>
-</form>
+<div class="grid gap-4">
+  <ng-container #component></ng-container>
+</div>
 <button class="btn btn-circle" type="button" (click)="addSection()">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
     class="size-6">
@@ -9,5 +8,4 @@
   </svg>
 </button>
 
-{{ form.value | json }}
-valid {{ form.valid }}
+{{data$ | async | json}}
