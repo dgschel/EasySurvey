@@ -21,32 +21,21 @@ export class SurveyFormComponent {
 
   addSection() {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
-    cmpRef.instance.remove.subscribe(() => {
-      this.removeSurveySection(cmpRef)
-      this.surveyStorage.removeData(cmpRef);
-    });
+    cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
+    cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
+    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '' } });
+    this.cmpRefs.push(cmpRef);
+  }
 
-    cmpRef.instance.stateChanged.subscribe((state) => {
-      const obj: SurveyRefData = {
-        ref: cmpRef,
-        data: {
-          title: state.title,
-          description: state.description
-        }
-      }
-
-      this.surveyStorage.updateData(cmpRef, obj);
-    });
-
-    this.surveyStorage.addData({
+  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: any) {
+    const surveyRefData: SurveyRefData = {
       ref: cmpRef,
       data: {
-        title: '',
-        description: ''
+        title: state.title,
+        description: state.description
       }
-    });
-
-    this.cmpRefs.push(cmpRef);
+    }
+    this.surveyStorage.updateData(cmpRef, surveyRefData);
   }
 
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
@@ -55,6 +44,7 @@ export class SurveyFormComponent {
       this.cmpRefs.splice(index, 1);
       cmpRef.destroy();
     }
+    this.surveyStorage.removeData(cmpRef);
   }
 
   ngOnDestroy() {
