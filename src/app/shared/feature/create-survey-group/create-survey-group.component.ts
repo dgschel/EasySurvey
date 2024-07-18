@@ -26,6 +26,7 @@ export class CreateSurveyGroupComponent {
     })
   }
 
+  // Can be moved to a service. For now, it's here for simplicity
   setValidatorFn = (validatorType: SurveyValidatorType, checked: boolean) => {
     const validatorFn = surveyValidatorMap[validatorType]
     this.surveyBaseModel.validatorMap.update((prev) => {
