@@ -13,14 +13,14 @@ export class SurveyDataService {
       required: true,
       title: '',
       description: '',
-      validators: {}
+      validator: {}
     }, {
       type: 'select',
       required: true,
       options: ['10-20', '20-30'],
       title: '',
       description: '',
-      validators: {}
+      validator: {}
     }];
 
     return data;

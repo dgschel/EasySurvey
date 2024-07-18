@@ -9,7 +9,7 @@ export class SurveyBase {
   state = computed<SurveyBaseType>(() => ({
     title: this.title(),
     description: this.description(),
-    validators: {
+    validator: {
       required: () => customRequiredValidator
     }
   }))

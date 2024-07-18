@@ -8,7 +8,7 @@ import { ValidatorFn } from "@angular/forms";
 export type SurveyBaseType = {
   title: string;
   description: string;
-  validators: Partial<SurveyValidatorMap>;
+  validator: Partial<SurveyValidatorMap>;
 };
 
 export type SurveyRefData = {
