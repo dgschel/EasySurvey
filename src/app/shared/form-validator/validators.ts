@@ -8,7 +8,7 @@ export const customRequiredValidator = (message: string = "This field is require
   }
 }
 
-export const customMinLengthValidator = (minLength: number, message: string = `Min length of ${minLength} characters`): ValidatorFn => {
+export const customMinLengthValidator = (minLength: number = 2, message: string = `Min length of ${minLength} characters`): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
     // Use the built-in minlength validator
     const validate = Validators.minLength(minLength)(control);
