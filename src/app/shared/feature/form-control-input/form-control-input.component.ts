@@ -33,7 +33,6 @@ export class FormControlInputComponent implements OnInit {
   }
 
   get validationErrors() {
-    console.log(this.surveyFormControl?.validationErrors)
     return this.surveyFormControl?.validationErrors
   }
 
