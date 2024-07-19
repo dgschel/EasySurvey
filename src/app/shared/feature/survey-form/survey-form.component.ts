@@ -52,16 +52,18 @@ export class SurveyFormComponent implements OnInit {
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
     const index = this.cmpRefs.indexOf(cmpRef);
     if (index !== -1) {
+      this.surveyStorage.removeData(cmpRef);
       this.cmpRefs.splice(index, 1);
       cmpRef.destroy();
     }
-    this.surveyStorage.removeData(cmpRef);
+  }
+
+  clearData() {
+    this.surveyStorage.clearData();
   }
 
   ngOnDestroy() {
-    this.cmpRefs.forEach((comp) => {
-      this.removeSurveySection(comp);
-      this.surveyStorage.clearData();
-    });
+    this.cmpRefs.forEach((comp) => comp.destroy());
+    this.cmpRefs = [];
   }
 }
