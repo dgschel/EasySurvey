@@ -1,18 +1,19 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, ViewChild, ViewContainerRef } from '@angular/core';
-
-import { FormControlSelectComponent } from '../form-control-select/form-control-select.component';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { DynamicOptionComponent } from '../../ui/dynamic-option/dynamic-option.component';
 
 @Component({
   selector: 'app-form-select',
   standalone: true,
-  imports: [FormControlSelectComponent],
+  imports: [],
   templateUrl: './form-select.component.html',
   styleUrl: './form-select.component.scss',
 })
 export class FormSelectComponent implements AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
   components: ComponentRef<DynamicOptionComponent>[] = [];
+
+  // Callback function to update options passed down from parent to child
+  @Input() optionsChangedCallback = (options: string[]): string[] => options;
 
   @ViewChild('host', { read: ViewContainerRef }) host!: ViewContainerRef;
 
@@ -31,6 +32,7 @@ export class FormSelectComponent implements AfterViewInit {
     componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
     componentRef.changeDetectorRef.detectChanges();
     this.cdr.detectChanges();
+    this.optionsChangedCallback(this.values);
   }
 
   onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
