@@ -1,29 +1,66 @@
-import { Component, effect, output } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgComponentOutlet } from '@angular/common';
 
-import { SurveyBase } from '../../../core/model/survey-base';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { SurveyBaseType, SurveyValidatorType } from '../../../util/type/survey-type';
+import { FormControlComponentType, SurveyInputModel, SurveyModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
 import { surveyValidatorMap } from '../../form-validator/validators';
+import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
+import { FormSelectComponent } from '../form-select/form-select.component';
+import { CreateFormInputComponent } from '../../ui/create-form-input/create-form-input.component';
+import { SurveyBase } from '../../../core/model/survey-base';
 
 @Component({
   selector: 'app-create-survey-group',
   standalone: true,
-  imports: [FormsModule, BasicCardComponent],
+  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet],
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss'
 })
-export class CreateSurveyGroupComponent {
+export class CreateSurveyGroupComponent implements AfterViewInit {
   surveyBaseModel = new SurveyBase();
+  surveyModel = signal<SurveyModel>({ ...this.surveyBaseModel.state(), type: 'input' });
   hasDescription: boolean = false;
 
   remove = output<void>();
-  stateChanged = output<SurveyBaseType>();
+  stateChanged = output<SurveyModel>();
+
+  cmpRef: ComponentRef<FormControlComponentType> | undefined;
+  @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
+
+  ngAfterViewInit() {
+    this.surveyModel.set({ ...this.surveyBaseModel.state(), type: 'input' });
+  }
+
+  onCreateComponent(cmp: Type<FormControlComponentType>) {
+    this.component.clear();
+    this.cmpRef?.destroy();
+    this.cmpRef = this.component.createComponent(cmp);
+    this.cmpRef.changeDetectorRef.detectChanges();
+
+    if (this.cmpRef.instance instanceof CreateFormInputComponent) {
+      const surveyInput = this.getDefaultSurveyInputModel();
+      this.surveyModel.set(surveyInput);
+    } else if (this.cmpRef.instance instanceof FormSelectComponent) {
+      const surveySelect = this.getDefaultSurveySelectModel();
+      this.surveyModel.set(surveySelect);
+      this.cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
+    }
+  }
 
   constructor() {
     effect(() => {
-      this.stateChanged.emit(this.surveyBaseModel.state())
+      this.stateChanged.emit(this.surveyModel());
     })
+  }
+
+  updateSelectOptions(options: string[]) {
+    const surveyModel: SurveySelectModel = {
+      ...this.surveyBaseModel.state(),
+      type: 'select',
+      options,
+    };
+    this.surveyModel.set(surveyModel);
   }
 
   // Can be moved to a service. For now, it's here for simplicity
@@ -37,5 +74,20 @@ export class CreateSurveyGroupComponent {
         return { ...prev };
       }
     });
+  }
+
+  getDefaultSurveyInputModel(): SurveyInputModel {
+    return {
+      ...this.surveyBaseModel.state(),
+      type: 'input',
+    };
+  }
+
+  getDefaultSurveySelectModel(): SurveySelectModel {
+    return {
+      ...this.surveyBaseModel.state(),
+      type: 'select',
+      options: [],
+    };
   }
 }
