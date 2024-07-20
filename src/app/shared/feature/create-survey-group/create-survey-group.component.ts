@@ -18,7 +18,7 @@ import { SurveyBase } from '../../../core/model/survey-base';
   styleUrl: './create-survey-group.component.scss'
 })
 export class CreateSurveyGroupComponent implements AfterViewInit {
-  surveyBaseModel = new SurveyBase();
+  surveyBaseModel = new SurveyBase<SurveyModel>();
   surveyModel = signal<SurveyModel>({ ...this.surveyBaseModel.state(), type: 'input' });
   hasDescription: boolean = false;
 
@@ -29,7 +29,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
 
   ngAfterViewInit() {
-    this.surveyModel.set({ ...this.surveyBaseModel.state(), type: 'input' });
+    this.surveyBaseModel.setState(this.surveyModel());
   }
 
   onCreateComponent(cmp: Type<FormControlComponentType>) {
