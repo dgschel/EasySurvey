@@ -3,7 +3,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyBaseStorage, SurveyBaseType, SurveyRefData } from '../../../util/type/survey-type';
+import { SurveyBaseStorage, SurveyModel, SurveyRefData } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
@@ -33,18 +33,14 @@ export class SurveyFormComponent implements OnInit {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
     cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
-    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '', validator: {} } });
+    this.surveyStorage.addData({ ref: cmpRef, data: { title: '', description: '', validator: {}, type: 'input' } });
     this.cmpRefs.push(cmpRef);
   }
 
-  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyBaseType) {
+  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyModel) {
     const surveyRefData: SurveyRefData = {
       ref: cmpRef,
-      data: {
-        title: state.title,
-        description: state.description,
-        validator: state.validator
-      }
+      data: { ...state }
     }
     this.surveyStorage.updateData(cmpRef, surveyRefData);
   }
