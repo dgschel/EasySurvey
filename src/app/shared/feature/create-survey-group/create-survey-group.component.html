@@ -2,7 +2,7 @@
   <div class="card-body grid gap-4 p-4 bg-red-300">
     <div class="form-control">
       title
-      <input type="text" class="input input-sm" [ngModel]="surveyBaseModel.title()" (ngModelChange)="surveyBaseModel.title.set($event)">
+      <input type="text" class="input input-sm" [(ngModel)]="surveyBaseModel.title">
     </div>
     @if (hasDescription) {
     <div class="form-control">

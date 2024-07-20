@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentRef, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, computed, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
@@ -17,9 +17,15 @@ import { SurveyBase } from '../../../core/model/survey-base';
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss'
 })
-export class CreateSurveyGroupComponent implements AfterViewInit {
+export class CreateSurveyGroupComponent {
   surveyBaseModel = new SurveyBase<SurveyModel>();
-  surveyModel = signal<SurveyModel>({ ...this.surveyBaseModel.state(), type: 'input' });
+  surveyComponentModel = signal<SurveyModel>(this.getDefaultSurveyInputModel());
+  surveyModel = computed(() => {
+    return {
+      ...this.surveyComponentModel(),
+      ...this.surveyBaseModel.state()
+    };
+  });
   hasDescription: boolean = false;
 
   remove = output<void>();
@@ -27,10 +33,6 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
   cmpRef: ComponentRef<FormControlComponentType> | undefined;
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
-
-  ngAfterViewInit() {
-    this.surveyBaseModel.setState(this.surveyModel());
-  }
 
   onCreateComponent(cmp: Type<FormControlComponentType>) {
     this.component.clear();
@@ -40,10 +42,11 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
     if (this.cmpRef.instance instanceof CreateFormInputComponent) {
       const surveyInput = this.getDefaultSurveyInputModel();
-      this.surveyModel.set(surveyInput);
+      this.surveyComponentModel.set(surveyInput);
+      this.surveyBaseModel.setType('input');
     } else if (this.cmpRef.instance instanceof FormSelectComponent) {
       const surveySelect = this.getDefaultSurveySelectModel();
-      this.surveyModel.set(surveySelect);
+      this.surveyComponentModel.set(surveySelect);
       this.cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
     }
   }
@@ -60,7 +63,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
       type: 'select',
       options,
     };
-    this.surveyModel.set(surveyModel);
+    this.surveyComponentModel.set(surveyModel);
   }
 
   // Can be moved to a service. For now, it's here for simplicity
