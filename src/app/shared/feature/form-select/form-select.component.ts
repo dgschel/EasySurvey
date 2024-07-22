@@ -31,10 +31,14 @@ export class FormSelectComponent implements AfterViewInit {
   addComponent() {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
     this.components.push(componentRef);
-    componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
-    componentRef.instance.blur.subscribe(() => this.optionsChangedCallback(this.values));
+    this.setupListeners(componentRef);
     componentRef.changeDetectorRef.detectChanges();
     this.cdr.detectChanges();
+  }
+
+  setupListeners(componentRef: ComponentRef<DynamicOptionComponent>) {
+    componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
+    componentRef.instance.blur.subscribe(() => this.optionsChangedCallback(this.values));
   }
 
   onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
