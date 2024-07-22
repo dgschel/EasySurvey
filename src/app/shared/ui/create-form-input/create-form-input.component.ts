@@ -4,9 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-create-form-input',
   standalone: true,
   imports: [],
-  templateUrl: './create-form-input.component.html',
-  styleUrl: './create-form-input.component.scss'
+  template: '<input type="text" class="input input-sm" disabled placeholder="Kurzantwort">'
 })
-export class CreateFormInputComponent {
-
-}
+export class CreateFormInputComponent { }

@@ -43,7 +43,6 @@ export class CreateSurveyGroupComponent {
     if (this.cmpRef.instance instanceof CreateFormInputComponent) {
       const surveyInput = this.getDefaultSurveyInputModel();
       this.surveyComponentModel.set(surveyInput);
-      this.surveyBaseModel.setType('input');
     } else if (this.cmpRef.instance instanceof FormSelectComponent) {
       const surveySelect = this.getDefaultSurveySelectModel();
       this.surveyComponentModel.set(surveySelect);
