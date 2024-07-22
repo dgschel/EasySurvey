@@ -1,9 +1,10 @@
 import { ComponentRef } from "@angular/core";
-import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
-import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
 import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-group/create-survey-group.component";
 import { ValidatorFn } from "@angular/forms";
+import { CreateFormInputComponent } from "../../shared/ui/create-form-input/create-form-input.component";
+import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
+import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -17,18 +18,28 @@ export type SurveyBaseStorage = {
   validator: SurveyValidatorType[];
 };
 
+export type SurveyModelFromStorage = Exclude<SurveyModel, 'validator'> & {
+  validator: SurveyBaseStorage['validator'];
+}
+
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
-  data: SurveyBaseType
+  data: SurveyModel
 }
 
 export type SurveyValidatorType = 'required' | 'minLength';
 export type SurveyValidatorMap = Record<SurveyValidatorType, ValidatorFn>;
 
+export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
-export type FormComponentType = typeof FormSelectComponent;
 
 export type FormControlType = 'input' | 'select'
+
+// user generated components
+export const formComponentMap: Record<FormControlType, FormComponentType> = {
+  input: CreateFormInputComponent, // TODO: Edit naming to distinquish user generated components and programatically form controls based on data
+  select: FormSelectComponent,
+}
 
 export const formControlComponentMap: Record<FormControlType, FormControlComponentType> = {
   input: FormControlInputComponent,
