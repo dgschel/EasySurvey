@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { DynamicOptionComponent } from '../../ui/dynamic-option/dynamic-option.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { DynamicOptionComponent } from '../../ui/dynamic-option/dynamic-option.c
   templateUrl: './form-select.component.html',
   styleUrl: './form-select.component.scss',
 })
-export class FormSelectComponent implements AfterViewInit {
+export class FormSelectComponent implements AfterViewInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   components: ComponentRef<DynamicOptionComponent>[] = [];
 
@@ -51,5 +51,9 @@ export class FormSelectComponent implements AfterViewInit {
       cmpRef.destroy();
       this.optionsChangedCallback(this.values);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.components.forEach(cmp => cmp.destroy())
   }
 }
