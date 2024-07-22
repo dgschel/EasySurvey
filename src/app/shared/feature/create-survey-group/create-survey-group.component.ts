@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ComponentRef, computed, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, computed, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormControlComponentType, SurveyInputModel, SurveyModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
+import { FormComponentType, SurveyInputModel, SurveyModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
 import { surveyValidatorMap } from '../../form-validator/validators';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
@@ -31,10 +31,10 @@ export class CreateSurveyGroupComponent {
   remove = output<void>();
   stateChanged = output<SurveyModel>();
 
-  cmpRef: ComponentRef<FormControlComponentType> | undefined;
+  cmpRef: ComponentRef<FormComponentType> | undefined;
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
 
-  onCreateComponent(cmp: Type<FormControlComponentType>) {
+  onCreateComponent(cmp: Type<FormComponentType>) {
     this.component.clear();
     this.cmpRef?.destroy();
     this.cmpRef = this.component.createComponent(cmp);
