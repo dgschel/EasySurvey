@@ -1,4 +1,5 @@
 import { Type } from "@angular/core";
-import { FormControlType, formControlComponentMap } from "../type/survey-type";
+import { FormControlType, formComponentMap, formControlComponentMap } from "../type/survey-type";
 
+export const createFormComponent = <T>(cmpType: FormControlType): Type<T> => formComponentMap[cmpType] as Type<T>;
 export const createFormControlComponent = <T>(cmpType: FormControlType): Type<T> => formControlComponentMap[cmpType] as Type<T>;
