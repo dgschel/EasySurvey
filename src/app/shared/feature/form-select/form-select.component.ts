@@ -43,6 +43,7 @@ export class FormSelectComponent implements AfterViewInit {
     if (index !== -1) {
       this.components.splice(index, 1);
       cmpRef.destroy();
+      this.optionsChangedCallback(this.values);
     }
   }
 }
