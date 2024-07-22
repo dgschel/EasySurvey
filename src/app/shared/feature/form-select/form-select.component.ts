@@ -19,7 +19,9 @@ export class FormSelectComponent implements AfterViewInit {
 
   // Will be used to populate options
   get values() {
-    return this.components.map(cmp => cmp.instance.value);
+    return this.components
+      .filter(cmp => cmp.instance.value !== '')
+      .map(cmp => cmp.instance.value);
   }
 
   ngAfterViewInit(): void {
@@ -30,9 +32,9 @@ export class FormSelectComponent implements AfterViewInit {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
     this.components.push(componentRef);
     componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
+    componentRef.instance.blur.subscribe(() => this.optionsChangedCallback(this.values));
     componentRef.changeDetectorRef.detectChanges();
     this.cdr.detectChanges();
-    this.optionsChangedCallback(this.values);
   }
 
   onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
