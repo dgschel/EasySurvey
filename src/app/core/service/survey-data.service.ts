@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { SurveyBaseStorage, SurveyBaseType, SurveyModel } from '../../util/type/survey-type';
+import { SurveyModel, SurveyModelFromStorage } from '../../util/type/survey-type';
 import { surveyValidatorMap } from '../../shared/form-validator/validators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SurveyDataService {
-  // TODO: Get survey data from API
   getSurveyData(): SurveyModel[] {
     const storageData = localStorage.getItem('surveyData') ?? "";
-    const storage = JSON.parse(storageData) as SurveyBaseStorage[];
+    const storage = JSON.parse(storageData) as SurveyModelFromStorage[];
 
-    const entries: SurveyBaseType[] = storage.map(entry => {
+    const entries: SurveyModel[] = storage.map((entry: SurveyModelFromStorage) => {
       const validationMap = entry.validator.reduce((acc, curr) => ({
         ...acc,
         [curr]: surveyValidatorMap[curr]
@@ -23,6 +22,6 @@ export class SurveyDataService {
       }
     });
 
-    return [];
+    return entries
   }
 }
