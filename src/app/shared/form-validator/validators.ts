@@ -18,6 +18,6 @@ export const customMinLengthValidator = (minLength: number = 3, message: string 
 }
 
 export const surveyValidatorMap: SurveyValidatorMap = {
-  'required': () => customRequiredValidator,
-  'minLength': () => customMinLengthValidator,
+  'required': customRequiredValidator(),
+  'minLength': customMinLengthValidator(),
 }
