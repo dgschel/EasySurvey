@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Injector, output, Type } from '@angular/core'
 import { KeyValuePipe } from '@angular/common';
 
 import { CreateComponentService } from './create-component.service';
-import { FormControlComponentType, FormControlNameMap, FormControlType } from '../../../util/type/survey-type';
+import { FormComponentType, FormControlNameMap, FormControlType } from '../../../util/type/survey-type';
 
 /**
  * Represents the CreateComponentComponent class.
@@ -17,8 +17,8 @@ import { FormControlComponentType, FormControlNameMap, FormControlType } from '.
   styleUrl: './create-component.component.scss'
 })
 export class CreateComponentComponent implements AfterViewInit {
-  private cmpService: CreateComponentService<FormControlComponentType>;
-  cmpTypeOutput = output<Type<FormControlComponentType>>();
+  private cmpService: CreateComponentService<FormComponentType>;
+  cmpTypeOutput = output<Type<FormComponentType>>();
   controlTypeMap = FormControlNameMap;
 
   /**
