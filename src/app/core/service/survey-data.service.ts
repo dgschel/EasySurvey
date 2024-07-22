@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
-import { SurveyModel } from '../../util/type/survey-type';
-import { customMinLengthValidator, customRequiredValidator } from '../../shared/form-validator/validators';
+import { SurveyModel, SurveyModelFromStorage } from '../../util/type/survey-type';
+import { surveyValidatorMap } from '../../shared/form-validator/validators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SurveyDataService {
-  // TODO: Get survey data from API
   getSurveyData(): SurveyModel[] {
-    const data: SurveyModel[] = [{
-      type: 'input',
-      placeholder: 'Name',
-      title: '',
-      description: '',
-      validator: {
-        required: customRequiredValidator(),
-        minLength: customMinLengthValidator()
-      }
-    }, {
-      type: 'select',
-      options: ['10-20', '20-30'],
-      title: '',
-      description: '',
-      validator: {
-        required: customRequiredValidator(),
-      }
-    }];
+    const storageData = localStorage.getItem('surveyData') ?? "";
+    const storage = JSON.parse(storageData) as SurveyModelFromStorage[];
 
-    return data;
+    const entries: SurveyModel[] = storage.map((entry: SurveyModelFromStorage) => {
+      const validationMap = entry.validator.reduce((acc, curr) => ({
+        ...acc,
+        [curr]: surveyValidatorMap[curr]
+      }), {})
+
+      return {
+        ...entry,
+        validator: validationMap
+      }
+    });
+
+    return entries
   }
 }

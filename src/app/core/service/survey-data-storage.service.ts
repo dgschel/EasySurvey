@@ -1,6 +1,6 @@
 import { ComponentRef, Injectable } from "@angular/core";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { SurveyBaseType, SurveyRefData } from "../../util/type/survey-type";
+import { SurveyModel, SurveyRefData } from "../../util/type/survey-type";
 import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-group/create-survey-group.component";
 
 @Injectable({
@@ -31,7 +31,7 @@ export class SurveyDataStorageService {
     this.dataStorageSubject.next([]);
   }
 
-  getData$(): Observable<SurveyBaseType[]> {
+  getData$(): Observable<SurveyModel[]> {
     return this.surveyData$.pipe(map(data => data.map(d => d.data)))
   }
 }
