@@ -32,8 +32,15 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
     this.components.push(componentRef);
     this.setupListeners(componentRef);
+    this.setupIndex();
     componentRef.changeDetectorRef.detectChanges();
     this.cdr.detectChanges();
+  }
+
+  setupIndex() {
+    this.components.forEach((cmp, index) => {
+      cmp.setInput('index', index);
+    });
   }
 
   setupListeners(componentRef: ComponentRef<DynamicOptionComponent>) {
@@ -46,11 +53,13 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
     if (this.components.length === 1) return;
 
     const index = this.components.indexOf(cmpRef);
-    if (index !== -1) {
-      this.components.splice(index, 1);
-      cmpRef.destroy();
-      this.optionsChangedCallback(this.values);
-    }
+
+    if (index === -1) return;
+
+    this.components.splice(index, 1);
+    cmpRef.destroy();
+    this.optionsChangedCallback(this.values);
+    this.setupIndex();
   }
 
   ngOnDestroy(): void {
