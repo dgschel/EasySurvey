@@ -25,20 +25,37 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.addComponent();
+    this.createOption();
   }
 
-  addComponent() {
+  createOption() {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
     this.components.push(componentRef);
     this.setupListeners(componentRef);
+    this.setupIndex();
     componentRef.changeDetectorRef.detectChanges();
     this.cdr.detectChanges();
   }
 
+  setupIndex() {
+    this.components.forEach((cmp, index) => {
+      cmp.setInput('index', index);
+    });
+  }
+
   setupListeners(componentRef: ComponentRef<DynamicOptionComponent>) {
     componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
-    componentRef.instance.blur.subscribe(() => this.optionsChangedCallback(this.values));
+    componentRef.instance.blur.subscribe((index) => {
+      this.handleLastOptionInput(index);
+      this.optionsChangedCallback(this.values);
+    });
+  }
+
+  handleLastOptionInput(index: number) {
+    const lastComponent = this.components[this.components.length - 1];
+    if (this.components.length - 1 === index && lastComponent.instance.value !== '') {
+      this.createOption();
+    }
   }
 
   onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
@@ -46,11 +63,13 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
     if (this.components.length === 1) return;
 
     const index = this.components.indexOf(cmpRef);
-    if (index !== -1) {
-      this.components.splice(index, 1);
-      cmpRef.destroy();
-      this.optionsChangedCallback(this.values);
-    }
+
+    if (index === -1) return;
+
+    this.components.splice(index, 1);
+    cmpRef.destroy();
+    this.optionsChangedCallback(this.values);
+    this.setupIndex();
   }
 
   ngOnDestroy(): void {

@@ -1,1 +1,14 @@
-<ng-container #component />
+<app-basic-card>
+  <div class="card-body">
+    <h2 class="font-bold leading-7">
+      {{ model.title }}
+      @if (hasValidator()) {
+      <span class="text-error">*</span>
+      }
+    </h2>
+    @if (model.description) {
+    <p class="text-sm">{{ model.description }}</p>
+    }
+    <ng-container #component />
+  </div>
+</app-basic-card>
