@@ -1,20 +1,16 @@
 <app-basic-card>
-  <div class="card-body grid gap-4 p-4 bg-red-300">
-    <div class="form-control">
-      title
-      <input type="text" class="input input-sm" [(ngModel)]="surveyBaseModel.title">
+  <div class="card-body grid gap-4">
+    <div class="flex w-full">
+      <input type="text" class="input w-full" placeholder="Geben Sie ein Titel ein" [(ngModel)]="surveyBaseModel.title">
+      <div class="divider divider-horizontal"></div>
+      <app-create-component (cmpTypeOutput)="onCreateComponent($event)" />
     </div>
     @if (hasDescription) {
-    <div class="form-control">
-      description
-      <input type="text" class="input input-sm" [(ngModel)]="surveyBaseModel.description">
-    </div>
+    <input type="text" class="input input-sm ps-4 pe-4 w-full" placeholder="Geben Sie optional eine Beschreibung ein"
+      [(ngModel)]="surveyBaseModel.description">
     }
-
-    <app-create-component (cmpTypeOutput)="onCreateComponent($event)" />
     <ng-container #component></ng-container>
-
-    <div class="card-actions items-center justify-end">
+    <div class="card-actions items-center justify-end border-t pt-1 -mb-2">
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Description</span>
