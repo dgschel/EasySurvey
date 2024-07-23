@@ -41,7 +41,7 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     }
   }
 
-  hasRequiredValidator(): boolean {
-    return this.model.validator.required !== undefined
+  hasValidator(): boolean {
+    return Object.keys(this.model.validator).length > 0
   }
 }

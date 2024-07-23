@@ -1,7 +1,7 @@
 <app-basic-card>
   <h2 class="font-bold leading-7">
     {{ model.title }}
-    @if (hasRequiredValidator()) {
+    @if (hasValidator()) {
     <span class="text-error">*</span>
     }
   </h2>
