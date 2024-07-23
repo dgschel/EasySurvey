@@ -2,11 +2,12 @@ import { AfterViewInit, Component, ComponentRef, Injector, Input, ViewChild, Vie
 import { CreateComponentComponent } from '../create-component/create-component.component';
 import { FormControlComponentType, SurveyModel } from '../../../util/type/survey-type';
 import { CreateComponentService } from '../create-component/create-component.service';
+import { BasicCardComponent } from '../basic-card/basic-card.component';
 
 @Component({
   selector: 'app-view-survey-group',
   standalone: true,
-  imports: [CreateComponentComponent],
+  imports: [CreateComponentComponent, BasicCardComponent],
   providers: [CreateComponentService],
   templateUrl: './view-survey-group.component.html',
   styleUrl: './view-survey-group.component.scss',
