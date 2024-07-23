@@ -12,5 +12,5 @@ export class DynamicOptionComponent {
   @Input() index = 0;
   value = '';
   remove = output<void>();
-  blur = output<void>();
+  blur = output<number>();
 }

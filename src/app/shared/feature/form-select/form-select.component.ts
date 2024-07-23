@@ -25,10 +25,10 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.addComponent();
+    this.createOption();
   }
 
-  addComponent() {
+  createOption() {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
     this.components.push(componentRef);
     this.setupListeners(componentRef);
@@ -45,7 +45,17 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
 
   setupListeners(componentRef: ComponentRef<DynamicOptionComponent>) {
     componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
-    componentRef.instance.blur.subscribe(() => this.optionsChangedCallback(this.values));
+    componentRef.instance.blur.subscribe((index) => {
+      this.handleLastOptionInput(index);
+      this.optionsChangedCallback(this.values);
+    });
+  }
+
+  handleLastOptionInput(index: number) {
+    const lastComponent = this.components[this.components.length - 1];
+    if (this.components.length - 1 === index && lastComponent.instance.value !== '') {
+      this.createOption();
+    }
   }
 
   onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
