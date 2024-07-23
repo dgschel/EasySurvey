@@ -1,5 +1,10 @@
 <app-basic-card>
-  <h2 class="font-bold leading-7">{{ model.title }}</h2>
+  <h2 class="font-bold leading-7">
+    {{ model.title }}
+    @if (hasRequiredValidator()) {
+    <span class="text-error">*</span>
+    }
+  </h2>
   <p class="text-sm mb-4">{{ model.description }}</p>
   <ng-container #component />
 </app-basic-card>

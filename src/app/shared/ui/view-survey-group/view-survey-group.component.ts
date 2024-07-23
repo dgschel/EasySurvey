@@ -27,6 +27,7 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log(this.model);
     const cmp = this.cmpService.createFormControlComponentInstance(this.model.type)
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(cmp);
@@ -38,5 +39,9 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     } else if (this.model.type === 'select') {
       this.componentRef.setInput('options', this.model.options);
     }
+  }
+
+  hasRequiredValidator(): boolean {
+    return this.model.validator.required !== undefined
   }
 }
