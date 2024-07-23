@@ -1,16 +1,16 @@
 <app-basic-card>
   <div class="card-body grid gap-4">
     <div class="flex w-full">
-      <input type="text" class="input w-full" placeholder="Geben Sie ein Titel ein" [(ngModel)]="surveyBaseModel.title">
+      <input type="text" class="input w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title">
       <div class="divider divider-horizontal"></div>
       <app-create-component (cmpTypeOutput)="onCreateComponent($event)" />
     </div>
     @if (hasDescription) {
-    <input type="text" class="input input-sm ps-4 pe-4 w-full" placeholder="Geben Sie optional eine Beschreibung ein"
+    <input type="text" class="input input-sm ps-4 pe-4 w-full" placeholder="Beschreibung"
       [(ngModel)]="surveyBaseModel.description">
     }
     <ng-container #component></ng-container>
-    <div class="card-actions items-center justify-end border-t pt-1 -mb-2">
+    <div class="card-actions items-center justify-end border-t pt-2">
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Beschreibung</span>
@@ -31,7 +31,7 @@
             (change)="setValidatorFn('required', required.checked)" />
         </label>
       </div>
-      <button type="button" class="btn btn-ghost btn-circle" (click)="remove.emit()"><svg
+      <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round"
