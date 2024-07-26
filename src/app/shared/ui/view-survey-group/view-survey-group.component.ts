@@ -27,7 +27,6 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.model);
     const cmp = this.cmpService.createFormControlComponentInstance(this.model.type)
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(cmp);
