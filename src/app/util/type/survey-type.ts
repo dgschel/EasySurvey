@@ -60,3 +60,5 @@ export type SurveyModel = SurveyInputModel | SurveySelectModel;
 export type SurveyModelStorage = Omit<SurveyModel, 'validator'> & {
   validator: Partial<ValidatorConfig>
 };
+
+export type SurveyValidatorFn = Record<SurveyValidatorType, ValidatorFn>

@@ -4,7 +4,7 @@ import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorF
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
-import { ValidatorConfig } from '../../../util/type/survey-type';
+import { SurveyModelStorage, SurveyValidatorFn, SurveyValidatorMap, ValidatorConfig, ValidatorFunction } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-control-input',
@@ -21,7 +21,7 @@ export class FormControlInputComponent implements OnInit {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>();
   placeholder = input<string>();
-  validator = input<ValidatorConfig>({} as ValidatorConfig);
+  validator = input<SurveyValidatorFn>({} as SurveyValidatorFn);
   surveyFormControl: SurveyFormControl | undefined;
 
   get parentFormGroup() {
