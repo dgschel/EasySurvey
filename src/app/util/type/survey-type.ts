@@ -1,7 +1,7 @@
 import { ComponentRef } from "@angular/core";
+import { ValidatorFn } from "@angular/forms";
 import { FormSelectComponent } from "../../shared/feature/form-select/form-select.component";
 import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-group/create-survey-group.component";
-import { ValidatorFn } from "@angular/forms";
 import { CreateFormInputComponent } from "../../shared/ui/create-form-input/create-form-input.component";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
@@ -9,26 +9,21 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 export type SurveyBaseType = {
   title: string;
   description: string;
-  validator: Partial<SurveyValidatorMap>;
+  validator: Partial<SurveyValidatorMap<ValidatorConfig>>;
 };
-
-export type SurveyBaseStorage = {
-  title: string;
-  description: string;
-  validator: SurveyValidatorType[];
-};
-
-export type SurveyModelFromStorage = Exclude<SurveyModel, 'validator'> & {
-  validator: SurveyBaseStorage['validator'];
-}
 
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
-  data: SurveyModel
+  data: SurveyModelStorage
 }
 
 export type SurveyValidatorType = 'required' | 'minLength';
-export type SurveyValidatorMap = Record<SurveyValidatorType, ValidatorFn>;
+export type ValidatorFunction<T> = (data: T) => ValidatorFn;
+export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
+export type ValidatorConfig = {
+  required: { message: string },
+  minLength: { message: string, value: number }
+}
 
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
@@ -62,3 +57,6 @@ export type SurveySelectModel = {
 } & SurveyBaseType
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel;
+export type SurveyModelStorage = Omit<SurveyModel, 'validator'> & {
+  validator: Partial<ValidatorConfig>
+};
