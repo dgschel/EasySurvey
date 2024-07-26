@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
+
 import { SurveyDataService } from '../core/service/survey-data.service';
-import { SurveyModel } from '../util/type/survey-type';
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
+import { SurveyModel } from '../util/type/survey-type';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -25,7 +26,7 @@ export class ViewSurveyFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.surveyComponents = this.surveyDataService.getSurveyData();
+    this.surveyComponents = this.surveyDataService.getSurveyData() as SurveyModel[];
     this.cdr.detectChanges();
   }
 }
