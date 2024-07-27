@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ComponentRef, Injector, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { CreateComponentComponent } from '../create-component/create-component.component';
-import { FormControlComponentType, SurveyModel } from '../../../util/type/survey-type';
+import { FormControlComponentType, SurveyModel, SurveyModelStorage } from '../../../util/type/survey-type';
 import { CreateComponentService } from '../create-component/create-component.service';
 import { BasicCardComponent } from '../basic-card/basic-card.component';
 
@@ -27,7 +27,6 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.model);
     const cmp = this.cmpService.createFormControlComponentInstance(this.model.type)
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(cmp);

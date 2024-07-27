@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { SurveyValidatorMap } from "../../util/type/survey-type";
+import { SurveyValidatorMap, ValidatorConfig } from "../../util/type/survey-type";
 
 export const customRequiredValidator = (message: string = "This field is required"): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -17,7 +17,7 @@ export const customMinLengthValidator = (minLength: number = 3, message: string 
   }
 }
 
-export const surveyValidatorMap: SurveyValidatorMap = {
-  'required': customRequiredValidator(),
-  'minLength': customMinLengthValidator(),
+export const surveyValidatorMap: SurveyValidatorMap<Partial<ValidatorConfig>> = {
+  required: (config: Partial<ValidatorConfig>) => customRequiredValidator(config.required?.message),
+  minLength: (config: Partial<ValidatorConfig>) => customMinLengthValidator(config.minLength?.value, config.minLength?.message)
 }

@@ -3,8 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, SurveyInputModel, SurveyModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
-import { surveyValidatorMap } from '../../form-validator/validators';
+import { FormComponentType, SurveyInputModel, SurveyModel, SurveyModelStorage, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
 import { CreateFormInputComponent } from '../../ui/create-form-input/create-form-input.component';
@@ -18,18 +17,16 @@ import { SurveyBase } from '../../../core/model/survey-base';
   styleUrl: './create-survey-group.component.scss'
 })
 export class CreateSurveyGroupComponent {
-  surveyBaseModel = new SurveyBase<SurveyModel>();
+  surveyBaseModel = new SurveyBase();
   surveyComponentModel = signal<SurveyModel>(this.getDefaultSurveyInputModel());
-  surveyModel = computed(() => {
-    return {
-      ...this.surveyComponentModel(),
-      ...this.surveyBaseModel.state()
-    };
-  });
+  surveyModel = computed(() => ({
+    ...this.surveyComponentModel(),
+    ...this.surveyBaseModel.state()
+  }) as SurveyModelStorage);
   hasDescription: boolean = false;
 
   remove = output<void>();
-  stateChanged = output<SurveyModel>();
+  stateChanged = output<SurveyModelStorage>();
 
   cmpRef: ComponentRef<FormComponentType> | undefined;
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
@@ -51,9 +48,7 @@ export class CreateSurveyGroupComponent {
   }
 
   constructor() {
-    effect(() => {
-      this.stateChanged.emit(this.surveyModel());
-    })
+    effect(() => this.stateChanged.emit(this.surveyModel()))
   }
 
   updateSelectOptions(options: string[]) {
@@ -67,10 +62,12 @@ export class CreateSurveyGroupComponent {
 
   // Can be moved to a service. For now, it's here for simplicity
   setValidatorFn = (validatorType: SurveyValidatorType, checked: boolean) => {
-    const validatorFn = surveyValidatorMap[validatorType]
     this.surveyBaseModel.validatorMap.update((prev) => {
       if (checked) {
-        return { ...prev, [validatorType]: validatorFn }
+        if (validatorType === 'required') {
+          return { ...prev, required: { message: 'how do we make this required' } };
+        } else if (validatorType === 'minLength') { }
+        return { ...prev, minLength: { message: '5 characters long', value: 5 } };
       } else {
         delete prev[validatorType];
         return { ...prev };

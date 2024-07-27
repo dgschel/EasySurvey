@@ -3,7 +3,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyBaseStorage, SurveyModel, SurveyRefData } from '../../../util/type/survey-type';
+import { SurveyModelStorage, SurveyRefData } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
@@ -22,8 +22,7 @@ export class SurveyFormComponent implements OnInit {
   ngOnInit(): void {
     this.data$.subscribe((surveyList) => {
       const surveyData = surveyList.map(survey => {
-        const validatorKeys = Object.keys(survey.validator);
-        return { ...survey, validator: validatorKeys } as SurveyBaseStorage;
+        return { ...survey, validator: survey.validator };
       })
       localStorage.setItem('surveyData', JSON.stringify(surveyData));
     })
@@ -37,7 +36,7 @@ export class SurveyFormComponent implements OnInit {
     this.cmpRefs.push(cmpRef);
   }
 
-  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyModel) {
+  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyModelStorage) {
     const surveyRefData: SurveyRefData = {
       ref: cmpRef,
       data: { ...state }
