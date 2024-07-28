@@ -60,19 +60,9 @@ export class CreateSurveyGroupComponent {
     this.surveyComponentModel.set(surveyModel);
   }
 
-  // Can be moved to a service. For now, it's here for simplicity
   setValidatorFn = (validatorType: SurveyValidatorType, checked: boolean) => {
-    this.surveyBaseModel.validatorMap.update((prev) => {
-      if (checked) {
-        if (validatorType === 'required') {
-          return { ...prev, required: { message: 'how do we make this required' } };
-        } else if (validatorType === 'minLength') { }
-        return { ...prev, minLength: { message: '5 characters long', value: 5 } };
-      } else {
-        delete prev[validatorType];
-        return { ...prev };
-      }
-    });
+    checked ? this.surveyBaseModel.updateValidator({ [validatorType]: { message: 'how do we make this required' } })
+      : this.surveyBaseModel.deleteValidator(validatorType);
   }
 
   getDefaultSurveyInputModel(): SurveyInputModel {
