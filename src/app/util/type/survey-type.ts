@@ -62,3 +62,6 @@ export type SurveyModelStorage = Omit<SurveyModel, 'validator'> & {
 };
 
 export type SurveyValidatorFn = Record<SurveyValidatorType, ValidatorFn>
+export type OmitValidator<T> = Omit<T, 'validator'> & {
+  validator: ValidatorFn[];
+};
