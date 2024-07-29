@@ -27,7 +27,6 @@ export class ViewSurveyFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.surveyComponents = this.surveyDataService.getSurveyData() as SurveyModel[];
-    this.surveyComponents = this.surveyDataService.getTestSurveyData() as SurveyModel[];
     this.cdr.detectChanges();
   }
 }
