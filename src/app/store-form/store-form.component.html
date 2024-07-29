@@ -1,0 +1,8 @@
+<form class="grid  gap-4" [formGroup]="form">
+  @for (survey of surveyModels; track $index) {
+  {{ survey.name}}
+  @for (model of survey.models; track $index) {
+  <app-view-survey-group [model]="model"></app-view-survey-group>
+  }
+  }
+</form>
