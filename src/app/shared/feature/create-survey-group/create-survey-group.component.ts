@@ -62,12 +62,12 @@ export class CreateSurveyGroupComponent {
 
   setMinlengthValidator(value: number) {
     if (value < 1) this.surveyBaseModel.deleteValidator('minLength');
-    else this.surveyBaseModel.updateValidator({ minLength: { message: `Answer must be at least ${value} characters long `, value } });
+    else this.surveyBaseModel.updateValidator({ minLength: { message: `Antwort muss mindestens ${value} Zeichen lang sein`, value } });
   }
 
   setRequiredValidator(checked: boolean) {
     checked
-      ? this.surveyBaseModel.updateValidator({ required: { message: 'This field is required' } })
+      ? this.surveyBaseModel.updateValidator({ required: { message: 'Dieses Feld ist erforderlich' } })
       : this.surveyBaseModel.deleteValidator('required');
   }
 
