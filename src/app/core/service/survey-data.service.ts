@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SurveyModelStorage, SurveyValidatorType } from '../../util/type/survey-type';
-import { surveyValidatorMap } from '../../shared/form-validator/validators';
+import { SurveyModel, SurveyModelStorage, SurveyValidatorType, ValidatorConfig } from '../../util/type/survey-type';
+import { customRequiredValidator, surveyValidatorMap } from '../../shared/form-validator/validators';
+import { AbstractControl, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,19 @@ export class SurveyDataService {
     });
 
     return entries;
+  }
+
+  getTestSurveyData(): SurveyModel[] {
+    return [
+      {
+        type: 'input',
+        placeholder: 'Enter your name',
+        description: 'Please enter your name',
+        title: 'Name',
+        validator: {
+          required: (control: AbstractControl) => customRequiredValidator('Name is required')(control)
+        } as any
+      }
+    ];
   }
 }
