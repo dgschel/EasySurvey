@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { JsonPipe, NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
-import { SurveyModelStorage, SurveyValidatorFn, SurveyValidatorMap, ValidatorConfig, ValidatorFunction } from '../../../util/type/survey-type';
+import { SurveyValidatorFn } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-control-input',
