@@ -19,16 +19,15 @@
       </div>
       <div class="form-control">
         <label class="label cursor-pointer">
-          <span class="label-text mr-1">Minimum Länge von 3</span>
-          <input type="checkbox" class="toggle toggle-sm" #minlength
-            (change)="setValidatorFn('minLength', minlength.checked)" />
+          <span class="label-text mr-1">Mindestlänge</span>
+          <input type="number" class="input input-xs input-primary w-min" #minlength
+            (change)="setMinlengthValidator(minlength.valueAsNumber)" />
         </label>
       </div>
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Pflichtfrage</span>
-          <input type="checkbox" class="toggle toggle-sm" #required
-            (change)="setValidatorFn('required', required.checked)" />
+          <input type="checkbox" class="toggle toggle-sm" #required (change)="setRequiredValidator(required.checked)" />
         </label>
       </div>
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
