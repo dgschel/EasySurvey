@@ -74,6 +74,7 @@ export class CreateSurveyGroupComponent {
   getDefaultSurveyInputModel(): SurveyInputModel {
     return {
       ...this.surveyBaseModel.state(),
+      placeholder: 'Antwort eingeben',
       type: 'input',
     };
   }

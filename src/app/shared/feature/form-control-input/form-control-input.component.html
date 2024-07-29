@@ -1,6 +1,6 @@
 @if (control) {
 <label class="form-control w-full max-w-xs">
-  <input type="text" [formControl]="control" [placeholder]="placeholder()" class="input input-bordered input-sm"
+  <input type="text" [formControl]="control" [placeholder]="placeholder() || 'Meine Antwort'" class="input input-bordered input-sm"
     [ngClass]="{'input-error': isFormControlValid}" />
 
   @if (isFormControlValid) {
