@@ -11,13 +11,27 @@ export class SurveyTemplateManager {
     return this.surveys[name];
   }
 
+  get countTotalTemplateControls() {
+    return Object.values(this.countControlsBySurvey).reduce((acc, curr) => acc + curr, 0);
+  }
+
+  get countControlsBySurvey(): Record<string, number> {
+    return this.surveyNames.reduce((acc, name) => {
+      return {
+        ...acc,
+        [name]: this.getSurvey(name).createPredefinedSurvey().length
+      }
+    }, {});
+  }
+
   get surveyNames(): string[] {
     return Object.keys(this.surveys);
   }
 
-  get surveyModels() {
+  get surveyTemplateModels() {
     return this.surveyNames.map(name => {
       return { name, models: this.getSurvey(name).createPredefinedSurvey() };
     })
   }
+
 }
