@@ -1,7 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { SurveyModel } from '../util/type/survey-type';
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicSurveyTemplate } from '../core/templates/basic-survey-template';
 import { PurchaseSurveyTemplate } from '../core/templates/purchase-survey-template';
@@ -14,16 +13,11 @@ import { SurveyTemplateManager } from '../core/model/survey-template-manager';
   templateUrl: './store-form.component.html',
   styleUrl: './store-form.component.scss'
 })
-export class StoreFormComponent implements AfterViewInit {
-  private cdr = inject(ChangeDetectorRef);
+export class StoreFormComponent {
   surveyManager: SurveyTemplateManager;
-
-  surveyModels: { name: string, models: SurveyModel[] }[] = [];
-
-  fb = inject(FormBuilder);
-  form = this.fb.group({
-    sections: this.fb.array([])
-  });
+  surveyNames: string[] = [];
+  survey: Record<string, number> = {};
+  total: number = 0;
 
   constructor() {
     const basicSurvey = new BasicSurveyTemplate();
@@ -32,11 +26,8 @@ export class StoreFormComponent implements AfterViewInit {
     this.surveyManager = new SurveyTemplateManager();
     this.surveyManager.addSurvey('basic', basicSurvey);
     this.surveyManager.addSurvey('purchase', purchaseSurvey);
-  }
-
-  ngAfterViewInit(): void {
-    this.surveyModels = this.surveyManager.surveyModels;
-    this.cdr.detectChanges();
+    this.surveyNames = this.surveyManager.surveyNames;
+    this.survey = this.surveyManager.countControlsBySurvey;
   }
 }
 
