@@ -12,11 +12,11 @@ export class SurveyTemplateManager {
     return this.surveys[name];
   }
 
-  getTemplateModelCounts(): Record<string, Record<string, number>>[] {
-    return this.surveyTemplateModels.map(({ name, models }) => {
+  getTemplateModelCounts(): Record<string, Record<string, number>> {
+    return this.surveyTemplateModels.reduce((acc, { name, models }) => {
       const result = this.countModelTypes(models);
-      return { [name]: result };
-    });
+      return { ...acc, [name]: result };
+    }, {});
   }
 
   private countModelTypes(models: SurveyModel[]): Record<string, number> {
