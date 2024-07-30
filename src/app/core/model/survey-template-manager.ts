@@ -1,4 +1,4 @@
-import { SurveyModel } from "../../util/type/survey-type";
+import { FormControlNameMap, FormControlType, SurveyModel } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
 export class SurveyTemplateManager {
@@ -15,7 +15,10 @@ export class SurveyTemplateManager {
   getTemplateModelCounts(): Record<string, Record<string, number>> {
     return this.surveyTemplateModels.reduce((acc, { name, models }) => {
       const result = this.countModelTypes(models);
-      return { ...acc, [name]: result };
+      const validators = this.getValidatorsFromModel(models);
+      const uniqueValidators = Array.from(new Set(validators));
+
+      return { ...acc, [name]: { ...result, validators: uniqueValidators } };
     }, {});
   }
 
@@ -28,6 +31,10 @@ export class SurveyTemplateManager {
         [type]: modelCount
       };
     }, {});
+  }
+
+  private getValidatorsFromModel(models: SurveyModel[]): string[] {
+    return models.flatMap(model => Object.keys(model.validator));
   }
 
   get countTotalTemplateControls() {
