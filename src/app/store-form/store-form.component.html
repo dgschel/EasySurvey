@@ -1,0 +1,36 @@
+<div class="grid grid-cols-2 auto-cols-fr gap-4">
+  @for (template of templateModelCounts | keyvalue; track $index) {
+  <div class="join join-vertical">
+    <div class="join-item">
+      <div class="card card-compact bg-base-100 rounded-b-none">
+        <div class="card-body">
+          <h3 class="card-title !mb-0">{{ template.key }}</h3>
+          <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ad nulla fuga nobis est rem.
+            Tempore blanditiis consequuntur similique, possimus quod odio necessitatibus</p>
+          <div class="card-actions">
+            <button class="btn w-full btn-primary">Vorschau</button>
+            <button class="btn w-full btn-outline btn-neutral">Übernehmen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="join-item">
+      <div tabindex="0" class="collapse collapse-arrow rounded-t-none bg-primary-content bg-opacity-30 shadow">
+        <div class="collapse-title font-medium">Informationen</div>
+        <div class="collapse-content">
+          <div>Formularelemente</div>
+          @for (item of template.value | keyvalue; track $index) {
+          <p>{{ item.key }}: {{ item.value }}</p>
+          }
+          <div class="my-1">Prüfungsregeln</div>
+          <div class="flex gap-1">
+            @for (validator of surveyManager.getValidatorsFromSurvey(template.key); track $index) {
+            <span class="badge badge-neutral">{{ validator }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
