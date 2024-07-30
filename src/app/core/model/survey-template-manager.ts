@@ -1,3 +1,4 @@
+import { SurveyModel } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
 export class SurveyTemplateManager {
@@ -9,6 +10,24 @@ export class SurveyTemplateManager {
 
   getSurvey(name: string): SurveyTemplateContract {
     return this.surveys[name];
+  }
+
+  getTemplateModelCounts(): Record<string, Record<string, number>>[] {
+    return this.surveyTemplateModels.map(({ name, models }) => {
+      const result = this.countModelTypes(models);
+      return { [name]: result };
+    });
+  }
+
+  private countModelTypes(models: SurveyModel[]): Record<string, number> {
+    const modelTypes = Array.from(new Set(models.map(model => model.type)));
+    return modelTypes.reduce((acc, type) => {
+      const modelCount = models.filter(model => model.type === type).length;
+      return {
+        ...acc,
+        [type]: modelCount
+      };
+    }, {});
   }
 
   get countTotalTemplateControls() {
