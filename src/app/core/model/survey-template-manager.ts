@@ -18,7 +18,12 @@ export class SurveyTemplateManager {
       const validators = this.getValidatorsFromModel(models);
       const uniqueValidators = Array.from(new Set(validators));
 
-      return { ...acc, [name]: { ...result, validators: uniqueValidators } };
+      const mappedResult = Object.keys(result).reduce((acc, key) => {
+        const mappedKey = FormControlNameMap[key as FormControlType];
+        return { ...acc, [mappedKey]: result[key] };
+      }, {});
+
+      return { ...acc, [name]: { ...mappedResult, validators: uniqueValidators } };
     }, {});
   }
 
