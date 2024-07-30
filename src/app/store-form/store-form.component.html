@@ -18,16 +18,14 @@
       <div tabindex="0" class="collapse collapse-arrow rounded-t-none bg-primary-content bg-opacity-30 shadow">
         <div class="collapse-title font-medium">Informationen</div>
         <div class="collapse-content">
-          <div>
-            <div>Formularelemente</div>
-            @for (item of template.value | keyvalue; track $index) {
-            <p>{{ item.key }}: {{ item.value }}</p>
-            }
-          </div>
-          <div class="mt-2">
-            <div>Validatoren</div>
+          <div>Formularelemente</div>
+          @for (item of template.value | keyvalue; track $index) {
+          <p>{{ item.key }}: {{ item.value }}</p>
+          }
+          <div class="my-1">Prüfungsregeln</div>
+          <div class="flex gap-1">
             @for (validator of surveyManager.getValidatorsFromSurvey(template.key); track $index) {
-            <span class="badge">{{ validator }}</span>
+            <span class="badge badge-neutral">{{ validator }}</span>
             }
           </div>
         </div>
