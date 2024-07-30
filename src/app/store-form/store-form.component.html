@@ -13,9 +13,15 @@
       <div class="collapse-title font-medium">Informationen</div>
       <div class="collapse-content">
         <div>
-          Formularelemente
+          <div>Formularelemente</div>
           @for (item of template.value | keyvalue; track $index) {
           <p>{{ item.key }}: {{ item.value }}</p>
+          }
+        </div>
+        <div class="mt-2">
+          <div>Validatoren</div>
+          @for (validator of surveyManager.getValidatorsFromSurvey(template.key); track $index) {
+          <span class="badge">{{ validator }}</span>
           }
         </div>
       </div>
