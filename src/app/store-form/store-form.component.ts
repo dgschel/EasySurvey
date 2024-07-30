@@ -31,7 +31,7 @@ export class StoreFormComponent {
     this.surveyNames = this.surveyManager.surveyNames;
     this.survey = this.surveyManager.countControlsBySurvey;
 
-    this.templateModelCounts = this.surveyManager.getTemplateModelCounts();
+    this.templateModelCounts = this.surveyManager.getTemplateModelTypeCounts();
   }
 }
 
