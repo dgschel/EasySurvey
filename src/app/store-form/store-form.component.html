@@ -5,8 +5,7 @@
       <div class="card card-compact bg-base-100 rounded-b-none">
         <div class="card-body">
           <h3 class="card-title !mb-0">{{ template.key }}</h3>
-          <p class="mb-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ad nulla fuga nobis est rem.
-            Tempore blanditiis consequuntur similique, possimus quod odio necessitatibus</p>
+          <p class="mb-2">{{ surveyManager.getSurveyInformation(template.key) }}</p>
           <div class="card-actions">
             <button class="btn btn-sm w-full btn-primary">Übernehmen</button>
             <button class="btn btn-sm w-full btn-outline btn-neutral">Vorschau</button>

@@ -4,12 +4,21 @@ import { SurveyTemplateContract } from "../types/survey-template-contract";
 export class SurveyTemplateManager {
   private surveys: Record<string, SurveyTemplateContract> = {};
 
+  private surveyInformation: Record<string, string> = {
+    Standard: 'Standard survey template',
+    Einkaufsformular: 'Purchase survey template for store form component'
+  };
+
   addSurvey(name: string, survey: SurveyTemplateContract) {
     this.surveys[name] = survey;
   }
 
   getSurvey(name: string): SurveyTemplateContract {
     return this.surveys[name];
+  }
+
+  getSurveyInformation(name: string): string {
+    return this.surveyInformation[name];
   }
 
   getTemplateModelTypeCounts(): Record<string, SurveyFormControlCount> {
