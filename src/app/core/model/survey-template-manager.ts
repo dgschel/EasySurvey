@@ -1,24 +1,24 @@
-import { FormControlNameMap, FormControlType, SurveyFormControlCount, SurveyModel, SurveyTemplateModel } from "../../util/type/survey-type";
+import { FormControlNameMap, FormControlType, SurveyFormControlCount, SurveyModel, SurveyName, SurveyTemplateModel } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
 export class SurveyTemplateManager {
-  private surveys: Record<string, SurveyTemplateContract> = {};
+  private surveys: Record<SurveyName, SurveyTemplateContract> = {} as Record<SurveyName, SurveyTemplateContract>;
 
-  private surveyInformation: Record<string, string> = {
+  private surveyInformation: Record<SurveyName, string> = {
     Standard: 'Standard survey template',
     Einkaufsformular: 'Purchase survey template for store form component'
   };
 
-  addSurvey(name: string, survey: SurveyTemplateContract) {
+  addSurvey(name: SurveyName, survey: SurveyTemplateContract) {
     this.surveys[name] = survey;
   }
 
-  getSurvey(name: string): SurveyTemplateContract {
+  getSurvey(name: SurveyName): SurveyTemplateContract {
     return this.surveys[name];
   }
 
   getSurveyInformation(name: string): string {
-    return this.surveyInformation[name];
+    return this.surveyInformation[name as SurveyName];
   }
 
   getTemplateModelTypeCounts(): Record<string, SurveyFormControlCount> {
@@ -38,7 +38,7 @@ export class SurveyTemplateManager {
   }
 
   getValidatorsFromSurvey(surveyName: string): string[] {
-    return this.getUniqueModelValidators(this.getSurvey(surveyName).createPredefinedSurvey());
+    return this.getUniqueModelValidators(this.getSurvey(surveyName as SurveyName).createPredefinedSurvey());
   }
 
   countModelTypes(models: SurveyModel[]): SurveyFormControlCount {
@@ -60,17 +60,17 @@ export class SurveyTemplateManager {
     return Object.values(this.countControlsBySurvey).reduce((acc, curr) => acc + curr, 0);
   }
 
-  get countControlsBySurvey(): Record<string, number> {
+  get countControlsBySurvey() {
     return this.surveyNames.reduce((acc, name) => {
       return {
         ...acc,
         [name]: this.getSurvey(name).createPredefinedSurvey().length
       }
-    }, {});
+    }, {} as Record<SurveyName, number>);
   }
 
-  get surveyNames(): string[] {
-    return Object.keys(this.surveys);
+  get surveyNames() {
+    return Object.keys(this.surveys) as SurveyName[];
   }
 
   get surveyTemplateModels(): SurveyTemplateModel[] {
