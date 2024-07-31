@@ -12,7 +12,7 @@ export class ModalService {
     private injector: EnvironmentInjector
   ) { }
 
-  createComponent(content: TemplateRef<any>) {
+  createComponent(content: TemplateRef<any>): ComponentRef<ModalComponent> {
     // Create an embedded view from the template
     const modalEmbeddedView = content.createEmbeddedView(null);
 
@@ -24,6 +24,10 @@ export class ModalService {
 
     // Append the component to the body
     document.body.appendChild(this.modalCompRef.location.nativeElement);
+
+    // Detect changes on the embedded view and the component
+    modalEmbeddedView.detectChanges();
+    this.modalCompRef.changeDetectorRef.detectChanges();
 
     // Attach the component to the application so it can be checked by angular
     this.appRef.attachView(this.modalCompRef.hostView);
