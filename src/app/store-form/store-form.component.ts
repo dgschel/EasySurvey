@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ComponentRef, inject, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { KeyValuePipe } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { PurchaseSurveyTemplate } from '../core/templates/purchase-survey-templa
 import { SurveyTemplateManager } from '../core/model/survey-template-manager';
 import { ModalService } from '../core/service/modal.service';
 import { SurveyModel, SurveyName } from '../util/type/survey-type';
+import { ModalComponent } from '../core/component/modal/modal.component';
 
 @Component({
   selector: 'app-store-form',
@@ -20,6 +21,8 @@ export class StoreFormComponent {
   modalService = inject(ModalService);
   surveyManager: SurveyTemplateManager;
   models: SurveyModel[] = [];
+
+  modalRef!: ComponentRef<ModalComponent>;
 
   // Use form to display the survey that is created by the user and inserted into the modal
   // The form is not used to submit the survey, it is only used to display the survey
@@ -42,6 +45,7 @@ export class StoreFormComponent {
   preview(surveyName: string) {
     const survey = this.surveyManager.getSurvey(surveyName as SurveyName);
     this.models = survey.createPredefinedSurvey()
-    this.modalService.open(this.container);
+    this.modalRef = this.modalService.open(this.container);
+    this.modalRef.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 }
