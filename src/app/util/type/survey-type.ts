@@ -17,6 +17,9 @@ export type SurveyTemplateModel = {
   models: SurveyModel[];
 };
 
+export type SurveyFormControlCount = Record<string, number>;
+export type SurveyName = 'Standard' | 'Einkaufsformular';
+
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
   data: SurveyModelStorage
