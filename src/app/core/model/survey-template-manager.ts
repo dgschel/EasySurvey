@@ -1,4 +1,4 @@
-import { FormControlNameMap, FormControlType, SurveyModel, SurveyTemplateModel } from "../../util/type/survey-type";
+import { FormControlNameMap, FormControlType, SurveyFormControlCount, SurveyModel, SurveyTemplateModel } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
 export class SurveyTemplateManager {
@@ -12,8 +12,8 @@ export class SurveyTemplateManager {
     return this.surveys[name];
   }
 
-  getTemplateModelTypeCounts() {
-    return this.surveyTemplateModels.reduce((acc, { name, models }) => {
+  getTemplateModelTypeCounts(): Record<string, SurveyFormControlCount> { // add return type
+    const x = this.surveyTemplateModels.reduce((acc, { name, models }) => {
       const result = this.countModelTypes(models);
       const mappedResult = Object.keys(result).reduce((acc, key) => {
         const mappedKey = FormControlNameMap[key as FormControlType];
@@ -22,17 +22,19 @@ export class SurveyTemplateManager {
 
       return { ...acc, [name]: { ...mappedResult } };
     }, {});
+
+    return x
   }
 
   getUniqueModelValidators(models: SurveyModel[]): string[] {
     return Array.from(new Set(this.getValidatorsFromModels(models)));
   }
 
-  getValidatorsFromSurvey(surveyName: string) {
+  getValidatorsFromSurvey(surveyName: string): string[] {
     return this.getUniqueModelValidators(this.getSurvey(surveyName).createPredefinedSurvey());
   }
 
-  countModelTypes(models: SurveyModel[]): Record<string, number> {
+  countModelTypes(models: SurveyModel[]): SurveyFormControlCount {
     const modelTypes = Array.from(new Set(models.map(model => model.type)));
     return modelTypes.reduce((acc, type) => {
       const modelCount = models.filter(model => model.type === type).length;
