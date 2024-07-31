@@ -12,8 +12,8 @@ export class SurveyTemplateManager {
     return this.surveys[name];
   }
 
-  getTemplateModelTypeCounts(): Record<string, SurveyFormControlCount> { // add return type
-    const x = this.surveyTemplateModels.reduce((acc, { name, models }) => {
+  getTemplateModelTypeCounts(): Record<string, SurveyFormControlCount> {
+    return this.surveyTemplateModels.reduce((acc, { name, models }) => {
       const result = this.countModelTypes(models);
       const mappedResult = Object.keys(result).reduce((acc, key) => {
         const mappedKey = FormControlNameMap[key as FormControlType];
@@ -22,8 +22,6 @@ export class SurveyTemplateManager {
 
       return { ...acc, [name]: { ...mappedResult } };
     }, {});
-
-    return x
   }
 
   getUniqueModelValidators(models: SurveyModel[]): string[] {
