@@ -8,7 +8,7 @@
           <p class="mb-2">{{ surveyManager.getSurveyInformation(template.key) }}</p>
           <div class="card-actions">
             <button class="btn btn-sm w-full btn-primary">Übernehmen</button>
-            <button class="btn btn-sm w-full btn-outline btn-neutral">Vorschau</button>
+            <button class="btn btn-sm w-full btn-outline btn-neutral" (click)="preview(template.key)">Vorschau</button>
           </div>
         </div>
       </div>
@@ -33,3 +33,11 @@
   </div>
   }
 </div>
+
+<ng-template #container>
+  <form [formGroup]="form">
+    @for (survey of models; track $index) {
+    <app-view-survey-group [model]="survey"></app-view-survey-group>
+    }
+  </form>
+</ng-template>
