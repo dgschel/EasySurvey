@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -7,6 +7,10 @@ import { Component } from '@angular/core';
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss'
 })
-export class ModalComponent {
+export class ModalComponent implements AfterViewInit {
+  @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
 
+  ngAfterViewInit(): void {
+    this.modal.nativeElement.showModal();
+  }
 }
