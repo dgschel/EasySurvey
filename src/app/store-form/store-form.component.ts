@@ -6,7 +6,6 @@ import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-su
 import { BasicSurveyTemplate } from '../core/templates/basic-survey-template';
 import { PurchaseSurveyTemplate } from '../core/templates/purchase-survey-template';
 import { SurveyTemplateManager } from '../core/model/survey-template-manager';
-import { SurveyFormControlCount } from '../util/type/survey-type';
 
 @Component({
   selector: 'app-store-form',
@@ -17,9 +16,6 @@ import { SurveyFormControlCount } from '../util/type/survey-type';
 })
 export class StoreFormComponent {
   surveyManager: SurveyTemplateManager;
-  surveyNames: string[] = [];
-
-  templateModelCounts: Record<string, SurveyFormControlCount> = {}
 
   constructor() {
     const basicSurvey = new BasicSurveyTemplate();
@@ -28,9 +24,6 @@ export class StoreFormComponent {
     this.surveyManager = new SurveyTemplateManager();
     this.surveyManager.addSurvey('Standard', basicSurvey);
     this.surveyManager.addSurvey('Einkaufsformular', purchaseSurvey);
-    this.surveyNames = this.surveyManager.surveyNames;
-
-    this.templateModelCounts = this.surveyManager.getTemplateModelTypeCounts();
   }
 }
 

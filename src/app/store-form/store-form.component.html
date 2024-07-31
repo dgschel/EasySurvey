@@ -1,5 +1,5 @@
 <div class="grid grid-cols-2 auto-cols-fr gap-4">
-  @for (template of templateModelCounts | keyvalue; track $index) {
+  @for (template of surveyManager.getTemplateModelTypeCounts() | keyvalue; track $index) {
   <div class="join join-vertical">
     <div class="join-item">
       <div class="card card-compact bg-base-100 rounded-b-none">
