@@ -55,6 +55,11 @@ export const FormControlNameMap: Record<FormControlType, string> = {
   select: 'Dropdown',
 }
 
+export const FormValidatorNameMap: Record<SurveyValidatorType, string> = {
+  required: 'Erforferlich',
+  minLength: 'Mindestlänge',
+}
+
 export type SurveyInputModel = {
   type: 'input';
   placeholder?: string;
