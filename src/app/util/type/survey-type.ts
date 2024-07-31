@@ -56,7 +56,7 @@ export const FormControlNameMap: Record<FormControlType, string> = {
 }
 
 export const FormValidatorNameMap: Record<SurveyValidatorType, string> = {
-  required: 'Erforferlich',
+  required: 'Erforderlich',
   minLength: 'Mindestlänge',
 }
 
