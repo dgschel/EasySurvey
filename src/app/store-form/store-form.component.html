@@ -33,11 +33,3 @@
   </div>
   }
 </div>
-
-<ng-template #container>
-  <form class="flex flex-col gap-4" [formGroup]="form">
-    @for (survey of models; track $index) {
-    <app-view-survey-group [model]="survey"></app-view-survey-group>
-    }
-  </form>
-</ng-template>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { fromEvent } from 'rxjs';
 
 @Component({
@@ -10,6 +10,7 @@ import { fromEvent } from 'rxjs';
 })
 export class ModalComponent implements AfterViewInit {
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
+  @ViewChild('modalContent', { read: ViewContainerRef, static: true }) modalContent!: ViewContainerRef;
 
   modalCloseEvent = new EventEmitter<void>();
 

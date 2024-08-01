@@ -9,7 +9,7 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 export type SurveyBaseType = {
   title: string;
   description: string;
-  validator: Partial<SurveyValidatorMap<ValidatorConfig>>; // TODO: find a better way to type this. The current type makes it hard to pass custom validators
+  validator: Partial<ValidatorConfig>;
 };
 
 export type SurveyTemplateModel = {
@@ -31,7 +31,7 @@ export type ValidatorFunction<T> = (data: T) => ValidatorFn;
 export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
 export type ValidatorConfig = {
   required: { message: string },
-  minLength: { message: string, value: number }
+  minLength: { value: number }
 }
 
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
