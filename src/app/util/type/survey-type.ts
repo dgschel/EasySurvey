@@ -9,7 +9,7 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 export type SurveyBaseType = {
   title: string;
   description: string;
-  validator: Partial<SurveyValidatorMap<ValidatorConfig>>; // TODO: find a better way to type this. The current type makes it hard to pass custom validators
+  validator: Partial<ValidatorConfig>;
 };
 
 export type SurveyTemplateModel = {
