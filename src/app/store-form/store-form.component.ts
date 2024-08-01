@@ -21,14 +21,13 @@ import { SurveyName } from '../util/type/survey-type';
 export class StoreFormComponent {
   modalService = inject(ModalService);
   environmentInjector = inject(EnvironmentInjector);
-  surveyManager: SurveyTemplateManager;
+  surveyManager = inject(SurveyTemplateManager);
   modalRef!: ComponentRef<ModalComponent>;
 
   constructor() {
     const basicSurvey = new BasicSurveyTemplate();
     const purchaseSurvey = new PurchaseSurveyTemplate();
 
-    this.surveyManager = new SurveyTemplateManager();
     this.surveyManager.addSurvey('Standard', basicSurvey);
     this.surveyManager.addSurvey('Einkaufsformular', purchaseSurvey);
   }
