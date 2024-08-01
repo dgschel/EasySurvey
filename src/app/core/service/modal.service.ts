@@ -12,15 +12,14 @@ export class ModalService {
     private injector: EnvironmentInjector
   ) { }
 
-  createComponent(content: TemplateRef<any>): ComponentRef<ModalComponent> {
-    // Create an embedded view from the template
-    const modalEmbeddedView = content.createEmbeddedView(null);
-
+  createComponent(componentRef: ComponentRef<any>): ComponentRef<ModalComponent> {
     // Create the base modal component
     this.modalCompRef = createComponent(ModalComponent, {
       environmentInjector: this.injector, // Pass the injector to the component
-      projectableNodes: [modalEmbeddedView.rootNodes], // Pass the nodes to the component to inject the content inside of <ng-template>
     });
+
+    // Create the embedded view of the component
+    const modalEmbeddedView = this.modalCompRef.instance.modalContent.insert(componentRef.hostView);
 
     // Append the component to the body
     document.body.appendChild(this.modalCompRef.location.nativeElement);
@@ -35,8 +34,8 @@ export class ModalService {
     return this.modalCompRef;
   }
 
-  open(templateRef: TemplateRef<any>): ComponentRef<ModalComponent> {
-    return this.createComponent(templateRef);
+  open(ref: ComponentRef<any>): ComponentRef<ModalComponent> {
+    return this.createComponent(ref);
   }
 
   close(): void {
