@@ -1,6 +1,10 @@
+import { Injectable } from "@angular/core";
 import { FormControlNameMap, FormControlType, FormValidatorNameMap, SurveyFormControlCount, SurveyModel, SurveyName, SurveyTemplateModel, SurveyValidatorType } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
+@Injectable({
+  providedIn: 'root'
+})
 export class SurveyTemplateManager {
   private surveys: Record<SurveyName, SurveyTemplateContract> = {} as Record<SurveyName, SurveyTemplateContract>;
 
