@@ -13,7 +13,7 @@ export class BaseSurveyFormControl {
    * @param controlName The name of the control.
    */
   constructor(public formArray: FormArray, public validatorsFn: () => ValidatorFn[], public controlName: string) {
-    const control = new FormControl('', { validators: validatorsFn.bind(this)(), updateOn: 'blur' })
+    const control = new FormControl('', { validators: validatorsFn(), updateOn: 'blur' })
     this.fg.addControl(controlName, control);
     this.formArray.push(this.fg);
   }
