@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { SurveyName } from '../../../../util/type/survey-type';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SurveyModel, SurveyName } from '../../../../util/type/survey-type';
 import { ViewSurveyGroupComponent } from '../../view-survey-group/view-survey-group.component';
 
 @Component({
@@ -12,4 +12,10 @@ import { ViewSurveyGroupComponent } from '../../view-survey-group/view-survey-gr
 })
 export class PreviewSurveyComponent {
   @Input() surveyName: SurveyName = 'Standard';
+  @ViewChild('container', { static: true, read: TemplateRef }) containerTemplate!: TemplateRef<any>;
+  models: SurveyModel[] = [];
+
+  form = new FormGroup({
+    sections: new FormArray([])
+  })
 }
