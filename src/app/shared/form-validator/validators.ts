@@ -9,17 +9,17 @@ export const customRequiredValidator = (message: string = "This field is require
   }
 }
 
-export const customMinLengthValidator = (minLength: number = 3, message: string = `Min length of ${minLength} characters`): ValidatorFn => {
+export const customMinLengthValidator = (minLength: number = 3): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
     // Use the built-in minlength validator
     const validate = Validators.minLength(minLength)(control);
-    return validate ? { message } : null;
+    return validate ? { message: `Antwort muss mindestens ${minLength} Zeichen lang sein` } : null;
   }
 }
 
 export const surveyValidatorMap: SurveyValidatorMap<Partial<ValidatorConfig>> = {
   required: (config: Partial<ValidatorConfig>) => customRequiredValidator(config.required?.message),
-  minLength: (config: Partial<ValidatorConfig>) => customMinLengthValidator(config.minLength?.value, config.minLength?.message)
+  minLength: (config: Partial<ValidatorConfig>) => customMinLengthValidator(config.minLength?.value)
 }
 
 export const createValidators = (config: Partial<ValidatorConfig>): ValidatorFn[] => {

@@ -31,7 +31,7 @@ export type ValidatorFunction<T> = (data: T) => ValidatorFn;
 export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
 export type ValidatorConfig = {
   required: { message: string },
-  minLength: { message: string, value: number }
+  minLength: { value: number }
 }
 
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
