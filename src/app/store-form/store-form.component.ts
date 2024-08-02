@@ -3,8 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { KeyValuePipe } from '@angular/common';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
-import { BasicSurveyTemplate } from '../core/templates/basic-survey-template';
-import { PurchaseSurveyTemplate } from '../core/templates/purchase-survey-template';
 import { SurveyTemplateManager } from '../core/model/survey-template-manager';
 import { ModalService } from '../core/service/modal.service';
 import { ModalComponent } from '../core/component/modal/modal.component';
@@ -23,14 +21,6 @@ export class StoreFormComponent {
   environmentInjector = inject(EnvironmentInjector);
   surveyManager = inject(SurveyTemplateManager);
   modalRef!: ComponentRef<ModalComponent>;
-
-  constructor() {
-    const basicSurvey = new BasicSurveyTemplate();
-    const purchaseSurvey = new PurchaseSurveyTemplate();
-
-    this.surveyManager.addSurvey('Standard', basicSurvey);
-    this.surveyManager.addSurvey('Einkaufsformular', purchaseSurvey);
-  }
 
   preview(surveyName: string) {
     const cmp = createComponent(PreviewSurveyComponent, {
