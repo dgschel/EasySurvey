@@ -4,7 +4,7 @@ import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorF
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
-import { SurveyValidatorFn, ValidatorConfig } from '../../../util/type/survey-type';
+import { ValidatorConfig } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-control-input',
