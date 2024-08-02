@@ -12,6 +12,12 @@ export class SurveyBase<T extends SurveyBaseType> {
     validator: this.validatorMap()
   }) as T);
 
+  setState(model: T) {
+    this.title.set(model.title)
+    this.description.set(model.description)
+    this.updateValidator(model.validator);
+  }
+
   updateValidator(validator: Partial<ValidatorConfig>) {
     this.validatorMap.update((prev) => ({ ...prev, ...validator }));
   }
