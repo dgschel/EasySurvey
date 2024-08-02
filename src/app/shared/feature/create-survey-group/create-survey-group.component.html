@@ -21,13 +21,15 @@
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Mindestlänge</span>
           <input type="number" max="10" class="input input-xs input-bordered w-16" #minlength
+            [ngModel]="surveyBaseModel.state().validator.minLength?.value"
             (change)="setMinlengthValidator(minlength.valueAsNumber)" />
         </label>
       </div>
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Pflichtfrage</span>
-          <input type="checkbox" class="toggle toggle-sm" #required (change)="setRequiredValidator(required.checked)" />
+          <input type="checkbox" class="toggle toggle-sm" #required
+            [ngModel]="surveyBaseModel.state().validator.required" (change)="setRequiredValidator(required.checked)" />
         </label>
       </div>
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
