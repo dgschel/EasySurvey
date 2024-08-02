@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { SurveyModelStorage } from '../../util/type/survey-type';
+import { SurveyModel } from '../../util/type/survey-type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SurveyDataService {
-  getSurveyData(): SurveyModelStorage[] {
+  getSurveyData(): SurveyModel[] {
     const storageData = localStorage.getItem('surveyData') ?? "";
-    const storage = JSON.parse(storageData) as SurveyModelStorage[];
+    const storage = JSON.parse(storageData) as SurveyModel[];
     return storage;
   }
 }
