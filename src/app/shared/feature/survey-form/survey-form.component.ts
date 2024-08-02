@@ -1,4 +1,4 @@
-import { Component, ComponentRef, inject, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
@@ -12,10 +12,13 @@ import { SurveyModel, SurveyRefData } from '../../../util/type/survey-type';
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss'
 })
-export class SurveyFormComponent implements OnInit {
+export class SurveyFormComponent implements OnInit, AfterViewInit {
   private surveyStorage = inject(SurveyDataStorageService)
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
+  @Input() models: SurveyModel[] = [];
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
+
+  cdr = inject(ChangeDetectorRef)
 
   data$ = this.surveyStorage.getData$();
 
@@ -25,12 +28,24 @@ export class SurveyFormComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit(): void {
+    this.models.forEach((model) => {
+      this.addSurveySection(model);
+    });
+  }
+
   addSection() {
+    this.addSurveySection({ type: 'input', description: '', title: '', validator: {} });
+  }
+
+  addSurveySection(model: SurveyModel) {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
     cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
-    this.surveyStorage.addData({ ref: cmpRef, data: { type: 'input', description: '', title: '', validator: {} } });
+    this.surveyStorage.addData({ ref: cmpRef, data: model });
     this.cmpRefs.push(cmpRef);
+    cmpRef.changeDetectorRef.detectChanges();
+    this.cdr.detectChanges();
   }
 
   updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyModel) {
