@@ -40,11 +40,19 @@ export class SurveyFormComponent implements OnInit, AfterViewInit {
 
   addSurveySection(model: SurveyModel) {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
-    cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
-    cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
+    this.setupComponent(cmpRef);
     this.surveyStorage.addData({ ref: cmpRef, data: model });
     this.cmpRefs.push(cmpRef);
+    this.detectChanges();
+  }
+
+  setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
+    cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
+    cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
     cmpRef.changeDetectorRef.detectChanges();
+  }
+
+  detectChanges() {
     this.cdr.detectChanges();
   }
 
