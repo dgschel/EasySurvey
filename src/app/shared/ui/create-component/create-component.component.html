@@ -1,5 +1,5 @@
 <select class="select" #controlTypeSelect (change)="updateFormControlType(controlTypeSelect.value)">
   @for (control of controlTypeMap | keyvalue; track $index) {
-    <option value="{{control.key}}">{{control.value}}</option>
+  <option [selected]="control.key === controlType" [value]="control.key">{{control.value}}</option>
   }
 </select>
