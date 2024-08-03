@@ -8,7 +8,7 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 
 export type SurveyBaseType = {
   title: string;
-  description: string;
+  description?: string;
   validator: Partial<ValidatorConfig>;
 };
 
