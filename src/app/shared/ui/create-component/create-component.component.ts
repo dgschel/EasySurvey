@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, output, Type } from '@angular/core';
+import { AfterViewInit, Component, Injector, Input, output, Type } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 
 import { CreateComponentService } from './create-component.service';
@@ -17,6 +17,7 @@ import { FormComponentType, FormControlNameMap, FormControlType } from '../../..
   styleUrl: './create-component.component.scss'
 })
 export class CreateComponentComponent implements AfterViewInit {
+  @Input('controlType') controlType: FormControlType = 'input';
   private cmpService: CreateComponentService<FormComponentType>;
   cmpTypeOutput = output<Type<FormComponentType>>();
   controlTypeMap = FormControlNameMap;
@@ -34,6 +35,7 @@ export class CreateComponentComponent implements AfterViewInit {
    * Emits the created form component type using cmpTypeOutput.
    */
   ngAfterViewInit(): void {
+    this.updateFormControlType(this.controlType);
     this.cmpTypeOutput.emit(this.cmpService.createFormComponentType());
   }
 
