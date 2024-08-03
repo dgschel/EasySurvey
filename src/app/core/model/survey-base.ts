@@ -14,7 +14,7 @@ export class SurveyBase<T extends SurveyBaseType> {
 
   setState(model: T) {
     this.title.set(model.title)
-    this.description.set(model.description)
+    this.description.set(model.description ?? '');
     this.updateValidator(model.validator);
   }
 
