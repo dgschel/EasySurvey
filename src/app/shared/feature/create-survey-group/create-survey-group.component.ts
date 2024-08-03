@@ -1,4 +1,4 @@
-import { Component, ComponentRef, computed, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, computed, effect, Input, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
@@ -24,6 +24,10 @@ export class CreateSurveyGroupComponent {
     ...this.surveyBaseModel.state()
   }));
   hasDescription: boolean = false;
+  @Input('model') set model(value: SurveyModel) {
+    this.surveyBaseModel.setState(value);
+    this.hasDescription = !!value.description;
+  }
 
   remove = output<void>();
   stateChanged = output<SurveyModel>();
