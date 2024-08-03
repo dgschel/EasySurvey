@@ -1,4 +1,4 @@
-import { Component, ComponentRef, computed, effect, Input, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
@@ -14,9 +14,10 @@ import { SurveyBase } from '../../../core/model/survey-base';
   standalone: true,
   imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet],
   templateUrl: './create-survey-group.component.html',
-  styleUrl: './create-survey-group.component.scss'
+  styleUrl: './create-survey-group.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateSurveyGroupComponent {
+export class CreateSurveyGroupComponent implements AfterViewInit {
   surveyBaseModel = new SurveyBase();
   surveyComponentModel = signal<SurveyModel>(this.getDefaultSurveyInputModel());
   surveyModel = computed(() => ({
@@ -24,35 +25,29 @@ export class CreateSurveyGroupComponent {
     ...this.surveyBaseModel.state()
   }));
   hasDescription: boolean = false;
-  @Input('model') set model(value: SurveyModel) {
-    this.surveyBaseModel.setState(value);
-    this.hasDescription = !!value.description;
-  }
-
   remove = output<void>();
-  stateChanged = output<SurveyModel>();
 
-  cmpRef: ComponentRef<FormComponentType> | undefined;
+  @Input('model') model: SurveyModel = this.surveyModel();
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
+
+  ngAfterViewInit(): void {
+    this.surveyBaseModel.setState(this.model);
+    this.hasDescription = !!this.model.description;
+  }
 
   onCreateComponent(cmp: Type<FormComponentType>) {
     this.component.clear();
-    this.cmpRef?.destroy();
-    this.cmpRef = this.component.createComponent(cmp);
-    this.cmpRef.changeDetectorRef.detectChanges();
+    const cmpRef = this.component.createComponent(cmp);
+    cmpRef.changeDetectorRef.detectChanges();
 
-    if (this.cmpRef.instance instanceof CreateFormInputComponent) {
+    if (cmpRef.instance instanceof CreateFormInputComponent) {
       const surveyInput = this.getDefaultSurveyInputModel();
       this.surveyComponentModel.set(surveyInput);
-    } else if (this.cmpRef.instance instanceof FormSelectComponent) {
+    } else if (cmpRef.instance instanceof FormSelectComponent) {
       const surveySelect = this.getDefaultSurveySelectModel();
       this.surveyComponentModel.set(surveySelect);
-      this.cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
+      cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
     }
-  }
-
-  constructor() {
-    effect(() => this.stateChanged.emit(this.surveyModel()))
   }
 
   updateSelectOptions(options: string[]) {
