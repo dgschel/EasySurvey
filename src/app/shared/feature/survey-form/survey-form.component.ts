@@ -1,18 +1,19 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
 import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyModel, SurveyRefData } from '../../../util/type/survey-type';
+import { SurveyModel } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-form',
   standalone: true,
   imports: [JsonPipe, CreateSurveyGroupComponent, AsyncPipe],
   templateUrl: './survey-form.component.html',
-  styleUrl: './survey-form.component.scss'
+  styleUrl: './survey-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SurveyFormComponent implements OnInit, AfterViewInit {
+export class SurveyFormComponent implements AfterViewInit {
   private surveyStorage = inject(SurveyDataStorageService)
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   @Input() models: SurveyModel[] = [];
@@ -21,12 +22,6 @@ export class SurveyFormComponent implements OnInit, AfterViewInit {
   cdr = inject(ChangeDetectorRef)
 
   data$ = this.surveyStorage.getData$();
-
-  ngOnInit(): void {
-    this.data$.subscribe((models) => {
-      localStorage.setItem('surveyData', JSON.stringify(models));
-    })
-  }
 
   ngAfterViewInit(): void {
     this.models.forEach((model) => {
@@ -44,25 +39,16 @@ export class SurveyFormComponent implements OnInit, AfterViewInit {
     cmpRef.setInput('model', model)
     this.surveyStorage.addData({ ref: cmpRef, data: model });
     this.cmpRefs.push(cmpRef);
-    this.detectChanges();
+  }
+
+  save() {
+    const models = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
+    localStorage.setItem('surveyData', JSON.stringify(models));
+    this.surveyStorage.clearData();
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
-    cmpRef.instance.stateChanged.subscribe((state) => this.updateSectionData(cmpRef, state));
-    cmpRef.changeDetectorRef.detectChanges();
-  }
-
-  detectChanges() {
-    this.cdr.detectChanges();
-  }
-
-  updateSectionData(cmpRef: ComponentRef<CreateSurveyGroupComponent>, state: SurveyModel) {
-    const surveyRefData: SurveyRefData = {
-      ref: cmpRef,
-      data: state
-    }
-    this.surveyStorage.updateData(cmpRef, surveyRefData);
   }
 
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
