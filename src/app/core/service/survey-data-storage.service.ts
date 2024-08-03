@@ -15,9 +15,9 @@ export class SurveyDataStorageService {
     this.dataStorageSubject.next([...currentSurveyData, surveyData])
   }
 
-  updateData(ref: ComponentRef<CreateSurveyGroupComponent>, surveyState: SurveyRefData) {
+  updateData(ref: ComponentRef<CreateSurveyGroupComponent>, model: SurveyModel) {
     const updatedData = this.dataStorageSubject.value.map(refData => {
-      return refData.ref === ref ? { ...refData, data: { ...surveyState.data } } : refData;
+      return refData.ref === ref ? { ref, data: model } : refData;
     });
     this.dataStorageSubject.next(updatedData);
   }
