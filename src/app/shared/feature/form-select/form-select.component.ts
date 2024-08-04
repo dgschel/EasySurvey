@@ -14,6 +14,7 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
 
   // Callback function to update options passed down from parent to child
   @Input() optionsChangedCallback = (options: string[]): string[] => options;
+  @Input() options: string[] = []
 
   @ViewChild('host', { read: ViewContainerRef }) host!: ViewContainerRef;
 
@@ -25,11 +26,13 @@ export class FormSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.createOption();
+    if (this.options.length === 0) this.createOption();
+    else this.options.forEach(option => this.createOption(option));
   }
 
-  createOption() {
+  createOption(value = '') {
     const componentRef = this.host.createComponent(DynamicOptionComponent);
+    componentRef.setInput('value', value);
     this.components.push(componentRef);
     this.setupListeners(componentRef);
     this.setupIndex();
