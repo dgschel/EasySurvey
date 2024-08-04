@@ -12,10 +12,6 @@ export class SurveyBase<T extends SurveyBaseType> {
     validator: this.validatorMap()
   }) as T);
 
-  setTitle(value: string) {
-    this.title.set(value)
-  }
-
   setState(model: T) {
     this.title.set(model.title)
     this.description.set(model.description ?? '');
