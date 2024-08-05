@@ -7,6 +7,7 @@ import { SurveyTemplateManager } from '../model/survey-template-manager';
   providedIn: 'root'
 })
 export class SurveyDataService {
+  // TODO: Refactor this service to use it to add and fetch surveys to and from azure functions that store the data in a database 
   private surveyManager = inject(SurveyTemplateManager);
 
   private randomData = new BehaviorSubject<SurveyTemplateModel[]>([]);
