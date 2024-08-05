@@ -5,7 +5,7 @@ import { StoreFormComponent } from './store-form/store-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home/:id', component: HomeComponent },
+  { path: 'home/:template', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'viewform', component: ViewSurveyFormComponent },
   { path: 'store', component: StoreFormComponent },
