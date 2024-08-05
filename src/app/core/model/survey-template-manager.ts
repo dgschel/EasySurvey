@@ -12,12 +12,12 @@ export class SurveyTemplateManager {
 
   private surveyInformation: Record<SurveyName, string> = {
     Standard: 'Standard survey template',
-    Einkaufsformular: 'Purchase survey template for store form component'
+    Einkaufen: 'Purchase survey template for store form component'
   };
 
   constructor() {
     this.addSurvey('Standard', new BasicSurveyTemplate());
-    this.addSurvey('Einkaufsformular', new PurchaseSurveyTemplate());
+    this.addSurvey('Einkaufen', new PurchaseSurveyTemplate());
   }
 
   addSurvey(name: SurveyName, survey: SurveyTemplateContract) {
