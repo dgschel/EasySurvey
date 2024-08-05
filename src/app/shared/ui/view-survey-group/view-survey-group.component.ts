@@ -31,6 +31,7 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(cmp);
 
+    this.componentRef.setInput('controlKeyName', this.model.title);
     this.componentRef.setInput('validator', this.model.validator);
 
     if (this.model.type === 'input') {
