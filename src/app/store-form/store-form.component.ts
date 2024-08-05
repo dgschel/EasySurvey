@@ -1,6 +1,6 @@
 import { Component, ComponentRef, createComponent, EnvironmentInjector, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValuePipe, LowerCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
@@ -13,7 +13,7 @@ import { SurveyName } from '../util/type/survey-type';
 @Component({
   selector: 'app-store-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, KeyValuePipe, RouterLink],
+  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, KeyValuePipe, LowerCasePipe, RouterLink],
   templateUrl: './store-form.component.html',
   styleUrl: './store-form.component.scss'
 })
