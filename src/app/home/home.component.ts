@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { SurveyTemplateManager } from '../core/model/survey-template-manager';
 import { SurveyFormComponent } from '../shared/feature/survey-form/survey-form.component';
-import { SurveyDataService } from '../core/service/survey-data.service';
 import { SurveyModel } from '../util/type/survey-type';
 
 @Component({
@@ -13,19 +13,17 @@ import { SurveyModel } from '../util/type/survey-type';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  surveyDataService = inject(SurveyDataService);
+  surveyManager = inject(SurveyTemplateManager);
   route = inject(ActivatedRoute);
-  
+
   models: SurveyModel[] = [];
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const models = this.surveyDataService.fetchSurveyData(id);
-      if (models) {
-        this.models = models;
-      }
+    const surveyTemplate = this.route.snapshot.paramMap.get('template');
+    const template = this.surveyManager.surveyTemplateModels.find(model => model.name === surveyTemplate);
+
+    if (template) {
+      this.models = template.models;
     }
   }
 }
-
