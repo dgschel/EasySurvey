@@ -45,12 +45,6 @@ export class FormControlSelectComponent {
     return this.surveyFormControl?.control;
   }
 
-  set validators(validators: ValidatorFn[]) {
-    if (this.surveyFormControl) {
-      this.surveyFormControl.validators = validators;
-    }
-  }
-
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.sections, this.validator(), this.controlKeyName());
   }
