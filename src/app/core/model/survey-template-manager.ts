@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { FormControlNameMap, FormControlType, FormValidatorNameMap, SurveyFormControlCount, SurveyModel, SurveyName, SurveyTemplateModel, SurveyValidatorType } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
+import { BasicSurveyTemplate } from "../templates/basic-survey-template";
+import { PurchaseSurveyTemplate } from "../templates/purchase-survey-template";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,13 @@ export class SurveyTemplateManager {
 
   private surveyInformation: Record<SurveyName, string> = {
     Standard: 'Standard survey template',
-    Einkaufsformular: 'Purchase survey template for store form component'
+    Einkaufen: 'Purchase survey template for store form component'
   };
+
+  constructor() {
+    this.addSurvey('Standard', new BasicSurveyTemplate());
+    this.addSurvey('Einkaufen', new PurchaseSurveyTemplate());
+  }
 
   addSurvey(name: SurveyName, survey: SurveyTemplateContract) {
     this.surveys[name] = survey;

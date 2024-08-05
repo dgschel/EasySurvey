@@ -1,10 +1,9 @@
 import { Component, ComponentRef, createComponent, EnvironmentInjector, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValuePipe, LowerCasePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
-import { BasicSurveyTemplate } from '../core/templates/basic-survey-template';
-import { PurchaseSurveyTemplate } from '../core/templates/purchase-survey-template';
 import { SurveyTemplateManager } from '../core/model/survey-template-manager';
 import { ModalService } from '../core/service/modal.service';
 import { ModalComponent } from '../core/component/modal/modal.component';
@@ -14,7 +13,7 @@ import { SurveyName } from '../util/type/survey-type';
 @Component({
   selector: 'app-store-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, KeyValuePipe],
+  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, KeyValuePipe, LowerCasePipe, RouterLink],
   templateUrl: './store-form.component.html',
   styleUrl: './store-form.component.scss'
 })
@@ -23,14 +22,6 @@ export class StoreFormComponent {
   environmentInjector = inject(EnvironmentInjector);
   surveyManager = inject(SurveyTemplateManager);
   modalRef!: ComponentRef<ModalComponent>;
-
-  constructor() {
-    const basicSurvey = new BasicSurveyTemplate();
-    const purchaseSurvey = new PurchaseSurveyTemplate();
-
-    this.surveyManager.addSurvey('Standard', basicSurvey);
-    this.surveyManager.addSurvey('Einkaufsformular', purchaseSurvey);
-  }
 
   preview(surveyName: string) {
     const cmp = createComponent(PreviewSurveyComponent, {

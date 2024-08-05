@@ -5,7 +5,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { FormControlInputComponent } from '../form-control-input/form-control-input.component';
 import { customRequiredValidator } from '../../form-validator/validators';
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormControlComponentType } from '../../../util/type/survey-type';
+import { FormComponentType } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 
 @Component({
@@ -37,7 +37,7 @@ export class SurveySectionComponent {
     }
   }
 
-  onCreateComponent(componentType: Type<FormControlComponentType>) {
+  onCreateComponent(componentType: Type<FormComponentType>) {
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(componentType);
     this.componentRef.changeDetectorRef.detectChanges();

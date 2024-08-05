@@ -7,7 +7,7 @@
           <h3 class="card-title !mb-0">{{ template.key }}</h3>
           <p class="mb-2">{{ surveyManager.getSurveyInformation(template.key) }}</p>
           <div class="card-actions">
-            <button class="btn btn-sm w-full btn-primary">Übernehmen</button>
+            <a [routerLink]="['/home', template.key | lowercase]" class="btn btn-sm w-full btn-primary">Übernehmen</a>
             <button class="btn btn-sm w-full btn-outline btn-neutral" (click)="preview(template.key)">Vorschau</button>
           </div>
         </div>

@@ -8,7 +8,7 @@ import { FormControlSelectComponent } from "../../shared/feature/form-control-se
 
 export type SurveyBaseType = {
   title: string;
-  description: string;
+  description?: string;
   validator: Partial<ValidatorConfig>;
 };
 
@@ -18,11 +18,11 @@ export type SurveyTemplateModel = {
 };
 
 export type SurveyFormControlCount = Record<string, number>;
-export type SurveyName = 'Standard' | 'Einkaufsformular';
+export type SurveyName = 'Standard' | 'Einkaufen';
 
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
-  data: SurveyModelStorage
+  data: SurveyModel
 }
 
 export type SurveyValidatorType = 'required' | 'minLength';
@@ -71,11 +71,3 @@ export type SurveySelectModel = {
 } & SurveyBaseType
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel;
-export type SurveyModelStorage = Omit<SurveyModel, 'validator'> & {
-  validator: Partial<ValidatorConfig>
-};
-
-export type SurveyValidatorFn = Record<SurveyValidatorType, ValidatorFn>
-export type OmitValidator<T> = Omit<T, 'validator'> & {
-  validator: ValidatorFn[];
-};

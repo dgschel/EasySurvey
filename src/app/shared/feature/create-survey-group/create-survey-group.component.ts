@@ -1,9 +1,9 @@
-import { Component, ComponentRef, computed, effect, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, SurveyInputModel, SurveyModel, SurveyModelStorage, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
+import { FormComponentType, SurveyInputModel, SurveyModel, SurveySelectModel } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
 import { CreateFormInputComponent } from '../../ui/create-form-input/create-form-input.component';
@@ -14,41 +14,56 @@ import { SurveyBase } from '../../../core/model/survey-base';
   standalone: true,
   imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet],
   templateUrl: './create-survey-group.component.html',
-  styleUrl: './create-survey-group.component.scss'
+  styleUrl: './create-survey-group.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateSurveyGroupComponent {
+export class CreateSurveyGroupComponent implements AfterViewInit {
   surveyBaseModel = new SurveyBase();
   surveyComponentModel = signal<SurveyModel>(this.getDefaultSurveyInputModel());
   surveyModel = computed(() => ({
     ...this.surveyComponentModel(),
     ...this.surveyBaseModel.state()
-  }) as SurveyModelStorage);
+  }));
   hasDescription: boolean = false;
-
   remove = output<void>();
-  stateChanged = output<SurveyModelStorage>();
 
-  cmpRef: ComponentRef<FormComponentType> | undefined;
+  // Input model from parent component. Default value is a SurveyModel object
+  @Input('model') model: SurveyModel = this.surveyModel();
   @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
+
+  ngAfterViewInit(): void {
+    this.surveyBaseModel.setState(this.model);
+    this.hasDescription = !!this.model.description;
+  }
 
   onCreateComponent(cmp: Type<FormComponentType>) {
     this.component.clear();
-    this.cmpRef?.destroy();
-    this.cmpRef = this.component.createComponent(cmp);
-    this.cmpRef.changeDetectorRef.detectChanges();
+    const cmpRef = this.component.createComponent(cmp);
 
-    if (this.cmpRef.instance instanceof CreateFormInputComponent) {
-      const surveyInput = this.getDefaultSurveyInputModel();
-      this.surveyComponentModel.set(surveyInput);
-    } else if (this.cmpRef.instance instanceof FormSelectComponent) {
-      const surveySelect = this.getDefaultSurveySelectModel();
-      this.surveyComponentModel.set(surveySelect);
-      this.cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
+    if (cmpRef.instance instanceof CreateFormInputComponent) {
+      this.createFormInputComponent();
+    } else if (cmpRef.instance instanceof FormSelectComponent) {
+      this.createFormSelectComponent(cmpRef);
     }
   }
 
-  constructor() {
-    effect(() => this.stateChanged.emit(this.surveyModel()))
+  private createFormInputComponent() {
+    const surveyInput = this.getDefaultSurveyInputModel();
+    this.surveyComponentModel.set(surveyInput);
+  }
+
+  private createFormSelectComponent(cmpRef: ComponentRef<FormComponentType>) {
+    const surveySelect = this.getDefaultSurveySelectModel();
+    this.surveyComponentModel.set(surveySelect);
+
+    if (this.model.type === 'select') {
+      const options = this.model.options; // access the options from the type (SurveyModel -> SurveySelectModel)
+      cmpRef.setInput('options', options);
+      this.updateSelectOptions(options);
+    }
+
+    // Callback function to update options passed down from parent to child
+    cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
   }
 
   updateSelectOptions(options: string[]) {
