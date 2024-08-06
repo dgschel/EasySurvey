@@ -1,15 +1,43 @@
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, input, InvocationContext, output } from "@azure/functions";
+import { v4 as uuidv4 } from 'uuid';
+
+const cosmosOutput = output.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Survey',
+    connection: 'cosmosDbConnection',
+    partitionKey: '/id',
+});
 
 export async function saveFormToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const name = request.query.get('name') || await request.text() || 'world';
+    try {
+        const survey = await request.json();
 
-    return { body: `Hello, ${name}!` };
+        if (survey) {
+            context.extraOutputs.set(cosmosOutput, {
+                id: uuidv4(),
+                models: survey['models'],
+            })
+        }
+
+        return {
+            body: "Survey saved successfully",
+        }
+
+    } catch (error) {
+        context.log(`Error: ${error}`);
+        return {
+            status: 500,
+            body: "An error occurred while saving the survey",
+        }
+
+    }
 };
 
 app.http('saveFormToCosmosDbHttp', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    authLevel: 'function',
+    extraOutputs: [cosmosOutput],
     handler: saveFormToCosmosDbHttp
 });
