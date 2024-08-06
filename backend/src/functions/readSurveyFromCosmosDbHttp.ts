@@ -1,15 +1,28 @@
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, input, InvocationContext } from "@azure/functions";
+
+const cosmosInput = input.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Survey',
+    connection: 'cosmosDbConnection',
+    id: '{id}',
+    partitionKey: '{id}',
+});
 
 export async function readSurveyFromCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const name = request.query.get('name') || await request.text() || 'world';
+    const survey = context.extraInputs.get(cosmosInput);
 
-    return { body: `Hello, ${name}!` };
+    if (!survey) {
+        return { status: 404, body: 'Survey not found' };
+    }
+
+    return { status: 200, jsonBody: survey['models'] };
 };
 
 app.http('readSurveyFromCosmosDbHttp', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
+    methods: ['GET'],
+    authLevel: 'function',
+    extraInputs: [cosmosInput],
     handler: readSurveyFromCosmosDbHttp
 });
