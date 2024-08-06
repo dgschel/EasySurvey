@@ -8,7 +8,7 @@ const cosmosOutput = output.cosmosDB({
     partitionKey: '/id',
 });
 
-export async function saveFormToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
@@ -35,9 +35,9 @@ export async function saveFormToCosmosDbHttp(request: HttpRequest, context: Invo
     }
 };
 
-app.http('saveFormToCosmosDbHttp', {
+app.http('saveSurveyToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
     extraOutputs: [cosmosOutput],
-    handler: saveFormToCosmosDbHttp
+    handler: saveSurveyToCosmosDbHttp
 });
