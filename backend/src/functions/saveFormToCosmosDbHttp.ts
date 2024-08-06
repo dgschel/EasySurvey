@@ -1,4 +1,4 @@
-import { app, HttpRequest, HttpResponseInit, input, InvocationContext, output } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { v4 as uuidv4 } from 'uuid';
 
 const cosmosOutput = output.cosmosDB({
