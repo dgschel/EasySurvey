@@ -9,7 +9,7 @@ export async function saveFormToCosmosDbHttp(request: HttpRequest, context: Invo
 };
 
 app.http('saveFormToCosmosDbHttp', {
-    methods: ['GET', 'POST'],
+    methods: ['POST'],
     authLevel: 'anonymous',
     handler: saveFormToCosmosDbHttp
 });
