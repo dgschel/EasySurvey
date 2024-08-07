@@ -42,9 +42,9 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 
         return {
             jsonBody: {
-                status: 200,
                 message: "Survey saved successfully",
-            }
+            },
+            status: 201
         };
 
     } catch (error) {
@@ -53,7 +53,8 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
         return {
             jsonBody: {
                 message: error.message || "An unexpected error occurred",
-            }
+            },
+            status: 500
         };
     }
 };
