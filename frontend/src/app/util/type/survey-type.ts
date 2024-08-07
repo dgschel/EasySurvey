@@ -13,7 +13,7 @@ export type SurveyBaseType = {
 };
 
 export type SurveyTemplateModel = {
-  name: string;
+  name: SurveyName;
   models: SurveyModel[];
 };
 
