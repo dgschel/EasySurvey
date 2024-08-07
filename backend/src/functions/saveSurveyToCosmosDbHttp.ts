@@ -9,22 +9,32 @@ const cosmosOutput = output.cosmosDB({
     partitionKey: '/id',
 });
 
+/**
+ * Saves a survey to Cosmos DB using an HTTP request.
+ * 
+ * @param request - The HTTP request object.
+ * @param context - The invocation context object.
+ * @returns A promise that resolves to an HTTP response object.
+ */
 export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
         const survey = await request.json();
 
+        // Check if there is a payload
         if (!survey || !Array.isArray(survey) || survey.length === 0) {
             throw new Error("Survey data is empty or invalid");
         }
 
+        // Validate the survey data using zod schema definition
         const parsedSurvey = SurveyModelSchema.array().safeParse(survey);
 
         if (!parsedSurvey.success) {
             throw new Error("Survey data is invalid");
         }
 
+        // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
             id: uuidv4(),
             models: parsedSurvey.data
