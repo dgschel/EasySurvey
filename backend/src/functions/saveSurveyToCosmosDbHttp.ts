@@ -1,5 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { v4 as uuidv4 } from 'uuid';
+import { SurveyModel } from "../models/survey";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -12,7 +13,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-        const survey = await request.json();
+        const survey = await request.json() as SurveyModel[];
 
         if (survey) {
             context.extraOutputs.set(cosmosOutput, {
