@@ -29,7 +29,6 @@ export async function readSurveyFromCosmosDbHttp(request: HttpRequest, context: 
         context.log('Survey found:', survey['models']);
 
         return {
-
             jsonBody: {
                 message: 'Survey found',
                 data: survey['models'] || []
