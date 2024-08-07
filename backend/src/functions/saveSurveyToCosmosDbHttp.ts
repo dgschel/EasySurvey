@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { v4 as uuidv4 } from 'uuid';
-import { SurveyModel } from "../models/survey";
+import { SurveyModelSchema } from "../schemas/survey";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -13,15 +13,21 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-        const survey = await request.json() as SurveyModel[];
+        const survey = await request.json();
 
         if (!survey || !Array.isArray(survey) || survey.length === 0) {
             throw new Error("Survey data is empty or invalid");
         }
 
+        const parsedSurvey = SurveyModelSchema.array().safeParse(survey);
+
+        if (!parsedSurvey.success) {
+            throw new Error("Survey data is invalid");
+        }
+
         context.extraOutputs.set(cosmosOutput, {
             id: uuidv4(),
-            models: survey
+            models: parsedSurvey.data
         });
 
         return {
