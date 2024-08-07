@@ -9,15 +9,42 @@ const cosmosInput = input.cosmosDB({
 });
 
 export async function readSurveyFromCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    context.log(`Http function processed request for url "${request.url}"`);
+    try {
+        context.log(`Http function processed request for url "${request.url}"`);
 
-    const survey = context.extraInputs.get(cosmosInput);
+        const survey = context.extraInputs.get(cosmosInput);
 
-    if (!survey) {
-        return { status: 404, body: 'Survey not found' };
+        if (!survey) {
+            context.log('Survey not found');
+
+            return {
+                jsonBody: {
+                    message: 'Survey not found',
+                    data: []
+                },
+                status: 404
+            }
+        }
+
+        context.log('Survey found:', survey['models']);
+
+        return {
+            jsonBody: {
+                message: 'Survey found',
+                data: survey['models'] || []
+            },
+            status: 200
+        }
+    } catch (error) {
+        context.log(`Error:`, error);
+
+        return {
+            jsonBody: {
+                message: 'Internal server error',
+            },
+            status: 500
+        }
     }
-
-    return { status: 200, jsonBody: survey['models'] };
 };
 
 app.http('readSurveyFromCosmosDbHttp', {

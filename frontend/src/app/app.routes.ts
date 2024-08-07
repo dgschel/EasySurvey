@@ -7,6 +7,7 @@ export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home/:template', component: HomeComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'viewform', component: ViewSurveyFormComponent },
   { path: 'store', component: StoreFormComponent },
+  { path: ':id/viewform', component: ViewSurveyFormComponent },
+  { path: '**', redirectTo: '/home' }
 ];

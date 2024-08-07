@@ -1,32 +1,48 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { JsonPipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { SurveyDataService } from '../core/service/survey-data.service';
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel } from '../util/type/survey-type';
+import { AzureSurveyService } from '../core/service/azure-survey.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-survey-form',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, ViewSurveyGroupComponent, BasicCardComponent],
+  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, BasicCardComponent],
   templateUrl: './view-survey-form.component.html',
-  styleUrl: './view-survey-form.component.scss'
+  styleUrl: './view-survey-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewSurveyFormComponent implements OnInit {
-  private surveyDataService = inject(SurveyDataService);
   private cdr = inject(ChangeDetectorRef);
-  fb = inject(FormBuilder);
+  private azureSurveyService = inject(AzureSurveyService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
-  surveyComponents: SurveyModel[] = [];
+  models: SurveyModel[] = [];
 
-  form = this.fb.group({
-    sections: this.fb.array([])
-  });
+  form = new FormGroup({
+    sections: new FormArray([])
+  })
 
   ngOnInit(): void {
-    this.surveyComponents = this.surveyDataService.getSurveyData()
-    this.cdr.detectChanges();
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (!id || id === '') {
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    this.azureSurveyService.fetchSurveyData(id).subscribe({
+      next: (response: { message: string, data: SurveyModel[] }) => {
+        this.models = response.data
+        this.cdr.detectChanges();
+      },
+      error(err) {
+        console.log("Error", err);
+      },
+    })
   }
 }

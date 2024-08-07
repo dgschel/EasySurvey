@@ -20,10 +20,10 @@ export class HomeComponent {
 
   ngOnInit() {
     const surveyTemplate = this.route.snapshot.paramMap.get('template');
-    const template = this.surveyManager.surveyTemplateModels.find(model => model.name.toLowerCase() === surveyTemplate);
+    const survey = this.surveyManager.surveyTemplateModels.find(model => model.name.toLowerCase() === surveyTemplate);
 
-    if (template) {
-      this.models = template.models;
+    if (survey) {
+      this.models = survey.models;
     }
   }
 }
