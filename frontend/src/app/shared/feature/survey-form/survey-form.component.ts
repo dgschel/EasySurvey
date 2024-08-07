@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
 
-import { SurveyDataStorageService } from '../../../core/service/survey-data-storage.service';
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel } from '../../../util/type/survey-type';
 import { AzureSurveyService } from '../../../core/service/azure-survey.service';
@@ -14,7 +13,6 @@ import { AzureSurveyService } from '../../../core/service/azure-survey.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SurveyFormComponent implements AfterViewInit {
-  private surveyStorage = inject(SurveyDataStorageService)
   private azureSurveyService = inject(AzureSurveyService)
 
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
@@ -35,15 +33,13 @@ export class SurveyFormComponent implements AfterViewInit {
   addSurveySection(model: SurveyModel) {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     this.setupComponent(cmpRef);
-    cmpRef.setInput('model', model)
-    this.surveyStorage.addData({ ref: cmpRef, data: model });
+    cmpRef.setInput('model', model);
     this.cmpRefs.push(cmpRef);
   }
 
   save() {
     const models = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
-    this.azureSurveyService.saveSurveyData(models).pipe().subscribe(data => console.log("Data saved", data));
-    this.surveyStorage.clearData();
+    this.azureSurveyService.saveSurveyData(models).subscribe(data => console.log("Data saved", data));
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
@@ -53,14 +49,9 @@ export class SurveyFormComponent implements AfterViewInit {
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
     const index = this.cmpRefs.indexOf(cmpRef);
     if (index !== -1) {
-      this.surveyStorage.removeData(cmpRef);
       this.cmpRefs.splice(index, 1);
       cmpRef.destroy();
     }
-  }
-
-  clearData() {
-    this.surveyStorage.clearData();
   }
 
   ngOnDestroy() {
