@@ -15,24 +15,30 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
     try {
         const survey = await request.json() as SurveyModel[];
 
-        if (survey) {
-            context.extraOutputs.set(cosmosOutput, {
-                id: uuidv4(),
-                models: survey['models'],
-            })
+        if (!survey || !Array.isArray(survey) || survey.length === 0) {
+            throw new Error("Survey data is empty or invalid");
         }
 
+        context.extraOutputs.set(cosmosOutput, {
+            id: uuidv4(),
+            models: survey
+        });
+
         return {
-            body: "Survey saved successfully",
-        }
+            jsonBody: {
+                status: 200,
+                message: "Survey saved successfully",
+            }
+        };
 
     } catch (error) {
-        context.log(`Error: ${error}`);
-        return {
-            status: 500,
-            body: "An error occurred while saving the survey",
-        }
+        context.log(`Error:`, error);
 
+        return {
+            jsonBody: {
+                message: error.message || "An unexpected error occurred",
+            }
+        };
     }
 };
 
