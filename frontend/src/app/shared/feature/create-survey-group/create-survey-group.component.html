@@ -3,7 +3,7 @@
     <div class="flex w-full">
       <input type="text" class="input w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title">
       <div class="divider divider-horizontal"></div>
-      <app-create-component [controlType]="model.type" (cmpTypeOutput)="onCreateComponent($event)" />
+      <app-create-component [controlType]="model.type" (controlTypeChanged)="onControlTypeChanged($event)" />
     </div>
     @if (hasDescription) {
     <input type="text" class="input input-sm ps-4 pe-4 w-full" placeholder="Beschreibung"
