@@ -1,81 +1,59 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, inject, Input, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { NgSwitch, NgSwitchCase } from '@angular/common';
+
 import { DynamicOptionComponent } from '../../ui/dynamic-option/dynamic-option.component';
+import { FormControlType } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-select',
   standalone: true,
-  imports: [],
+  imports: [DynamicOptionComponent, NgSwitch, NgSwitchCase,],
   templateUrl: './form-select.component.html',
   styleUrl: './form-select.component.scss',
 })
-export class FormSelectComponent implements AfterViewInit, OnDestroy {
+export class FormSelectComponent implements AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
-  components: ComponentRef<DynamicOptionComponent>[] = [];
 
   // Callback function to update options passed down from parent to child
   @Input() optionsChangedCallback = (options: string[]): string[] => options;
-  @Input() options: string[] = []
+  @Input() controlModel: { modelType: Exclude<FormControlType, 'input'>, options: string[] } = { modelType: 'select', options: [] };
 
-  @ViewChild('host', { read: ViewContainerRef }) host!: ViewContainerRef;
+  dynamicOptions: string[] = [];
 
   // Will be used to populate options
   get values() {
-    return this.components
-      .filter(cmp => cmp.instance.value !== '')
-      .map(cmp => cmp.instance.value);
+    return this.dynamicOptions
+      .filter(option => option !== '')
+      .map(option => option.trim());
   }
 
   ngAfterViewInit(): void {
-    if (this.options.length === 0) this.createOption();
-    else this.options.forEach(option => this.createOption(option));
-  }
+    this.dynamicOptions = [...this.controlModel.options];
 
-  createOption(value = '') {
-    const componentRef = this.host.createComponent(DynamicOptionComponent);
-    componentRef.setInput('value', value);
-    this.components.push(componentRef);
-    this.setupListeners(componentRef);
-    this.setupIndex();
-    componentRef.changeDetectorRef.detectChanges();
+    if (this.dynamicOptions.length === 0) this.dynamicOptions.push('')
+
+    // After create component we need to detect changes so that the @for-loop will display an initial value
     this.cdr.detectChanges();
   }
 
-  setupIndex() {
-    this.components.forEach((cmp, index) => {
-      cmp.setInput('index', index);
-    });
-  }
+  onBlur(cmp: DynamicOptionComponent) {
+    this.dynamicOptions[cmp.index] = cmp.value;
+    const lastItemIndex = this.dynamicOptions.indexOf(cmp.value);
 
-  setupListeners(componentRef: ComponentRef<DynamicOptionComponent>) {
-    componentRef.instance.remove.subscribe(() => this.onRemove(componentRef));
-    componentRef.instance.blur.subscribe((index) => {
-      this.handleLastOptionInput(index);
-      this.optionsChangedCallback(this.values);
-    });
-  }
-
-  handleLastOptionInput(index: number) {
-    const lastComponent = this.components[this.components.length - 1];
-    if (this.components.length - 1 === index && lastComponent.instance.value !== '') {
-      this.createOption();
+    // Insert a new empty string if the last item is not empty and the current item is the last one
+    if (this.dynamicOptions.length - 1 === cmp.index && this.dynamicOptions[lastItemIndex] !== '') {
+      this.dynamicOptions.push('');
     }
-  }
 
-  onRemove(cmpRef: ComponentRef<DynamicOptionComponent>) {
-    // Only remove if there is more than one component
-    if (this.components.length === 1) return;
-
-    const index = this.components.indexOf(cmpRef);
-
-    if (index === -1) return;
-
-    this.components.splice(index, 1);
-    cmpRef.destroy();
     this.optionsChangedCallback(this.values);
-    this.setupIndex();
   }
 
-  ngOnDestroy(): void {
-    this.components.forEach(cmp => cmp.destroy())
+  onRemove(cmp: DynamicOptionComponent) {
+    // Only remove if there is atleast one element
+    if (this.dynamicOptions.length === 1) return;
+
+    // Will also remove duplicate values
+    this.dynamicOptions = this.dynamicOptions.filter(option => option !== cmp.value);
+    this.optionsChangedCallback(this.values);
   }
 }

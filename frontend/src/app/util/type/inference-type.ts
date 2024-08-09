@@ -4,4 +4,4 @@
  * Represents a type that infers the values of an object's properties.
  * @template T - The type of the object
  */
-export type InferObj<T> = { [P in keyof T]?: T[P] extends Record<string, infer U> ? U : any };
+export type InferObj<T> = { [P in keyof T]?: T[P] extends Record<string, infer U> ? U : T[P] };

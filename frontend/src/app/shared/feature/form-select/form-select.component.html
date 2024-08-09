@@ -1,3 +1,21 @@
 <div class="flex flex-col gap-2">
-  <ng-container #host></ng-container>
+  @for (option of dynamicOptions; track $index) {
+
+  <div class="flex gap-2 items-center">
+    
+    <!-- Static elements based on controlModel.modelType -->
+    <ng-container [ngSwitch]="controlModel.modelType">
+      <span *ngSwitchCase="'select'">{{ $index + 1 }}.</span>
+      <input *ngSwitchCase="'radio'" type="radio" class="radio radio-sm" disabled checked />
+      <input *ngSwitchCase="'checkbox'" type="checkbox" class="checkbox checkbox-sm" disabled />
+    </ng-container>
+
+    <div class="w-full">
+      <app-dynamic-option [value]="option" [index]="$index" (blur)="onBlur($event)"
+        (remove)="onRemove($event)"></app-dynamic-option>
+    </div>
+  </div>
+
+  }
+
 </div>

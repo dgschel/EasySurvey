@@ -54,7 +54,7 @@ export class SurveyTemplateManager {
   }
 
   mapValidatorName(validator: SurveyValidatorType): string {
-    return FormValidatorNameMap[validator as SurveyValidatorType];
+    return FormValidatorNameMap[validator];
   }
 
   countModelTypes(models: SurveyModel[]): SurveyFormControlCount {

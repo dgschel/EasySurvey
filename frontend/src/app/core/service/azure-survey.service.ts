@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment.development';
 import { SurveyModel } from '../../util/type/survey-type';
-import { catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
