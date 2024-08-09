@@ -11,6 +11,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 export class DynamicOptionComponent {
   @Input() index = 0;
   @Input() value = '';
-  remove = output<void>();
-  blur = output<number>();
+  remove = output<DynamicOptionComponent>();
+  blur = output<DynamicOptionComponent>();
 }
