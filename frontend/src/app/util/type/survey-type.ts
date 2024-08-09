@@ -5,6 +5,7 @@ import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-g
 import { CreateFormInputComponent } from "../../shared/ui/create-form-input/create-form-input.component";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
+import { CreateFormRadioComponent } from "../../shared/ui/create-form-radio/create-form-radio.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -37,22 +38,28 @@ export type ValidatorConfig = {
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
 
-export type FormControlType = 'input' | 'select'
+export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
 // user generated components
 export const formComponentMap: Record<FormControlType, FormComponentType> = {
   input: CreateFormInputComponent, // TODO: Edit naming to distinquish user generated components and programatically form controls based on data
   select: FormSelectComponent,
+  checkbox: FormSelectComponent,
+  radio: FormSelectComponent
 }
 
 export const formControlComponentMap: Record<FormControlType, FormControlComponentType> = {
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
+  radio: FormControlSelectComponent,
+  checkbox: FormControlSelectComponent,
 }
 
 export const FormControlNameMap: Record<FormControlType, string> = {
   input: 'Textbox',
   select: 'Dropdown',
+  radio: 'Radio',
+  checkbox: 'Checkbox'
 }
 
 export const FormValidatorNameMap: Record<SurveyValidatorType, string> = {
@@ -65,9 +72,20 @@ export type SurveyInputModel = {
   placeholder?: string;
 } & SurveyBaseType
 
+export type SurveyRadioModel = {
+  type: 'radio';
+  name: string
+  options: string[]
+} & SurveyBaseType
+
+export type SurveyCheckboxModel = {
+  type: 'checkbox';
+  options: string[]
+} & SurveyBaseType
+
 export type SurveySelectModel = {
   type: 'select';
   options: string[];
 } & SurveyBaseType
 
-export type SurveyModel = SurveyInputModel | SurveySelectModel;
+export type SurveyModel = SurveyInputModel | SurveySelectModel | SurveyCheckboxModel | SurveyRadioModel;
