@@ -20,6 +20,7 @@ export class CreateComponentComponent implements AfterViewInit {
   @Input('controlType') controlType: FormControlType = 'input';
   private cmpService: CreateComponentService<FormComponentType>;
   cmpTypeOutput = output<Type<FormComponentType>>();
+  controlTypeChanged = output<FormControlType>();
   controlTypeMap = FormControlNameMap;
 
   /**
@@ -36,7 +37,6 @@ export class CreateComponentComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     this.updateFormControlType(this.controlType);
-    this.cmpTypeOutput.emit(this.cmpService.createFormComponentType());
   }
 
   /**
@@ -46,6 +46,6 @@ export class CreateComponentComponent implements AfterViewInit {
    */
   updateFormControlType(controlType: string) {
     this.cmpService.setFormControlType(controlType as FormControlType);
-    this.cmpTypeOutput.emit(this.cmpService.createFormComponentType());
+    this.controlTypeChanged.emit(controlType as FormControlType)
   }
 }
