@@ -1,3 +1,30 @@
 <div class="flex flex-col gap-2">
-  <ng-container #host></ng-container>
+  @for (item of state; track $index) {
+
+  <div class="flex gap-2 items-center">
+
+    @if (controlModel.modelType === 'select') {
+    <span>{{ $index + 1 }}.</span>
+    } @else if (controlModel.modelType === 'radio') {
+    <input type="radio" class="radio radio-sm radio-success" disabled />
+    } @else if (controlModel.modelType === 'checkbox') {
+    <input type="checkbox" class="checkbox checkbox-sm checkbox-secondary" disabled />
+    }
+
+    <!-- Dynamic Option -->
+    <div class="flex gap-2 flex-grow items-center">
+      <input type="text" class="input input-sm w-full" [(ngModel)]="item.option" placeholder="Option hinzufügen">
+      <button type="button" class="btn btn-sm btn-ghost btn-circle flex-shrink">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  }
+
 </div>
+
+{{ state | json }}
