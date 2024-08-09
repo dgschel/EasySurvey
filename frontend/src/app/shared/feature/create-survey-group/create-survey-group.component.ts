@@ -1,13 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, SurveyInputModel, SurveyModel, SurveySelectModel } from '../../../util/type/survey-type';
+import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
-import { CreateFormInputComponent } from '../../ui/create-form-input/create-form-input.component';
 import { SurveyBase } from '../../../core/model/survey-base';
+import { createFormComponent } from '../../../util/component/create';
 
 @Component({
   selector: 'app-create-survey-group',
@@ -29,21 +29,22 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
   // Input model from parent component. Default value is a SurveyModel object
   @Input('model') model: SurveyModel = this.surveyModel();
-  @ViewChild('component', { read: ViewContainerRef }) component!: ViewContainerRef;
+  @ViewChild('component', { read: ViewContainerRef }) componentRef!: ViewContainerRef;
 
   ngAfterViewInit(): void {
     this.surveyBaseModel.setState(this.model);
     this.hasDescription = !!this.model.description;
   }
 
-  onCreateComponent(cmp: Type<FormComponentType>) {
-    this.component.clear();
-    const cmpRef = this.component.createComponent(cmp);
+  onControlTypeChanged(controlType: FormControlType) {
+    this.componentRef.clear();
+    const cmpType = createFormComponent<FormComponentType>(controlType);
+    const cmp = this.componentRef.createComponent(cmpType);
 
-    if (cmpRef.instance instanceof CreateFormInputComponent) {
+    if (controlType === 'input') {
       this.createFormInputComponent();
-    } else if (cmpRef.instance instanceof FormSelectComponent) {
-      this.createFormSelectComponent(cmpRef);
+    } else if (controlType === 'select' || controlType === 'checkbox' || controlType === 'radio') {
+      this.createFormChoiceComponent(controlType, cmp);
     }
   }
 
@@ -52,27 +53,26 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     this.surveyComponentModel.set(surveyInput);
   }
 
-  private createFormSelectComponent(cmpRef: ComponentRef<FormComponentType>) {
-    const surveySelect = this.getDefaultSurveySelectModel();
-    this.surveyComponentModel.set(surveySelect);
+  private createFormChoiceComponent(modelType: Exclude<FormControlType, 'input'>, cmpRef: ComponentRef<FormComponentType>) {
+    const { options } = this.model as SurveySelectModel // Get the options from any model thats supports options
+    let model: SurveyModel = {} as SurveyModel;
 
-    if (this.model.type === 'select') {
-      const options = this.model.options; // access the options from the type (SurveyModel -> SurveySelectModel)
-      cmpRef.setInput('options', options);
-      this.updateSelectOptions(options);
+    if (modelType === 'select') {
+      model = this.getDefaultSurveySelectModel(options);
+    } else if (modelType === 'checkbox') {
+      model = this.getDefaultSurveyCheckboxModel(options);
+    } else if (modelType === 'radio') {
+      model = this.getDefaultSurveyRadioModel(options);
     }
 
-    // Callback function to update options passed down from parent to child
-    cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateSelectOptions(updatedOptions));
+    this.surveyComponentModel.set(model);
+
+    cmpRef.setInput('controlModel', { modelType, options: options || [] });
+    cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateOptions(updatedOptions));
   }
 
-  updateSelectOptions(options: string[]) {
-    const surveyModel: SurveySelectModel = {
-      ...this.surveyBaseModel.state(),
-      type: 'select',
-      options,
-    };
-    this.surveyComponentModel.set(surveyModel);
+  updateOptions(options: string[]) {
+    this.surveyComponentModel.update((prev) => ({ ...prev, options }));
   }
 
   setMinlengthValidator(value: number) {
@@ -94,11 +94,28 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     };
   }
 
-  getDefaultSurveySelectModel(): SurveySelectModel {
+  getDefaultSurveySelectModel(options: string[] = []): SurveySelectModel {
     return {
       ...this.surveyBaseModel.state(),
       type: 'select',
-      options: [],
+      options
+    };
+  }
+
+  getDefaultSurveyCheckboxModel(options: string[] = []): SurveyCheckboxModel {
+    return {
+      ...this.surveyBaseModel.state(),
+      type: 'checkbox',
+      options
+    };
+  }
+
+  getDefaultSurveyRadioModel(options: string[] = []): SurveyRadioModel {
+    return {
+      ...this.surveyBaseModel.state(),
+      type: 'radio',
+      name: 'radio',
+      options,
     };
   }
 }
