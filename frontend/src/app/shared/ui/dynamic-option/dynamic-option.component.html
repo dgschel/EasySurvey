@@ -1,10 +1,9 @@
 <div class="flex gap-4">
   <div class="flex gap-2 flex-grow items-center">
-    <span>{{ index + 1 }}.</span>
     <input type="text" class="input input-sm w-full" [(ngModel)]="value" placeholder="Option hinzufügen"
-      (blur)="blur.emit(index)">
+      (blur)="blur.emit(this)">
   </div>
-  <button type="button" class="btn btn-sm btn-ghost btn-circle flex-shrink" (click)="remove.emit()">
+  <button type="button" class="btn btn-sm btn-ghost btn-circle flex-shrink" (click)="remove.emit(this)">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
       class="size-6">
       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
