@@ -5,7 +5,6 @@ import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-g
 import { CreateFormInputComponent } from "../../shared/ui/create-form-input/create-form-input.component";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
-import { CreateFormRadioComponent } from "../../shared/ui/create-form-radio/create-form-radio.component";
 
 export type SurveyBaseType = {
   title: string;
