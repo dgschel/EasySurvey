@@ -39,12 +39,12 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   onControlTypeChanged(controlType: FormControlType) {
     this.componentRef.clear();
     const cmpType = createFormComponent<FormComponentType>(controlType);
-    const cmp = this.componentRef.createComponent(cmpType);
+    const cmpRef = this.componentRef.createComponent(cmpType);
 
     if (controlType === 'input') {
       this.createFormInputComponent();
     } else if (controlType === 'select' || controlType === 'checkbox' || controlType === 'radio') {
-      this.createFormChoiceComponent(controlType, cmp);
+      this.createFormChoiceComponent(controlType, cmpRef);
     }
   }
 

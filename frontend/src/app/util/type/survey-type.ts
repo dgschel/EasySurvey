@@ -5,6 +5,7 @@ import { CreateSurveyGroupComponent } from "../../shared/feature/create-survey-g
 import { CreateFormInputComponent } from "../../shared/ui/create-form-input/create-form-input.component";
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
+import { FormControlRadioComponent } from "../../shared/feature/form-control-radio/form-control-radio.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -50,7 +51,7 @@ export const formComponentMap: Record<FormControlType, FormComponentType> = {
 export const formControlComponentMap: Record<FormControlType, FormControlComponentType> = {
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
-  radio: FormControlSelectComponent,
+  radio: FormControlRadioComponent,
   checkbox: FormControlSelectComponent,
 }
 

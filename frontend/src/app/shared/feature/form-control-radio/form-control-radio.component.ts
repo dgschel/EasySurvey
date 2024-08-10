@@ -1,26 +1,27 @@
 import { Component, inject, input } from '@angular/core';
+import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { SurveyFormControl } from '../../model/survey-form-control';
 import { ValidatorConfig } from '../../../util/type/survey-type';
+import { SurveyFormControl } from '../../model/survey-form-control';
+import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 
 @Component({
-  selector: 'app-form-control-select',
+  selector: 'app-form-control-radio',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass, FormControlErrorComponent],
-  templateUrl: './form-control-select.component.html',
-  styleUrl: './form-control-select.component.scss',
+  templateUrl: './form-control-radio.component.html',
+  styleUrl: './form-control-radio.component.scss',
   viewProviders: [{ // viewProviders is used to provide the parent form group to the child component. Useful for content projection
     provide: ControlContainer,
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlSelectComponent {
+export class FormControlRadioComponent {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>();
   options = input<string[]>([]);
+  name = input.required<string>();
   label = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});
   surveyFormControl: SurveyFormControl | undefined;
