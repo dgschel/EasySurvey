@@ -39,6 +39,10 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     } else if (this.model.type === 'select') {
       this.componentRef.setInput('options', this.model.options);
     }
+    else if (this.model.type === 'radio') {
+      this.componentRef.setInput('options', this.model.options);
+      this.componentRef.setInput('name', this.model.name);
+    }
   }
 
   hasValidator(): boolean {
