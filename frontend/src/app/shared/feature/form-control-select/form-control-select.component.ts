@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
