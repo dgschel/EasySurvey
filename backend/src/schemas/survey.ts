@@ -25,4 +25,16 @@ const SurveySelectModelSchema = SurveyBaseTypeSchema.extend({
   options: z.array(z.string()),
 });
 
-export const SurveyModelSchema = z.union([SurveyInputModelSchema, SurveySelectModelSchema]);
+
+const SurveyCheckboxModelSchema = SurveyBaseTypeSchema.extend({
+  type: z.literal('checkbox'),
+  options: z.array(z.string()),
+});
+
+const SurveyRadioModelSchema = SurveyBaseTypeSchema.extend({
+  type: z.literal('radio'),
+  options: z.array(z.string()),
+  name: z.string(),
+});
+
+export const SurveyModelSchema = z.union([SurveyInputModelSchema, SurveySelectModelSchema, SurveyCheckboxModelSchema, SurveyRadioModelSchema]);
