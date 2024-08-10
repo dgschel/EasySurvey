@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel } from '../util/type/survey-type';
 import { AzureSurveyService } from '../core/service/azure-survey.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -13,7 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [ReactiveFormsModule, ViewSurveyGroupComponent, BasicCardComponent],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewSurveyFormComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
