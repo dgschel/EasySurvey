@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
 
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
-import { SurveyModel } from '../../../util/type/survey-type';
+import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
 import { AzureSurveyService } from '../../../core/service/azure-survey.service';
 
 @Component({
@@ -39,7 +39,18 @@ export class SurveyFormComponent implements AfterViewInit {
 
   save() {
     const models = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
+
+    // Get a *reference* of the radio models and iterate over their names
+    const radioModels = models.filter((model) => model.type === 'radio') as SurveyRadioModel[];
+    this.generateRadioNames(radioModels);
+    
     this.azureSurveyService.saveSurveyData(models).subscribe(data => console.log("Data saved", data));
+  }
+
+  generateRadioNames(models: SurveyRadioModel[]) {
+    models.forEach((model, index) => {
+      model.name = `radio-${index + 1}`;
+    });
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
