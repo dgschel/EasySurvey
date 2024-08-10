@@ -31,6 +31,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
         const parsedSurvey = SurveyModelSchema.array().safeParse(survey);
 
         if (!parsedSurvey.success) {
+            context.log(`Validation errors:`, parsedSurvey.error.errors);
             throw new Error("Survey data is invalid");
         }
 
