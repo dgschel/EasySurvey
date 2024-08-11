@@ -43,6 +43,9 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
       this.componentRef.setInput('options', this.model.options);
       this.componentRef.setInput('name', this.model.name);
     }
+    else if (this.model.type === 'checkbox') {
+      this.componentRef.setInput('options', this.model.options);
+    }
   }
 
   hasValidator(): boolean {
