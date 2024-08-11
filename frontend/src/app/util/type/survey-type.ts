@@ -6,6 +6,7 @@ import { CreateFormInputComponent } from "../../shared/ui/create-form-input/crea
 import { FormControlInputComponent } from "../../shared/feature/form-control-input/form-control-input.component";
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormControlRadioComponent } from "../../shared/feature/form-control-radio/form-control-radio.component";
+import { FormControlCheckboxComponent } from "../../shared/feature/form-control-checkbox/form-control-checkbox.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -52,7 +53,7 @@ export const formControlComponentMap: Record<FormControlType, FormControlCompone
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
   radio: FormControlRadioComponent,
-  checkbox: FormControlSelectComponent,
+  checkbox: FormControlCheckboxComponent,
 }
 
 export const FormControlNameMap: Record<FormControlType, string> = {
