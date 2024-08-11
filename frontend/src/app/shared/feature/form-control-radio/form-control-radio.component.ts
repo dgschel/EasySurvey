@@ -19,7 +19,7 @@ import { FormControlErrorComponent } from '../../ui/form-control-error/form-cont
 })
 export class FormControlRadioComponent {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input<string>();
+  controlKeyName = input<string>('');
   options = input<string[]>([]);
   name = input.required<string>();
   label = input<string>();

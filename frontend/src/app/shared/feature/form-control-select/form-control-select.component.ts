@@ -19,7 +19,7 @@ import { ValidatorConfig } from '../../../util/type/survey-type';
 })
 export class FormControlSelectComponent {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input<string>();
+  controlKeyName = input<string>('');
   options = input<string[]>([]);
   label = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});

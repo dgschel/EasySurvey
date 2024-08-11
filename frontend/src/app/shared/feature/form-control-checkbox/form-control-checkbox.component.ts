@@ -20,7 +20,7 @@ import { map } from 'rxjs';
 })
 export class FormControlCheckboxComponent {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input<string>();
+  controlKeyName = input<string>('');
   options = input<string[]>([]);
   label = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});
@@ -46,11 +46,10 @@ export class FormControlCheckboxComponent {
     return this.surveyFormControl?.control;
   }
 
-
   get getCheckboxes(): FormArray<FormControl> {
     const lastSectionIndex = this.sections.length - 1;
     const lastSection = this.sections.at(lastSectionIndex) as FormGroup;
-    return lastSection.get(this.controlKeyName()!) as FormArray;
+    return lastSection.get(this.controlKeyName()) as FormArray;
   }
 
   onCheckboxChange(e: Event, index: number) {
@@ -64,9 +63,7 @@ export class FormControlCheckboxComponent {
   ngOnInit(): void {
     const controls = this.options().map(() => new FormControl(false));
     const array = new FormArray(controls);
-    const fg = new FormGroup({
-      [this.controlKeyName()!]: array
-    })
+    const fg = new FormGroup({ [this.controlKeyName()]: array })
 
     this.sections.push(fg);
 
