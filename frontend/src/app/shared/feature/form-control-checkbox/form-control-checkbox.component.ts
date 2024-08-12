@@ -63,6 +63,7 @@ export class FormControlCheckboxComponent {
     // checkbox.setValue(isChecked ? value : false);
   }
 
+  // TODO: Add this to our validator config either as a new function or if required is set, then use this validator for checkboxes
   minSelectedCheckboxes(min = 2) {
     const validator: any = (formArray: FormArray) => {
       const totalSelected = formArray.controls
@@ -78,7 +79,7 @@ export class FormControlCheckboxComponent {
   ngOnInit(): void {
     const controls = this.options().map(() => new FormControl(false));
     const array = new FormArray(controls, { validators: this.minSelectedCheckboxes(), updateOn: 'blur' });
-    
+
     this.surveyFormControl = new CheckboxArrayFormControl(array, () => [], this.controlKeyName(), this.options());
 
     this.surveyFormControl.formGroup.addControl(this.controlKeyName(), array);
