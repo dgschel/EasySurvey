@@ -11,6 +11,14 @@ export class BaseSurveyFormControl {
   }
 
   /**
+   * Sets a new control that replace the current control
+   * @param c - The new control
+   */
+  set control(c: AbstractControl) {
+    this.form.setControl(this.controlName, c)
+  }
+
+  /**
    * Gets the control associated with the form control.
    * @returns The control associated with the form control.
    */
