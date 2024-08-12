@@ -35,7 +35,8 @@ export const customSelectCheckboxesValidator = (min: number = 1): ValidatorFn =>
 
 export const surveyValidatorMap: SurveyValidatorMap<Partial<ValidatorConfig>> = {
   required: (config: Partial<ValidatorConfig>) => customRequiredValidator(config.required?.message),
-  minLength: (config: Partial<ValidatorConfig>) => customMinLengthValidator(config.minLength?.value)
+  minLength: (config: Partial<ValidatorConfig>) => customMinLengthValidator(config.minLength?.value),
+  minSelected: (config: Partial<ValidatorConfig>) => customSelectCheckboxesValidator(config.minSelected?.value)
 }
 
 export const createValidators = (config: Partial<ValidatorConfig>): ValidatorFn[] => {
