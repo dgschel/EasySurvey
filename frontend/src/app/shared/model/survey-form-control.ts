@@ -18,11 +18,12 @@ export class SurveyFormControl extends BaseSurveyFormControl {
 export class SurveyFormCheckboxControl extends BaseSurveyFormControl {
   constructor(
     form: FormGroup,
-    validatorsFn: () => ValidatorFn[],
+    validator: Partial<ValidatorConfig>,
     private options: string[],
     controlName: string = 'controlName',
   ) {
-    super(form, validatorsFn, controlName);
+    const validators = createValidators(validator);
+    super(form, () => validators, controlName);
     this.initializeCheckboxes();
   }
 
