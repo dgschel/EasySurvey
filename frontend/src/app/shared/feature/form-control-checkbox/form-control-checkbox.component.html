@@ -1,9 +1,10 @@
-<!-- @if (control) { -->
+@if (control) {
 <div class="form-control w-full max-w-xs">
-  @for (option of getCheckboxes.controls; track $index) {
+
+  @for (c of formControlArray.controls; track $index) {
   <label class="label gap-2 justify-normal cursor-pointer">
-    <input type="checkbox" [formControl]="option" class="checkbox checkbox-sm"
-      (change)="onCheckboxChange($event, $index)" [ngClass]=" {'input-error': isFormControlValid}">
+    <input type="checkbox" [formControl]="c" class="checkbox checkbox-sm"
+      [ngClass]=" {'input-error': isFormControlValid}">
     <span class="label-text">{{ options()[$index] }}</span>
   </label>
   }
@@ -14,4 +15,5 @@
   }
   }
 </div>
-<!-- } -->
+
+}
