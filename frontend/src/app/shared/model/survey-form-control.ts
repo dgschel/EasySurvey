@@ -39,10 +39,10 @@ export class SurveyFormCheckboxControl extends BaseSurveyFormControl {
    */
   private initializeCheckboxes() {
     const controls = this.options.map(() => new FormControl(false));
-    const array = new FormArray(controls, { updateOn: 'blur' });
+    const formArrayControls = new FormArray(controls, { updateOn: 'blur' });
 
     // Override control in base class
-    super.control = array
+    super.control = formArrayControls
   }
 
   /**
