@@ -5,6 +5,7 @@ import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@an
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { ValidatorConfig } from '../../../util/type/survey-type';
 import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
+import { customSelectCheckboxesValidator } from '../../form-validator/validators';
 
 @Component({
   selector: 'app-form-control-checkbox',
@@ -41,21 +42,8 @@ export class FormControlCheckboxComponent implements OnInit {
     return this.surveyFormControl?.control;
   }
 
-  // TODO: Add this to our validator config either as a new function or if required is set, then use this validator for checkboxes
-  minSelectedCheckboxes(min = 2) {
-    const validator: any = (formArray: FormArray) => {
-      const totalSelected = formArray.controls
-        .map(control => control.value)
-        .reduce((prev, next) => next ? prev + next : prev, 0);
-
-      return totalSelected >= min ? null : { message: `At least ${min} to select` };
-    };
-
-    return validator;
-  }
-
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, () => [], this.options(), this.controlKeyName());
-    this.surveyFormControl.validators = [this.minSelectedCheckboxes(2)];
+    this.surveyFormControl.validators = [customSelectCheckboxesValidator(3)];
   }
 }
