@@ -23,7 +23,7 @@ export class FormControlCheckboxComponent {
   options = input<string[]>([]);
   label = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});
-  surveyFormControl: SurveyFormControl | undefined;
+  surveyFormControl: SurveyFormCheckboxControl | undefined;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -38,7 +38,7 @@ export class FormControlCheckboxComponent {
   }
 
   get control() {
-    return this.surveyFormControl?.control
+    return this.surveyFormControl?.control;
   }
 
   // TODO: Add this to our validator config either as a new function or if required is set, then use this validator for checkboxes
@@ -55,11 +55,6 @@ export class FormControlCheckboxComponent {
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, () => [], this.controlKeyName(), this.options());
-  }
-
-  formControlArray() {
-    // this.surveyFormControl.
-    return this.surveyFormControl?.control as any as FormArray<FormControl<boolean>>
+    this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, () => [], this.options(), this.controlKeyName());
   }
 }
