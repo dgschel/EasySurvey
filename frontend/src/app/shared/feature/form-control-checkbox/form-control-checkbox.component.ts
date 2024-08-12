@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
@@ -17,7 +17,7 @@ import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlCheckboxComponent {
+export class FormControlCheckboxComponent implements OnInit {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>('');
   options = input<string[]>([]);
