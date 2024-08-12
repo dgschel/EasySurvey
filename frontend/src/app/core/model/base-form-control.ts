@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 
 /**
  * Represents a base form control for a survey.
@@ -15,7 +15,7 @@ export class BaseSurveyFormControl {
    * @returns The control associated with the form control.
    */
   get control() {
-    return this.form.get(this.controlName) as FormControl;
+    return this.form.get(this.controlName) as AbstractControl;
   }
 
   /**
