@@ -1,10 +1,10 @@
 import { NgClass } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
-import { ControlContainer, FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { ValidatorConfig } from '../../../util/type/survey-type';
-import { SurveyCheckboxFormControl, SurveyFormControl } from '../../model/survey-form-control';
+import { CheckboxArrayFormControl, SurveyCheckboxFormControl, SurveyFormControl } from '../../model/survey-form-control';
 import { map } from 'rxjs';
 
 @Component({
@@ -46,28 +46,47 @@ export class FormControlCheckboxComponent {
     return this.surveyFormControl?.control;
   }
 
-  get getCheckboxes(): FormArray<FormControl> {
+  get checkboxes(): FormArray<FormControl> {
     const lastSectionIndex = this.sections.length - 1;
     const lastSection = this.sections.at(lastSectionIndex) as FormGroup;
+    console.log(this.surveyFormControl?.control.get(this.controlKeyName()) as FormArray)
     return lastSection.get(this.controlKeyName()) as FormArray;
+
+    return this.surveyFormControl?.control.get(this.controlKeyName()) as FormArray;
   }
 
   onCheckboxChange(e: Event, index: number) {
-    const checkboxes = this.getCheckboxes;
+    const checkboxes = this.checkboxes;
     const checkbox = checkboxes.at(index);
     const value = this.options()[index];
     const isChecked = (e.target as HTMLInputElement).checked;
-    checkbox.setValue(isChecked ? value : false);
+    // checkbox.setValue(isChecked ? value : false);
+  }
+
+  minSelectedCheckboxes(min = 2) {
+    const validator: any = (formArray: FormArray) => {
+      const totalSelected = formArray.controls
+        .map(control => control.value)
+        .reduce((prev, next) => next ? prev + next : prev, 0);
+
+      return totalSelected >= min ? null : { message: `At least ${min} to select` };
+    };
+
+    return validator;
   }
 
   ngOnInit(): void {
     const controls = this.options().map(() => new FormControl(false));
-    const array = new FormArray(controls);
-    const fg = new FormGroup({ [this.controlKeyName()]: array })
+    const array = new FormArray(controls, { validators: this.minSelectedCheckboxes(), updateOn: 'blur' });
+    
+    this.surveyFormControl = new CheckboxArrayFormControl(array, () => [], this.controlKeyName(), this.options());
 
-    this.sections.push(fg);
+    this.surveyFormControl.formGroup.addControl(this.controlKeyName(), array);
+    console.log(this.surveyFormControl.control as any as FormArray)
+  }
 
-    // this.surveyFormControl = new SurveyFormControl(array, this.validator(), this.controlKeyName()); 
+  get formControlArray() {
+    return this.surveyFormControl?.control as any as FormArray<FormControl<boolean>>
   }
 
   ngOnDestroy(): void {
