@@ -37,24 +37,11 @@ export class FormControlSelectComponent {
     return this.surveyFormControl?.validationErrors
   }
 
-  get sections() {
-    return this.parentFormGroup.get('sections') as FormArray;
-  }
-
   get control() {
     return this.surveyFormControl?.control;
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.sections, this.validator(), this.controlKeyName());
-  }
-
-  ngOnDestroy(): void {
-    if (this.surveyFormControl?.formGroup) {
-      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.formGroup);
-      if (formGroupIndex !== -1) {
-        this.sections.removeAt(formGroupIndex);
-      }
-    }
+    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
   }
 }
