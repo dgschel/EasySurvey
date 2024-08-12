@@ -27,13 +27,14 @@ export type SurveyRefData = {
   data: SurveyModel
 }
 
-export type SurveyValidatorType = 'required' | 'minLength';
+export type SurveyValidatorType = 'required' | 'minLength' | 'minSelected';
 export type ValidatorFunction<T> = (data: T) => ValidatorFn;
 
 export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
 export type ValidatorConfig = {
   required: { message: string },
-  minLength: { value: number }
+  minLength: { value: number },
+  minSelected: { value: number }
 }
 
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
@@ -66,6 +67,7 @@ export const FormControlNameMap: Record<FormControlType, string> = {
 export const FormValidatorNameMap: Record<SurveyValidatorType, string> = {
   required: 'Erforderlich',
   minLength: 'Mindestlänge',
+  minSelected: 'Mindestanzahl'
 }
 
 export type SurveyInputModel = {
