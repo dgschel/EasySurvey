@@ -1,21 +1,13 @@
-import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 
 /**
  * Represents a base form control for a survey.
  */
 export class BaseSurveyFormControl {
-  private fg = new FormGroup({});
 
-  /**
-   * Initializes a new instance of the BaseFormControl class.
-   * @param formArray The parent form array.
-   * @param validatorsFn A function that returns an array of validator functions.
-   * @param controlName The name of the control.
-   */
-  constructor(public formArray: FormArray, public validatorsFn: () => ValidatorFn[], public controlName: string) {
+  constructor(private form: FormGroup, public validatorsFn: () => ValidatorFn[], public controlName: string) {
     const control = new FormControl('', { validators: validatorsFn(), updateOn: 'blur' })
-    this.fg.addControl(controlName, control);
-    this.formArray.push(this.fg);
+    form.addControl(controlName, control);
   }
 
   /**
@@ -23,7 +15,7 @@ export class BaseSurveyFormControl {
    * @returns The control associated with the form control.
    */
   get control() {
-    return this.fg.get(this.controlName) as FormControl;
+    return this.form.get(this.controlName) as FormControl;
   }
 
   /**
@@ -31,7 +23,7 @@ export class BaseSurveyFormControl {
     * @returns The parent form group associated with the form control.
     */
   get formGroup() {
-    return this.fg;
+    return this.form;
   }
 
   /**
