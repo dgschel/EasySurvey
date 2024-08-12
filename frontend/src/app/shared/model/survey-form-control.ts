@@ -1,64 +1,64 @@
-import { FormArray } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+
 import { BaseSurveyFormControl } from "../../core/model/base-form-control";
 import { ValidatorConfig } from "../../util/type/survey-type";
 import { createValidators } from "../form-validator/validators";
 
 export class SurveyFormControl extends BaseSurveyFormControl {
-  constructor(form: FormArray, validator: Partial<ValidatorConfig>, controlName: string = 'controlName') {
+  constructor(form: FormGroup, validator: Partial<ValidatorConfig>, controlName: string = 'controlName') {
     const validators = createValidators(validator);
     super(form, () => validators, controlName);
   }
-}
-export class SurveyCheckboxFormControl {
-  constructor(form: FormArray, validator: Partial<ValidatorConfig>, controlName: string = 'controlName') {
-    const validators = createValidators(validator);
-    // super(form, () => validators, controlName);
+
+  override get control() {
+    return super.control as FormControl;
   }
 }
 
-export class CheckboxArrayFormControl extends BaseSurveyFormControl {
-  /**
-   * Initializes a new instance of the CheckboxArrayFormControl class.
-   * @param formArray The parent form array.
-   * @param validatorsFn A function that returns an array of validator functions.
-   * @param controlName The name of the control.
-   * @param checkboxOptions The options for the checkboxes.
-   */
+export class SurveyFormCheckboxControl extends BaseSurveyFormControl {
   constructor(
-    formArray: FormArray,
+    form: FormGroup,
     validatorsFn: () => ValidatorFn[],
-    controlName: string,
-    private checkboxOptions: string[]
+    private options: string[],
+    controlName: string = 'controlName',
   ) {
-    super(formArray, validatorsFn, controlName);
+    super(form, validatorsFn, controlName);
     this.initializeCheckboxes();
+  }
+
+  /**
+   * Returns the control from base class as a FormArray of FormControl<boolean>.
+   */
+  override get control() {
+    return super.control as FormArray<FormControl<boolean>>
   }
 
   /**
    * Initializes the checkboxes.
    */
   private initializeCheckboxes() {
-    this.checkboxOptions.forEach(option => {
-      const checkboxControl = new FormControl(false);
-      // (this.control as FormArray).push(checkboxControl);
-    });
+    const controls = this.options.map(() => new FormControl(false));
+    const array = new FormArray(controls, { updateOn: 'blur' });
+
+    // Override control in base class
+    super.control = array
   }
 
   /**
-   * Gets the values of the selected checkboxes.
-   * @returns The values of the selected checkboxes.
+   * Gets the values of the selected checkboxes
+   * @returns The values of the selected checkboxes
    */
-  get selectedValues() {
-    return this.checkboxOptions.filter((_, index) => this.isChecked(index));
+  get selectedValues(): string[] {
+    return this.options.filter((_, index) => this.isChecked(index));
   }
 
   /**
-   * Checks if the checkbox at the specified index is checked.
-   * @param index The index of the checkbox.
-   * @returns True if the checkbox is checked, false otherwise.
+   * Checks if the checkbox at the specified index is checked
+   * @param index The index of the checkbox
+   * @returns True if the checkbox is checked, false otherwise
    */
-  isChecked(index: number) {
-    const checkboxControl = (this.control as unknown as FormArray).controls[index];
+  isChecked(index: number): boolean {
+    const checkboxControl = this.control.controls[index];
     return checkboxControl.value;
   }
 }
