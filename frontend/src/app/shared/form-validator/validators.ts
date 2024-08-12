@@ -17,13 +17,19 @@ export const customMinLengthValidator = (minLength: number = 3): ValidatorFn => 
   }
 }
 
-export const customSelectCheckboxesValidator = (min = 1): ValidatorFn => {
+/**
+ * Validates the selection of checkboxes in a custom select component
+ * 
+ * @param min The minimum number of checkboxes that must be selected
+ * @returns A validator function that returns a ValidationErrors object if the selection is invalid, or null if it is valid
+ */
+export const customSelectCheckboxesValidator = (min: number = 1): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
     const totalSelected = (control as FormArray).controls
       .map(control => control.value)
       .reduce((prev, next) => next ? prev + next : prev, 0);
 
-    return totalSelected >= min ? null : { message: `At least ${min} to select` };
+    return totalSelected >= min ? null : { message: `Mindestens ${min} Kästchen müssen ausgewählt werden` };
   }
 }
 
