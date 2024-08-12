@@ -37,7 +37,7 @@ export type ValidatorConfig = {
 }
 
 export type FormComponentType = typeof CreateFormInputComponent | typeof FormSelectComponent;
-export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent;
+export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent | typeof FormControlRadioComponent | typeof FormControlCheckboxComponent;
 
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
@@ -53,7 +53,7 @@ export const formControlComponentMap: Record<FormControlType, FormControlCompone
   input: FormControlInputComponent,
   select: FormControlSelectComponent,
   radio: FormControlRadioComponent,
-  checkbox: FormControlCheckboxComponent,
+  checkbox: FormControlCheckboxComponent
 }
 
 export const FormControlNameMap: Record<FormControlType, string> = {
