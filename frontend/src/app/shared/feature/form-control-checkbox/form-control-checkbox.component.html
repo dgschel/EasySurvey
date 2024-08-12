@@ -1,9 +1,9 @@
 @if (control) {
 <div class="form-control w-full max-w-xs">
 
-  @for (c of formControlArray.controls; track $index) {
+  @for (control of formControlArray.controls; track $index) {
   <label class="label gap-2 justify-normal cursor-pointer">
-    <input type="checkbox" [formControl]="c" class="checkbox checkbox-sm"
+    <input type="checkbox" [formControl]="control" class="checkbox checkbox-sm"
       [ngClass]=" {'input-error': isFormControlValid}">
     <span class="label-text">{{ options()[$index] }}</span>
   </label>
