@@ -1,11 +1,10 @@
 import { NgClass } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { ValidatorConfig } from '../../../util/type/survey-type';
 import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
-import { customSelectCheckboxesValidator } from '../../form-validator/validators';
 
 @Component({
   selector: 'app-form-control-checkbox',
