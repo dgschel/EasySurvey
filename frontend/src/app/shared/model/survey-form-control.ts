@@ -22,9 +22,15 @@ export class SurveyFormCheckboxControl extends BaseSurveyFormControl {
     private options: string[],
     controlName: string = 'controlName',
   ) {
+    // Since we are overriding the control in the base class, we need to call super with an empty array of validators
+    super(form, () => [], controlName);
+
+    const formArrayControls = this.initializeCheckboxes();
     const validators = createValidators(validator);
-    super(form, () => validators, controlName);
-    this.initializeCheckboxes();
+    formArrayControls.setValidators(validators);
+
+    // Override control in base class
+    super.control = formArrayControls;
   }
 
   /**
@@ -39,10 +45,7 @@ export class SurveyFormCheckboxControl extends BaseSurveyFormControl {
    */
   private initializeCheckboxes() {
     const controls = this.options.map(() => new FormControl(false));
-    const formArrayControls = new FormArray(controls, { updateOn: 'blur' });
-
-    // Override control in base class
-    super.control = formArrayControls
+    return new FormArray(controls, { updateOn: 'blur' });
   }
 
   /**
