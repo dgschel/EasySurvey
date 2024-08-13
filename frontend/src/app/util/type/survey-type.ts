@@ -20,7 +20,7 @@ export type SurveyTemplateModel = {
 };
 
 export type SurveyFormControlCount = Record<string, number>;
-export type SurveyName = 'Standard' | 'Einkaufen';
+export type SurveyName = 'Standard' | 'Einkaufen' | 'Edeka'
 
 export type SurveyRefData = {
   ref: ComponentRef<CreateSurveyGroupComponent>,
