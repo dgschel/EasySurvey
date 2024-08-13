@@ -43,7 +43,6 @@ export class FormControlCheckboxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, {}, this.options(), this.controlKeyName());
-    this.surveyFormControl.validators = [customSelectCheckboxesValidator(3)];
+    this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, this.validator(), this.options(), this.controlKeyName());
   }
 }
