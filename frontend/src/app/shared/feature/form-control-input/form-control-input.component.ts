@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, input } from '@angular/core';
 import { JsonPipe, NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
@@ -19,7 +19,7 @@ import { ValidatorConfig } from '../../../util/type/survey-type';
 })
 export class FormControlInputComponent implements OnInit {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input<string>();
+  controlKeyName = input<string>('');
   placeholder = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});
   surveyFormControl: SurveyFormControl | undefined;
@@ -36,24 +36,12 @@ export class FormControlInputComponent implements OnInit {
     return this.surveyFormControl?.validationErrors
   }
 
-  get sections() {
-    return this.parentFormGroup.get('sections') as FormArray;
-  }
-
   get control() {
-    return this.surveyFormControl?.control;
+    return this.surveyFormControl?.control
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.sections, this.validator(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
   }
 
-  ngOnDestroy(): void {
-    if (this.surveyFormControl?.formGroup) {
-      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.formGroup);
-      if (formGroupIndex !== -1) {
-        this.sections.removeAt(formGroupIndex);
-      }
-    }
-  }
 }

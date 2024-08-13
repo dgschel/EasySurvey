@@ -1,29 +1,30 @@
-import { Component, inject, input } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { SurveyFormControl } from '../../model/survey-form-control';
 import { ValidatorConfig } from '../../../util/type/survey-type';
+import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
+import { customSelectCheckboxesValidator } from '../../form-validator/validators';
 
 @Component({
-  selector: 'app-form-control-select',
+  selector: 'app-form-control-checkbox',
   standalone: true,
   imports: [ReactiveFormsModule, NgClass, FormControlErrorComponent],
-  templateUrl: './form-control-select.component.html',
-  styleUrl: './form-control-select.component.scss',
+  templateUrl: './form-control-checkbox.component.html',
+  styleUrl: './form-control-checkbox.component.scss',
   viewProviders: [{ // viewProviders is used to provide the parent form group to the child component. Useful for content projection
     provide: ControlContainer,
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlSelectComponent {
+export class FormControlCheckboxComponent implements OnInit {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>('');
   options = input<string[]>([]);
   label = input<string>();
   validator = input.required<Partial<ValidatorConfig>>({});
-  surveyFormControl: SurveyFormControl | undefined;
+  surveyFormControl: SurveyFormCheckboxControl | undefined;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -42,6 +43,6 @@ export class FormControlSelectComponent {
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, this.validator(), this.options(), this.controlKeyName());
   }
 }

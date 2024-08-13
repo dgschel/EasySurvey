@@ -1,5 +1,5 @@
 import { Component, inject, input } from '@angular/core';
-import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgClass } from '@angular/common';
 
 import { ValidatorConfig } from '../../../util/type/survey-type';
@@ -19,7 +19,7 @@ import { FormControlErrorComponent } from '../../ui/form-control-error/form-cont
 })
 export class FormControlRadioComponent {
   parentContainer = inject(ControlContainer);
-  controlKeyName = input<string>();
+  controlKeyName = input<string>('');
   options = input<string[]>([]);
   name = input.required<string>();
   label = input<string>();
@@ -38,24 +38,12 @@ export class FormControlRadioComponent {
     return this.surveyFormControl?.validationErrors
   }
 
-  get sections() {
-    return this.parentFormGroup.get('sections') as FormArray;
-  }
-
   get control() {
-    return this.surveyFormControl?.control;
+    return this.surveyFormControl?.control as FormControl
   }
 
   ngOnInit(): void {
-    this.surveyFormControl = new SurveyFormControl(this.sections, this.validator(), this.controlKeyName());
+    this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
   }
 
-  ngOnDestroy(): void {
-    if (this.surveyFormControl?.formGroup) {
-      const formGroupIndex = this.sections.controls.indexOf(this.surveyFormControl.formGroup);
-      if (formGroupIndex !== -1) {
-        this.sections.removeAt(formGroupIndex);
-      }
-    }
-  }
 }
