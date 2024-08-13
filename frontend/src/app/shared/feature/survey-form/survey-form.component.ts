@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
+import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
@@ -7,14 +8,13 @@ import { AzureSurveyService } from '../../../core/service/azure-survey.service';
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [CreateSurveyGroupComponent],
+  imports: [CreateSurveyGroupComponent, CdkDropList],
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SurveyFormComponent implements AfterViewInit {
   private azureSurveyService = inject(AzureSurveyService)
-
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   @Input() models: SurveyModel[] = [];
 
@@ -23,6 +23,25 @@ export class SurveyFormComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.models.forEach((model) => {
       this.addSurveySection(model);
+    });
+  }
+
+  /**
+   * Handles the drop event for the survey form component.
+   * 
+   * @param event - The drop event containing information about the dragged item.
+   */
+  drop(event: CdkDragDrop<ComponentRef<CreateSurveyGroupComponent>[]>) {
+    // Move the items with the helper function from the drag-drop module
+    moveItemInArray(this.cmpRefs, event.previousIndex, event.currentIndex);
+
+    // Update the view to reflect the new order
+    this.updateView();
+  }
+
+  updateView() {
+    this.cmpRefs.forEach(componentRef => {
+      this.componentContainer.insert(componentRef.hostView);
     });
   }
 
