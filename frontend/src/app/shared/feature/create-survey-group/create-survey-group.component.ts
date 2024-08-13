@@ -26,6 +26,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   }));
   hasDescription: boolean = false;
   remove = output<void>();
+  clonedSurvey = output<SurveyModel>();
 
   // Input model from parent component. Default value is a SurveyModel object
   @Input('model') model: SurveyModel = this.surveyModel();
@@ -69,6 +70,10 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
     cmpRef.setInput('controlModel', { modelType, options: options || [] });
     cmpRef.setInput('optionsChangedCallback', (updatedOptions: string[]) => this.updateOptions(updatedOptions));
+  }
+
+  clone() {
+    this.clonedSurvey.emit(this.surveyModel());
   }
 
   updateOptions(options: string[]) {
