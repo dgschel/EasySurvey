@@ -80,6 +80,11 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     else this.surveyBaseModel.updateValidator({ minLength: { value } });
   }
 
+  setMinSelectedValidator(value: number) {
+    if (value < 1) this.surveyBaseModel.deleteValidator('minSelected');
+    else this.surveyBaseModel.updateValidator({ minSelected: { value } });
+  }
+
   setRequiredValidator(checked: boolean) {
     checked
       ? this.surveyBaseModel.updateValidator({ required: { message: 'Dieses Feld ist erforderlich' } })
