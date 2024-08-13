@@ -56,6 +56,7 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
+    cmpRef.instance.clonedSurvey.subscribe((model) => this.addSurveySection(model));
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
   }
 
