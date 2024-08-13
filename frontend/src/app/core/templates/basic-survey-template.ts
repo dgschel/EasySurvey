@@ -1,7 +1,13 @@
-import { SurveyInputModel, SurveySelectModel, SurveyModel } from "../../util/type/survey-type";
+import { SurveyInputModel, SurveySelectModel, SurveyModel, SurveyCheckboxModel, SurveyRadioModel } from "../../util/type/survey-type";
 import { SurveyTemplateContract } from "../types/survey-template-contract";
 
 export class BasicSurveyTemplate implements SurveyTemplateContract {
+  createSurveyRadio(model?: SurveyRadioModel): SurveyRadioModel {
+    throw new Error("Method not implemented.");
+  }
+  createSurveyCheckbox(model?: SurveyCheckboxModel): SurveyCheckboxModel {
+    throw new Error("Method not implemented.");
+  }
   createSurveyInput(model?: SurveyInputModel): SurveyInputModel {
     return model
       ? { ...model }
