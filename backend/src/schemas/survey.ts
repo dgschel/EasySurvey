@@ -7,6 +7,9 @@ const ValidatorConfigSchema = z.object({
   minLength: z.object({
     value: z.number(),
   }),
+  minSelected: z.object({
+    value: z.number(),
+  }),
 }).partial();
 
 const SurveyBaseTypeSchema = z.object({
