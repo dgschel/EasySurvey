@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
-import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
 import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel } from '../../../util/type/survey-type';
@@ -13,7 +13,7 @@ import { createFormComponent } from '../../../util/component/create';
 @Component({
   selector: 'app-create-survey-group',
   standalone: true,
-  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle],
+  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder],
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
