@@ -82,6 +82,7 @@ export class SurveyFormComponent implements AfterViewInit {
   insertComponentBeneath(originalCmpRef: ComponentRef<CreateSurveyGroupComponent>, model: SurveyModel) {
     const originalCmpIndex = this.cmpRefs.indexOf(originalCmpRef);
 
+    // Create a new component beneath the original component
     const clonedCmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent, {
       index: originalCmpIndex + 1
     });
