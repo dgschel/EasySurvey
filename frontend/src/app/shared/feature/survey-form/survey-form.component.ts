@@ -28,7 +28,7 @@ export class SurveyFormComponent implements AfterViewInit {
 
   /**
    * Handles the drop event for the survey form component.
-   * 
+   *
    * @param event - The drop event containing information about the dragged item.
    */
   drop(event: CdkDragDrop<ComponentRef<CreateSurveyGroupComponent>[]>) {
@@ -75,8 +75,21 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
-    cmpRef.instance.clonedSurvey.subscribe((model) => this.addSurveySection(model));
+    cmpRef.instance.clonedSurvey.subscribe((model) => this.insertComponentBeneath(cmpRef, model));
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
+  }
+
+  insertComponentBeneath(originalCmpRef: ComponentRef<CreateSurveyGroupComponent>, model: SurveyModel) {
+    const originalCmpIndex = this.cmpRefs.indexOf(originalCmpRef);
+
+    // Create a new component beneath the original component
+    const clonedCmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent, {
+      index: originalCmpIndex + 1
+    });
+
+    this.setupComponent(clonedCmpRef);
+    clonedCmpRef.setInput('model', model);
+    this.cmpRefs.splice(originalCmpIndex + 1, 0, clonedCmpRef);
   }
 
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
