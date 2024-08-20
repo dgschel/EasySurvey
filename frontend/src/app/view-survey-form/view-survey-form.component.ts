@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
@@ -20,11 +20,11 @@ export class ViewSurveyFormComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
+  @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
+
   models: SurveyModel[] = [];
 
-  form = new FormGroup({
-    sections: new FormArray([])
-  })
+  form = new FormGroup({})
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -43,5 +43,11 @@ export class ViewSurveyFormComponent implements OnInit {
         console.log("Error", err);
       },
     })
+  }
+
+  submit() {
+    this.surveyGroups.forEach(group => {
+      console.log(group.getFormControlComponentValue())
+    });
   }
 }
