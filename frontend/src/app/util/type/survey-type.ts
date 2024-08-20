@@ -42,6 +42,10 @@ export type FormControlComponentType = typeof FormControlInputComponent | typeof
 
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
+export interface FormControlComponentValue {
+  getValue<T>(): T
+}
+
 // user generated components
 export const formComponentMap: Record<FormControlType, FormComponentType> = {
   input: CreateFormInputComponent, // TODO: Edit naming to distinquish user generated components and programatically form controls based on data
