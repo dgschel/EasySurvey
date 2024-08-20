@@ -1,10 +1,10 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { ControlContainer, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 import { SurveyFormControl } from '../../model/survey-form-control';
-import { ValidatorConfig } from '../../../util/type/survey-type';
+import { FormControlComponentValue, ValidatorConfig } from '../../../util/type/survey-type';
 
 @Component({
   selector: 'app-form-control-select',
@@ -17,7 +17,7 @@ import { ValidatorConfig } from '../../../util/type/survey-type';
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlSelectComponent {
+export class FormControlSelectComponent implements OnInit, FormControlComponentValue {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>('');
   options = input<string[]>([]);
@@ -43,5 +43,9 @@ export class FormControlSelectComponent {
 
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
+  }
+
+  getValue<T>(): T {
+    return this.control?.value as T
   }
 }

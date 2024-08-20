@@ -1,8 +1,8 @@
-import { Component, inject, input } from '@angular/core';
-import { ControlContainer, FormGroup, FormArray, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { ControlContainer, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgClass } from '@angular/common';
 
-import { ValidatorConfig } from '../../../util/type/survey-type';
+import { FormControlComponentValue, ValidatorConfig } from '../../../util/type/survey-type';
 import { SurveyFormControl } from '../../model/survey-form-control';
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
 
@@ -17,7 +17,7 @@ import { FormControlErrorComponent } from '../../ui/form-control-error/form-cont
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlRadioComponent {
+export class FormControlRadioComponent implements OnInit, FormControlComponentValue {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>('');
   options = input<string[]>([]);
@@ -46,4 +46,7 @@ export class FormControlRadioComponent {
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
   }
 
+  getValue<T>(): T {
+    return this.control?.value as T
+  }
 }
