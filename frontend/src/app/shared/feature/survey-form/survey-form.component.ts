@@ -57,15 +57,15 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   save() {
-    const models = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
+    const surveyModels = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
 
-    if (models.length === 0) return;
+    if (surveyModels.length === 0) return;
 
     // Get a *reference* of the radio models and iterate over their names
-    const radioModels = models.filter((model) => model.type === 'radio') as SurveyRadioModel[];
+    const radioModels = surveyModels.filter((model) => model.type === 'radio') as SurveyRadioModel[];
     this.generateRadioNames(radioModels);
 
-    this.azureSurveyService.saveSurveyData(models).subscribe(data => console.log("Data saved", data));
+    this.azureSurveyService.saveSurveyData(surveyModels).subscribe(data => console.log("Data saved", data));
   }
 
   generateRadioNames(models: SurveyRadioModel[]) {
