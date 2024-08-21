@@ -35,15 +35,18 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             throw new Error("Survey data is invalid");
         }
 
+        const id = uuidv4()
+
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
-            id: uuidv4(),
+            id,
             models: parsedSurvey.data
         });
 
         return {
             jsonBody: {
                 message: "Survey saved successfully",
+                id
             },
             status: 201
         };
