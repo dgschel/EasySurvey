@@ -46,8 +46,16 @@ export class ViewSurveyFormComponent implements OnInit {
   }
 
   submit() {
-    this.surveyGroups.forEach(group => {
-      console.log(group.getFormControlComponentValue())
-    });
+    // We could use this.form.value to get the form values but the checkboxes are only returning true or false
+    // So we need to get the values from the surveyGroups instead
+
+    const survey = this.surveyGroups.reduce((acc, group) => {
+      return {
+        ...acc,
+        [group.model.title]: group.getFormControlComponentValue()
+      }
+    }, {})
+
+    console.log(survey);
   }
 }
