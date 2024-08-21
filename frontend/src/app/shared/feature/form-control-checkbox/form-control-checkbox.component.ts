@@ -3,7 +3,7 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { FormControlErrorComponent } from '../../ui/form-control-error/form-control-error.component';
-import { ValidatorConfig } from '../../../util/type/survey-type';
+import { FormControlComponentValue, ValidatorConfig } from '../../../util/type/survey-type';
 import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
 
 @Component({
@@ -17,7 +17,7 @@ import { SurveyFormCheckboxControl } from '../../model/survey-form-control';
     useFactory: () => inject(ControlContainer, { skipSelf: true })
   }]
 })
-export class FormControlCheckboxComponent implements OnInit {
+export class FormControlCheckboxComponent implements OnInit, FormControlComponentValue {
   parentContainer = inject(ControlContainer);
   controlKeyName = input<string>('');
   options = input<string[]>([]);
@@ -43,5 +43,9 @@ export class FormControlCheckboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, this.validator(), this.options(), this.controlKeyName());
+  }
+
+  getValue<T>(): T {
+    return this.surveyFormControl?.selectedValues as T;
   }
 }

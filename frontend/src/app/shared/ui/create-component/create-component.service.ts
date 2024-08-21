@@ -1,5 +1,5 @@
 import { computed, Injectable, signal, Type } from '@angular/core';
-import { FormControlType } from '../../../util/type/survey-type';
+import { FormControlComponentType, FormControlType } from '../../../util/type/survey-type';
 import { createFormComponent, createFormControlComponent } from '../../../util/component/create';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class CreateComponentService<T> {
     return createFormComponent<T>(controlType);
   }
 
-  createFormControlComponentInstance(controlType: FormControlType = 'input'): Type<T> {
+  createFormControlComponentInstance<T extends FormControlComponentType>(controlType: FormControlType = 'input'): Type<T> {
     return createFormControlComponent<T>(controlType);
   }
 

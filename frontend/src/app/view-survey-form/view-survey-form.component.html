@@ -2,5 +2,5 @@
   @for (model of models; track $index) {
   <app-view-survey-group [model]="model"></app-view-survey-group>
   }
-  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Save</button>
+  <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
 </form>

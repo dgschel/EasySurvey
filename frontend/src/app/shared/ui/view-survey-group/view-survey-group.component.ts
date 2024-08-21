@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ComponentRef, Injector, Input, ViewChild, ViewContainerRef } from '@angular/core';
+
 import { CreateComponentComponent } from '../create-component/create-component.component';
 import { FormControlComponentType, SurveyModel } from '../../../util/type/survey-type';
 import { CreateComponentService } from '../create-component/create-component.service';
@@ -26,10 +27,15 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     this.cmpService = this.injector.get(CreateComponentService); // Fully typed service instance
   }
 
+  getFormControlComponentValue() {
+    // TODO: Add correct type to get rid of any
+    return (this.componentRef?.instance as any).getValue();
+  }
+
   ngAfterViewInit(): void {
-    const cmp = this.cmpService.createFormControlComponentInstance(this.model.type)
+    const cmpType = this.cmpService.createFormControlComponentInstance(this.model.type);
     this.componentContainer.clear();
-    this.componentRef = this.componentContainer.createComponent(cmp);
+    this.componentRef = this.componentContainer.createComponent(cmpType);
 
     this.componentRef.setInput('controlKeyName', this.model.title);
     this.componentRef.setInput('validator', this.model.validator);
@@ -52,3 +58,4 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     return Object.keys(this.model.validator).length > 0
   }
 }
+
