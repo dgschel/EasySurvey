@@ -4,6 +4,7 @@ import { catchError, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment.development';
 import { SurveyModel } from '../../util/type/survey-type';
+import { Submission } from '../../util/type/submission';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,11 @@ export class AzureSurveyService {
     return throwError(() => new Error("Error fetching survey data", error));
   }
 
-  saveSurveyData(data: SurveyModel[]) {
-    return this.httpService.post<{ message: string }>(environment.endpoints.saveSurvey, data);
+  saveSurveyData(surveyModels: SurveyModel[]) {
+    return this.httpService.post<{ message: string }>(environment.endpoints.saveSurvey, surveyModels);
+  }
+
+  saveSurveySubmission(submission: Submission) {
+    return this.httpService.post<{ message: string }>(environment.endpoints.saveSubmission, submission);
   }
 }
