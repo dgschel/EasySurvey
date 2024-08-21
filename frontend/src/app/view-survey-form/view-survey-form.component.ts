@@ -6,6 +6,7 @@ import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-su
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel } from '../util/type/survey-type';
 import { AzureSurveyService } from '../core/service/azure-survey.service';
+import { Submission } from '../util/type/submission';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -25,8 +26,8 @@ export class ViewSurveyFormComponent implements OnInit {
   @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
 
   models: SurveyModel[] = [];
-
-  form = new FormGroup({})
+  form = new FormGroup({});
+  id: string = "";
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -35,6 +36,8 @@ export class ViewSurveyFormComponent implements OnInit {
       this.router.navigate(['/home']);
       return;
     }
+
+    this.id = id;
 
     this.azureSurveyService.fetchSurveyData(id).subscribe({
       next: (response: { message: string, data: SurveyModel[] }) => {
@@ -49,15 +52,26 @@ export class ViewSurveyFormComponent implements OnInit {
 
   submit() {
     // We could use this.form.value to get the form values but the checkboxes are only returning true or false
-    // So we need to get the values from the surveyGroups instead
-
-    const survey = this.surveyGroups.reduce((acc, group) => {
+    // So we need to get the values from the components that holds the form values instead
+    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
       return {
         ...acc,
         [group.model.title]: group.getFormControlComponentValue()
       }
-    }, {})
+    }, {});
 
-    console.log(survey);
+    const submission: Submission = {
+      surveyFormData: surveyFormData,
+      surveyId: this.id,
+    }
+
+    this.azureSurveyService.saveSurveySubmission(submission).subscribe({
+      next: (response: { message: string }) => {
+        console.log("Response", response);
+      },
+      error(err) {
+        console.log("Error", err);
+      },
+    })
   }
 }
