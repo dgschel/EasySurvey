@@ -40,6 +40,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
             id,
+            status: 'not paid',
             models: parsedSurvey.data
         });
 
