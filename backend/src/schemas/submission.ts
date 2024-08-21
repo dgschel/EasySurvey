@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-const surveySchema = z.record(
+export const SurveySchema = z.record(
   z.string(),
   z.union([z.string(), z.array(z.string())])
 );
 
-const submissionSchema = z.object({
-  surveyFormData: surveySchema,
+export const SubmissionSchema = z.object({
+  surveyFormData: SurveySchema,
   surveyId: z.string().uuid(),
 });
