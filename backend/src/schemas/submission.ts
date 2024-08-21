@@ -6,6 +6,6 @@ const surveySchema = z.record(
 );
 
 const submissionSchema = z.object({
-  survey: surveySchema,
+  surveyFormData: surveySchema,
   surveyId: z.string().uuid(),
 });
