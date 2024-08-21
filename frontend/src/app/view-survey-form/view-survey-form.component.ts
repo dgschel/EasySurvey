@@ -20,6 +20,8 @@ export class ViewSurveyFormComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
+  // ViewChildren is used to query each ViewSurveyGroupComponent instance
+  // This is useful for getting the form values from each survey group
   @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
 
   models: SurveyModel[] = [];
