@@ -9,7 +9,7 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
 };
 
 app.http('saveSurveySubmissionToCosmosDbHttp', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
+    methods: ['POST'],
+    authLevel: 'function',
     handler: saveSurveySubmissionToCosmosDbHttp
 });
