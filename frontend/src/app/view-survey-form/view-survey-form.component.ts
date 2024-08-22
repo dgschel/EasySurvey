@@ -40,7 +40,7 @@ export class ViewSurveyFormComponent implements OnInit {
     this.id = id;
 
     this.azureSurveyService.fetchSurveyData(id).subscribe({
-      next: (response: { message: string, data: SurveyModel[] }) => {
+      next: (response) => {
         this.models = response.data
         this.cdr.detectChanges();
       },
@@ -66,7 +66,7 @@ export class ViewSurveyFormComponent implements OnInit {
     }
 
     this.azureSurveyService.saveSurveySubmission(submission).subscribe({
-      next: (response: { message: string }) => {
+      next: (response) => {
         console.log("Response", response);
       },
       error(err) {

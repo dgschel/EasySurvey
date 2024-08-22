@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { SurveyModel } from '../../util/type/survey-type';
 import { Submission } from '../../util/type/submission';
+import { HttpWrapper } from '../../util/type/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AzureSurveyService {
 
   fetchSurveyData(id: string) {
     return this.httpService
-      .get<{ message: string, data: SurveyModel[] }>(environment.endpoints.readSurvey, { params: { id } })
+      .get<HttpWrapper<SurveyModel[]>>(environment.endpoints.readSurvey, { params: { id } })
       .pipe(catchError(this.handleError));
   }
 
@@ -25,10 +26,10 @@ export class AzureSurveyService {
   }
 
   saveSurveyData(surveyModels: SurveyModel[]) {
-    return this.httpService.post<{ message: string }>(environment.endpoints.saveSurvey, surveyModels);
+    return this.httpService.post<HttpWrapper<{ id: string }>>(environment.endpoints.saveSurvey, surveyModels);
   }
 
   saveSurveySubmission(submission: Submission) {
-    return this.httpService.post<{ message: string }>(environment.endpoints.saveSubmission, submission);
+    return this.httpService.post<HttpWrapper<null>>(environment.endpoints.saveSubmission, submission);
   }
 }
