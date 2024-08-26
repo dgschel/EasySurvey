@@ -35,7 +35,6 @@ export class AppInsightsService {
   });
 
   constructor() {
-    console.log('AppInsightsService constructor');
     this.appInsights.loadAppInsights();
     this.appInsights.addTelemetryInitializer((envelope) => {
       envelope.tags = envelope.tags || [];
