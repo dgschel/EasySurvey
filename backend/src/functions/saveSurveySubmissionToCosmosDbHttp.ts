@@ -8,6 +8,11 @@ const cosmosOutput = output.cosmosDB({
     partitionKey: '/surveyId',
 });
 
+const storageQueueOutput = output.storageQueue({
+    queueName: 'survey-submission-messages-001',
+    connection: 'storageConnection',
+})
+
 export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
@@ -34,6 +39,16 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
             submission: parsedSubmission.data.surveyFormData
         });
 
+        // Send the submission data to a storage queue
+        context.extraOutputs.set(storageQueueOutput, {
+            surveyId: parsedSubmission.data.surveyId,
+            statistic: {
+                submissionId: context.invocationId,
+                date: new Date().toISOString(),
+                status: "success"
+            }
+        });
+
         return { jsonBody: { message: `Submission saved successfully` }, status: 201 };
 
     } catch (error) {
@@ -52,6 +67,6 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
 app.http('saveSurveySubmissionToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
-    extraOutputs: [cosmosOutput],
+    extraOutputs: [cosmosOutput, storageQueueOutput],
     handler: saveSurveySubmissionToCosmosDbHttp
 });
