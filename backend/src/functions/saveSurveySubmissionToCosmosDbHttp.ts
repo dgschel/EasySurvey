@@ -42,11 +42,9 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         // Send the submission data to a storage queue
         context.extraOutputs.set(storageQueueOutput, {
             surveyId: parsedSubmission.data.surveyId,
-            statistic: {
-                submissionId: context.invocationId,
-                date: new Date().toISOString(),
-                status: "success"
-            }
+            submissionId: context.invocationId,
+            date: new Date().toISOString(),
+            status: "success"
         });
 
         return { jsonBody: { message: `Submission saved successfully` }, status: 201 };
