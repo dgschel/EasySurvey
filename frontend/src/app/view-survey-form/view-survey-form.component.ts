@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import { Submission } from '../util/type/submission';
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
 })
-export class ViewSurveyFormComponent implements OnInit {
+export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private azureSurveyService = inject(AzureSurveyService);
   private router = inject(Router);
@@ -48,6 +48,17 @@ export class ViewSurveyFormComponent implements OnInit {
         console.log("Error", err);
       },
     })
+  }
+
+  // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: Event) {
+    // TODO: Add logic to add to submission statistics that this was failed
+    event.preventDefault();
+  }
+
+  ngOnDestroy() {
+    // TODO: Add logic to add to submission statistics that this was failed
   }
 
   submit() {
