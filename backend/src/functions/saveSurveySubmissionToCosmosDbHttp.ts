@@ -1,5 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { SubmissionSchema } from "../schemas/submission";
+import { SurveySubmissionMessage } from "../models/queue-storage";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -39,13 +40,15 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
             submission: parsedSubmission.data.surveyFormData
         });
 
-        // Send the submission data to a storage queue
-        context.extraOutputs.set(storageQueueOutput, {
+        const submissionMessage: SurveySubmissionMessage = {
             surveyId: parsedSubmission.data.surveyId,
             submissionId: context.invocationId,
             date: new Date().toISOString(),
             status: "success"
-        });
+        }
+
+        // Send the submission data to a storage queue
+        context.extraOutputs.set(storageQueueOutput, submissionMessage);
 
         return { jsonBody: { message: `Submission saved successfully` }, status: 201 };
 
