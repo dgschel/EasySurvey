@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const SubmissionStatisticSchema = z.object({
-  submissionId: z.string(),
   date: z.string().datetime(), // ISO date string
   status: z.enum(['success', 'failure']),
 });
