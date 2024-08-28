@@ -12,7 +12,7 @@ const blobOutput = output.storageBlob({
     connection: 'storageConnection',
 })
 
-export async function readSurveySubmissionMessage(queueItem: SurveySubmissionMessage, context: InvocationContext): Promise<void> {
+export async function processSubmissionMessage(queueItem: SurveySubmissionMessage, context: InvocationContext): Promise<void> {
     context.log('Storage queue function processed work item:', queueItem);
 
     // Read blob and update it with the new submission
@@ -50,10 +50,10 @@ const updateStatistic = (statistic: SurveyStatistic, submission: SurveySubmissio
     return statistic;
 };
 
-app.storageQueue('readSurveySubmissionMessage', {
+app.storageQueue('processSubmissionMessage', {
     queueName: 'survey-submission-messages-001',
     connection: 'storageConnection',
     extraInputs: [blobInput],
     extraOutputs: [blobOutput],
-    handler: readSurveySubmissionMessage
+    handler: processSubmissionMessage
 });
