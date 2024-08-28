@@ -1,5 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { SubmissionSchema } from "../schemas/submission";
+import { SurveySubmissionMessage } from "../models/queue-storage";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -7,6 +8,11 @@ const cosmosOutput = output.cosmosDB({
     connection: 'cosmosDbConnection',
     partitionKey: '/surveyId',
 });
+
+const storageQueueOutput = output.storageQueue({
+    queueName: 'survey-submission-messages-001',
+    connection: 'storageConnection',
+})
 
 export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
@@ -31,8 +37,18 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         context.extraOutputs.set(cosmosOutput, {
             id: context.invocationId, // Unique ID for the document
             surveyId: parsedSubmission.data.surveyId, // Partition key is the survey
-            submission: parsedSubmission.data.surveyFormData
+            status: parsedSubmission.data.status,
+            submission: parsedSubmission.data.surveyFormData,
         });
+
+        const submissionMessage: SurveySubmissionMessage = {
+            surveyId: parsedSubmission.data.surveyId,
+            submissionId: context.invocationId,
+            ...parsedSubmission.data.statistic
+        }
+
+        // Send the submission data to a storage queue
+        context.extraOutputs.set(storageQueueOutput, submissionMessage);
 
         return { jsonBody: { message: `Submission saved successfully` }, status: 201 };
 
@@ -52,6 +68,6 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
 app.http('saveSurveySubmissionToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
-    extraOutputs: [cosmosOutput],
+    extraOutputs: [cosmosOutput, storageQueueOutput],
     handler: saveSurveySubmissionToCosmosDbHttp
 });

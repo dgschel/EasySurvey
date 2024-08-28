@@ -1,6 +1,9 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { v4 as uuidv4 } from 'uuid';
 import { SurveyModelSchema } from "../schemas/survey";
+import { SurveyStatistic } from "../models/statistic";
+
+const id = uuidv4(); // Generate a unique ID for the survey and statistic file
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -8,6 +11,11 @@ const cosmosOutput = output.cosmosDB({
     connection: 'cosmosDbConnection',
     partitionKey: '/id',
 });
+
+const blobOutput = output.storageBlob({
+    path: `statistic/${id}.json`,
+    connection: 'storageConnection',
+})
 
 /**
  * Saves a survey to Cosmos DB using an HTTP request.
@@ -35,14 +43,25 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             throw new Error("Survey data is invalid");
         }
 
-        const id = uuidv4()
-
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
             id,
             status: 'not paid',
             models: parsedSurvey.data
         });
+
+        // Create blob and save initial statistic
+        const initialStatistic: SurveyStatistic = {
+            submissionTotalCount: 0,
+            submissionSuccessCount: 0,
+            submissionFailureCount: 0,
+            submissionSuccessRate: 0,
+            submissionFailureRate: 0,
+            submissionAverageDurationInMS: 0,
+            submission: {}
+        }
+
+        context.extraOutputs.set(blobOutput, initialStatistic)
 
         return {
             jsonBody: {
@@ -67,6 +86,6 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 app.http('saveSurveyToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
-    extraOutputs: [cosmosOutput],
+    extraOutputs: [cosmosOutput, blobOutput],
     handler: saveSurveyToCosmosDbHttp
 });

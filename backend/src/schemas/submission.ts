@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SubmissionStatisticSchema } from './statistic';
 
 export const SurveySchema = z.record(
   z.string(),
@@ -8,4 +9,6 @@ export const SurveySchema = z.record(
 export const SubmissionSchema = z.object({
   surveyFormData: SurveySchema,
   surveyId: z.string().uuid(),
+  status: z.enum(["success", "failure"]),
+  statistic: SubmissionStatisticSchema
 });
