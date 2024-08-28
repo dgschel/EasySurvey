@@ -17,14 +17,32 @@ export async function readSurveySubmissionMessage(queueItem: SurveySubmissionMes
 
     // Read blob and update it with the new submission
     const blob = context.extraInputs.get(blobInput) as SurveyStatistic;
+    const updatedBlob = updateStatistic(blob, queueItem);
 
-    blob.submission[queueItem.submissionId] = {
-        date: queueItem.date,
-        status: queueItem.status
-    };
-
-    context.extraOutputs.set(blobOutput, blob)
+    context.extraOutputs.set(blobOutput, updatedBlob);
 }
+
+const updateStatistic = (statistic: SurveyStatistic, submission: SurveySubmissionMessage): SurveyStatistic => {
+    statistic.submissionTotalCount += 1;
+
+    // Update success or failure count based on the status of the new submission
+    if (submission.status === 'success') {
+        statistic.submissionSuccessCount += 1;
+    } else {
+        statistic.submissionFailureCount += 1;
+    }
+
+    // Recalculate success and failure rates
+    statistic.submissionSuccessRate =
+        (statistic.submissionSuccessCount / statistic.submissionTotalCount) * 100;
+    statistic.submissionFailureRate =
+        (statistic.submissionFailureCount / statistic.submissionTotalCount) * 100;
+
+    // Add the new submission to the submission map
+    statistic.submission[submission.submissionId] = { date: submission.date, status: submission.status };
+
+    return statistic;
+};
 
 app.storageQueue('readSurveySubmissionMessage', {
     queueName: 'survey-submission-messages-001',
