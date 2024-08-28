@@ -9,5 +9,6 @@ export const SurveySchema = z.record(
 export const SubmissionSchema = z.object({
   surveyFormData: SurveySchema,
   surveyId: z.string().uuid(),
+  status: z.enum(["success", "failure"]),
   statistic: SubmissionStatisticSchema
 });
