@@ -7,5 +7,6 @@ import { SubmissionStatistic } from "./statistic";
 export type Submission = {
   surveyFormData: Record<string, string | string[]>;
   surveyId: string;
+  status: "success" | "failure";
   statistic: SubmissionStatistic;
 };
