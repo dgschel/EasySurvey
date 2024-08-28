@@ -53,75 +53,42 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     })
   }
 
-  // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
-  @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler(event: Event) {
-    // TODO: Add logic to add to submission statistics that this was failed
-    // event.preventDefault();
-    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
-      return {
-        ...acc,
-        [group.model.title]: group.getFormControlComponentValue()
-      }
-    }, {});
-
-    const submission: Submission = {
-      surveyFormData: surveyFormData,
-      surveyId: this.surveyId,
-      status: "failure",
-      statistic: {
-        startDate: this.startSurveyDate,
-        endDate: new Date(),
-        status: "failure"
-      }
-    }
-
+  private sendSubmissionBeacon(submission: Submission) {
+    // Send the submission data to the backend using the Beacon API
+    // This is useful for sending data to the server even if the user navigates away or close the browser / tab
+    // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
     navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
   }
 
-  ngOnDestroy() {
-    // TODO: Add logic to add to submission statistics that this was failed
-    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
-      return {
-        ...acc,
-        [group.model.title]: group.getFormControlComponentValue()
-      }
-    }, {});
+  private createSubmission(status: "success" | "failure") {
+    const surveyFormData: Record<string, string | string[]> = this.createSurveyFormData();
 
     const submission: Submission = {
       surveyFormData: surveyFormData,
       surveyId: this.surveyId,
-      status: "failure",
+      status,
       statistic: {
         startDate: this.startSurveyDate,
         endDate: new Date(),
-        status: "failure"
+        status
       }
     }
 
-    navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
+    return submission;
   }
 
-  submit() {
-    // We could use this.form.value to get the form values but the checkboxes are only returning true or false
-    // So we need to get the values from the components that holds the form values instead
-    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
+  // Creates a survey form data object from the survey groups
+  private createSurveyFormData(): Record<string, string | string[]> {
+    return this.surveyGroups.reduce((acc, group) => {
       return {
         ...acc,
         [group.model.title]: group.getFormControlComponentValue()
-      }
+      };
     }, {});
+  }
 
-    const submission: Submission = {
-      surveyFormData: surveyFormData,
-      surveyId: this.surveyId,
-      status: "success",
-      statistic: {
-        startDate: this.startSurveyDate,
-        endDate: new Date(),
-        status: "success"
-      }
-    }
+  submit(): void {
+    const submission = this.createSubmission("success");
 
     this.azureSurveyService.saveSurveySubmission(submission).subscribe({
       next: (response) => {
@@ -131,5 +98,18 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
         console.log("Error", err);
       },
     })
+  }
+
+  // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: Event) {
+    const surveyFormData = this.createSubmission("failure");
+    this.sendSubmissionBeacon(surveyFormData);
+  }
+
+  // This method is called when the component is destroyed
+  ngOnDestroy() {
+    const surveyFormData = this.createSubmission("failure");
+    this.sendSubmissionBeacon(surveyFormData);
   }
 }
