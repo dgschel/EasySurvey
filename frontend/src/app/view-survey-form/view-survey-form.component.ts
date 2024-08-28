@@ -7,6 +7,7 @@ import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component
 import { SurveyModel } from '../util/type/survey-type';
 import { AzureSurveyService } from '../core/service/azure-survey.service';
 import { Submission } from '../util/type/submission';
+import { environment } from '../../environments/environment.development';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -56,11 +57,49 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
     // TODO: Add logic to add to submission statistics that this was failed
-    event.preventDefault();
+    // event.preventDefault();
+    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
+      return {
+        ...acc,
+        [group.model.title]: group.getFormControlComponentValue()
+      }
+    }, {});
+
+    const submission: Submission = {
+      surveyFormData: surveyFormData,
+      surveyId: this.surveyId,
+      status: "failure",
+      statistic: {
+        startDate: this.startSurveyDate,
+        endDate: new Date(),
+        status: "failure"
+      }
+    }
+
+    navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
   }
 
   ngOnDestroy() {
     // TODO: Add logic to add to submission statistics that this was failed
+    const surveyFormData: Record<string, string | string[]> = this.surveyGroups.reduce((acc, group) => {
+      return {
+        ...acc,
+        [group.model.title]: group.getFormControlComponentValue()
+      }
+    }, {});
+
+    const submission: Submission = {
+      surveyFormData: surveyFormData,
+      surveyId: this.surveyId,
+      status: "failure",
+      statistic: {
+        startDate: this.startSurveyDate,
+        endDate: new Date(),
+        status: "failure"
+      }
+    }
+
+    navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
   }
 
   submit() {
@@ -76,6 +115,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     const submission: Submission = {
       surveyFormData: surveyFormData,
       surveyId: this.surveyId,
+      status: "success",
       statistic: {
         startDate: this.startSurveyDate,
         endDate: new Date(),
