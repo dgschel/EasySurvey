@@ -29,6 +29,8 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   form = new FormGroup({});
   surveyId: string = "";
 
+  startSurveyDate: Date = new Date();
+
   ngOnInit(): void {
     const surveyId = this.activatedRoute.snapshot.paramMap.get('id');
 
@@ -74,6 +76,11 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     const submission: Submission = {
       surveyFormData: surveyFormData,
       surveyId: this.surveyId,
+      statistic: {
+        startDate: this.startSurveyDate,
+        endDate: new Date(),
+        status: "success"
+      }
     }
 
     this.azureSurveyService.saveSurveySubmission(submission).subscribe({
