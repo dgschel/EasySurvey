@@ -1,8 +1,7 @@
 import { z } from 'zod';
+import { SubmissionStatisticSchema } from './statistic';
 
-export const SurveySubmissionMessageSchema = z.object({
+export const SurveySubmissionMessageSchema = SubmissionStatisticSchema.extend({
   surveyId: z.string().uuid(),
   submissionId: z.string().uuid(),
-  date: z.string().datetime(), // ISO date string
-  status: z.enum(['success', 'failure']),
-});
+})
