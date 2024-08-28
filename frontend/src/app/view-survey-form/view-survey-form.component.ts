@@ -27,19 +27,19 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
   models: SurveyModel[] = [];
   form = new FormGroup({});
-  id: string = "";
+  surveyId: string = "";
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    const surveyId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    if (!id || id === '') {
+    if (!surveyId || surveyId === '') {
       this.router.navigate(['/home']);
       return;
     }
 
-    this.id = id;
+    this.surveyId = surveyId;
 
-    this.azureSurveyService.fetchSurveyData(id).subscribe({
+    this.azureSurveyService.fetchSurveyData(surveyId).subscribe({
       next: (response) => {
         this.models = response.data
         this.cdr.detectChanges();
@@ -73,7 +73,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
     const submission: Submission = {
       surveyFormData: surveyFormData,
-      surveyId: this.id,
+      surveyId: this.surveyId,
     }
 
     this.azureSurveyService.saveSurveySubmission(submission).subscribe({
