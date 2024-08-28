@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const SubmissionStatisticSchema = z.object({
-  date: z.string().datetime(), // ISO date string
+  startDate: z.coerce.date(), // valid dates are primitive date types form javascript => new Date(input)
+  endDate: z.coerce.date(), // valid dates are primitive date types form javascript => new Date(input)
   status: z.enum(['success', 'failure']),
 });
 
