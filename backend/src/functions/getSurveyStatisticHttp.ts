@@ -8,9 +8,16 @@ const blobInput = input.storageBlob({
 export async function getSurveyStatisticHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const name = request.query.get('name') || await request.text() || 'world';
+    const blob = context.extraInputs.get(blobInput);
 
-    return { body: `Hello, ${name}!` };
+    context.log('Blob content:', blob);
+
+    return {
+        jsonBody: {
+            message: `Statistic for survey ${request.params.surveyId}`,
+            data: blob
+        }
+    };
 };
 
 app.http('getSurveyStatisticHttp', {
