@@ -1,6 +1,7 @@
 import { app, input, InvocationContext, output } from "@azure/functions";
 import { SurveyStatistic } from "../models/statistic";
 import { SurveySubmissionMessage } from "../models/queue-storage";
+import { SurveyStatisticSchema } from "../schemas/statistic";
 
 const blobInput = input.storageBlob({
     path: 'statistic/{surveyId}.json', // {surveyId} is a key of the json from the parameter queueItem
@@ -35,8 +36,7 @@ const updateStatistic = (statistic: SurveyStatistic, submission: SurveySubmissio
     // Recalculate success and failure rates
     statistic.submissionSuccessRate =
         (statistic.submissionSuccessCount / statistic.submissionTotalCount) * 100;
-    statistic.submissionFailureRate =
-        (statistic.submissionFailureCount / statistic.submissionTotalCount) * 100;
+    statistic.submissionFailureRate = 100 - statistic.submissionSuccessRate;
 
     // Calculate the duration of the submission
     const startDate = new Date(submission.startDate);
@@ -47,7 +47,10 @@ const updateStatistic = (statistic: SurveyStatistic, submission: SurveySubmissio
     // Add the new submission to the submission map
     statistic.submission[submission.submissionId] = { startDate: submission.startDate, endDate: submission.endDate, status: submission.status };
 
-    return statistic;
+    // Validate and transform the updated statistic 
+    const parsedStatistic = SurveyStatisticSchema.parse(statistic);
+
+    return parsedStatistic;
 };
 
 app.storageQueue('processSubmissionMessage', {
