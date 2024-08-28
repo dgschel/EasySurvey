@@ -43,8 +43,7 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         const submissionMessage: SurveySubmissionMessage = {
             surveyId: parsedSubmission.data.surveyId,
             submissionId: context.invocationId,
-            date: new Date().toISOString(),
-            status: "success"
+            ...parsedSubmission.data.statistic
         }
 
         // Send the submission data to a storage queue
