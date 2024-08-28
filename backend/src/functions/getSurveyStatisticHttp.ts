@@ -5,17 +5,29 @@ const blobInput = input.storageBlob({
     connection: 'storageConnection',
 });
 
+const cosmosInput = input.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Submission',
+    connection: 'cosmosDbConnection',
+    partitionKey: '{surveyId}',
+});
+
 export async function getSurveyStatisticHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const blob = context.extraInputs.get(blobInput);
+    const surveyStatistic = context.extraInputs.get(blobInput);
+    const submissions = context.extraInputs.get(cosmosInput);
 
-    context.log('Blob content:', blob);
+    context.log('Blob content:', surveyStatistic);
+    context.log('Cosmos content:', submissions);
 
     return {
         jsonBody: {
             message: `Statistic for survey ${request.params.surveyId}`,
-            data: blob
+            data: {
+                [request.params.surveyId]: surveyStatistic,
+                submissions
+            }
         },
         status: 200
     };
@@ -24,6 +36,6 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 app.http('getSurveyStatisticHttp', {
     methods: ['GET'],
     authLevel: 'function',
-    extraInputs: [blobInput],
+    extraInputs: [blobInput, cosmosInput],
     handler: getSurveyStatisticHttp
 });
