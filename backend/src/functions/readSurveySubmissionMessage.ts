@@ -38,8 +38,14 @@ const updateStatistic = (statistic: SurveyStatistic, submission: SurveySubmissio
     statistic.submissionFailureRate =
         (statistic.submissionFailureCount / statistic.submissionTotalCount) * 100;
 
+    // Calculate the duration of the submission
+    const startDate = new Date(submission.startDate);
+    const endDate = new Date(submission.endDate);
+    const durationInMS = endDate.getTime() - startDate.getTime();
+    statistic.submissionAverageDurationInMS = ((statistic.submissionAverageDurationInMS * (statistic.submissionTotalCount - 1)) + durationInMS) / statistic.submissionTotalCount;
+
     // Add the new submission to the submission map
-    statistic.submission[submission.submissionId] = { date: submission.date, status: submission.status };
+    statistic.submission[submission.submissionId] = { startDate: submission.startDate, endDate: submission.endDate, status: submission.status };
 
     return statistic;
 };
