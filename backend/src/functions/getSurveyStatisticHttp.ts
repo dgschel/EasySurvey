@@ -9,7 +9,7 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 };
 
 app.http('getSurveyStatisticHttp', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
+    methods: ['GET'],
+    authLevel: 'function',
     handler: getSurveyStatisticHttp
 });
