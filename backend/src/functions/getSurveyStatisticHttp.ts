@@ -16,7 +16,8 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         jsonBody: {
             message: `Statistic for survey ${request.params.surveyId}`,
             data: blob
-        }
+        },
+        status: 200
     };
 };
 
