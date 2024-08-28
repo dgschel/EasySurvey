@@ -37,7 +37,8 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         context.extraOutputs.set(cosmosOutput, {
             id: context.invocationId, // Unique ID for the document
             surveyId: parsedSubmission.data.surveyId, // Partition key is the survey
-            submission: parsedSubmission.data.surveyFormData
+            status: parsedSubmission.data.status,
+            submission: parsedSubmission.data.surveyFormData,
         });
 
         const submissionMessage: SurveySubmissionMessage = {
