@@ -77,13 +77,28 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
                     acc[question] = {}
                 }
 
-                // Initialize the answer count if not already initialized
-                if (!acc[question][answer]) {
-                    acc[question][answer] = 0
+                // If the answer is an array, increment the count for each answer
+                if (Array.isArray(answer)) {
+
+                    answer.forEach((value) => {
+                        if (!acc[question][value]) {
+                            acc[question][value] = 0
+                        }
+
+                        // Increment the count for this answer
+                        acc[question][value] += 1
+                    })
                 }
 
-                // Increment the count for this answer
-                acc[question][answer] += 1
+                else {
+                    // Initialize the answer count if not already initialized
+                    if (!acc[question][answer]) {
+                        acc[question][answer] = 0
+                    }
+
+                    // Increment the count for this answer
+                    acc[question][answer] += 1
+                }
             }
 
             return acc
