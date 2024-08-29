@@ -7,7 +7,8 @@ export const SurveySchema = z.record(
 );
 
 export const SubmissionSchema = z.object({
-  surveyFormData: SurveySchema,
+  submission: SurveySchema,
+  id: z.string().uuid(),
   surveyId: z.string().uuid(),
   status: z.enum(["success", "failure"]),
   statistic: SubmissionStatisticSchema
