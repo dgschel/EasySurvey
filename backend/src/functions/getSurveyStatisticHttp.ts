@@ -10,7 +10,7 @@ const blobInput = input.storageBlob({
     connection: 'storageConnection',
 });
 
-const cosmosInput = input.cosmosDB({
+const submissionInput = input.cosmosDB({
     databaseName: 'SurveyDB',
     containerName: 'Submission',
     connection: 'cosmosDbConnection',
@@ -22,7 +22,7 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
     try {
         const surveyStatistic = context.extraInputs.get(blobInput) as SurveyStatistic;
-        const submissions = context.extraInputs.get(cosmosInput) as Submission[];
+        const submissions = context.extraInputs.get(submissionInput) as Submission[];
 
         const parsedSurveyStatistic = SurveyStatisticSchema.safeParse(surveyStatistic);
         const parsedSubmission = SubmissionSchema.pick({ id: true, submission: true, status: true }).array().safeParse(submissions);
@@ -87,6 +87,6 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 app.http('getSurveyStatisticHttp', {
     methods: ['GET'],
     authLevel: 'function',
-    extraInputs: [blobInput, cosmosInput],
+    extraInputs: [blobInput, submissionInput],
     handler: getSurveyStatisticHttp
 });
