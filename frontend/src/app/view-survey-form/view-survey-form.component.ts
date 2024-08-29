@@ -64,7 +64,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     const surveyFormData: Record<string, string | string[]> = this.createSurveyFormData();
 
     const submission: Submission = {
-      surveyFormData: surveyFormData,
+      submission: surveyFormData,
       surveyId: this.surveyId,
       status,
       statistic: {

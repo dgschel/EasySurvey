@@ -5,7 +5,7 @@ import { SubmissionStatistic } from "./statistic";
  * @path backend\src\schemas\submission.ts
  */
 export type Submission = {
-  surveyFormData: Record<string, string | string[]>;
+  submission: Record<string, string | string[]>;
   surveyId: string;
   status: "success" | "failure";
   statistic: SubmissionStatistic;
