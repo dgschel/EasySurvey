@@ -41,3 +41,9 @@ const SurveyRadioModelSchema = SurveyBaseTypeSchema.extend({
 });
 
 export const SurveyModelSchema = z.union([SurveyInputModelSchema, SurveySelectModelSchema, SurveyCheckboxModelSchema, SurveyRadioModelSchema]);
+
+export const SurveyCosmosDbSchema = z.object({
+  id: z.string().uuid(),
+  status: z.string(),
+  models: z.array(SurveyModelSchema)
+});
