@@ -1,7 +1,7 @@
 import { app, HttpRequest, HttpResponseInit, input, InvocationContext } from "@azure/functions";
 import { SubmissionSchema } from "../schemas/submission";
 import { SurveyStatisticSchema } from "../schemas/statistic";
-import { SurveyStatisticResponseSchema } from "../schemas/http";
+import { SurveyResponse, SurveyStatisticResponseSchema } from "../schemas/http";
 import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
 
 const blobInput = input.storageBlob({
@@ -49,6 +49,8 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
         // Map the submission data to the survey statistic
         const mappedStatistics = parsedSubmission.data.reduce((acc, curr) => {
+
+            // Check if the submission id is in the survey statistic
             if (curr.id in parsedSurveyStatistic.data.submission) {
                 return {
                     ...acc,
@@ -61,6 +63,32 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
             return acc;
         }, {});
+
+
+        // Count the number of times each answer was submitted
+        const result = parsedSubmission.data.reduce((acc, curr) => {
+            const submission = curr.submission;
+
+            return Object.keys(submission).reduce((acc, questionId) => {
+                const currentAnswer = submission[questionId];
+
+                context.log("currentAnswer", currentAnswer)
+                
+                // Check if the question is an array of answers
+                if (Array.isArray(currentAnswer)) {
+                    return currentAnswer.reduce((acc, answer) => {
+                        acc[answer] = (acc[answer] || 0) + 1;
+                        return acc
+                    }, acc)
+                }
+                else {
+                    acc[currentAnswer] = (acc[currentAnswer] || 0) + 1;
+                    return acc
+                }
+            }, acc)
+        }, {})
+
+        context.log("result", result)
 
         // Merge the survey statistic data with the replaced submission data
         const mergedStatistic = {
@@ -79,7 +107,11 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         return {
             jsonBody: {
                 message: `Statistic for survey ${request.params.surveyId}`,
-                data: parsedMergedStatistic.data
+                data: {
+                    survey: parsedSurvey,
+                    submission: parsedSubmission.data,
+                    statistic: parsedSurveyStatistic.data
+                }
             },
             status: 200
         };
