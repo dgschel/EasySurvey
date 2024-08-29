@@ -1,6 +1,4 @@
 import { app, HttpRequest, HttpResponseInit, input, InvocationContext } from "@azure/functions";
-import { SurveyStatistic } from "../models/statistic";
-import { Submission } from "../models/submission";
 import { SubmissionSchema } from "../schemas/submission";
 import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
@@ -33,8 +31,8 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         const parsedSurvey = SurveyCosmosDbSchema.array().parse(surveys).at(0); // There should only be one survey since we are querying by id
         const models = SurveyModelSchema.array().parse(parsedSurvey.models);
 
-        const surveyStatistic = context.extraInputs.get(blobInput) as SurveyStatistic;
-        const submissions = context.extraInputs.get(submissionInput) as Submission[];
+        const surveyStatistic = context.extraInputs.get(blobInput);
+        const submissions = context.extraInputs.get(submissionInput);
 
         const parsedSurveyStatistic = SurveyStatisticSchema.safeParse(surveyStatistic);
         const parsedSubmission = SubmissionSchema.pick({ id: true, submission: true, status: true }).array().safeParse(submissions);
