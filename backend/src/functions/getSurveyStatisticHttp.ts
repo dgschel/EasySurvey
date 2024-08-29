@@ -65,27 +65,28 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         }, {});
 
 
-        // Count the number of times each answer was submitted
+        // Count the number of submissions for each question and answer
         const result = parsedSubmission.data.reduce((acc, curr) => {
             const submission = curr.submission;
 
-            return Object.keys(submission).reduce((acc, questionId) => {
-                const currentAnswer = submission[questionId];
+            for (const question in submission) {
+                const answer = submission[question];
 
-                context.log("currentAnswer", currentAnswer)
-                
-                // Check if the question is an array of answers
-                if (Array.isArray(currentAnswer)) {
-                    return currentAnswer.reduce((acc, answer) => {
-                        acc[answer] = (acc[answer] || 0) + 1;
-                        return acc
-                    }, acc)
+                // Initialize the question entry if not already initialized
+                if (!acc[question]) {
+                    acc[question] = {}
                 }
-                else {
-                    acc[currentAnswer] = (acc[currentAnswer] || 0) + 1;
-                    return acc
+
+                // Initialize the answer count if not already initialized
+                if (!acc[question][answer]) {
+                    acc[question][answer] = 0
                 }
-            }, acc)
+
+                // Increment the count for this answer
+                acc[question][answer] += 1
+            }
+
+            return acc
         }, {})
 
         context.log("result", result)
