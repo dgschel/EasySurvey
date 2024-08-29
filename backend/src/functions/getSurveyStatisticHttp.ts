@@ -4,6 +4,7 @@ import { Submission } from "../models/submission";
 import { SubmissionSchema } from "../schemas/submission";
 import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
+import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
 
 const blobInput = input.storageBlob({
     path: 'statistic/{surveyId}.json', // {surveyId} is a key of the json from the parameter queueItem
@@ -17,10 +18,21 @@ const submissionInput = input.cosmosDB({
     partitionKey: '{surveyId}',
 });
 
+const surveyInput = input.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Survey',
+    connection: 'cosmosDbConnection',
+    partitionKey: '{surveyId}',
+});
+
 export async function getSurveyStatisticHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
+        const surveys = context.extraInputs.get(surveyInput);
+        const parsedSurvey = SurveyCosmosDbSchema.array().parse(surveys).at(0); // There should only be one survey since we are querying by id
+        const models = SurveyModelSchema.array().parse(parsedSurvey.models);
+
         const surveyStatistic = context.extraInputs.get(blobInput) as SurveyStatistic;
         const submissions = context.extraInputs.get(submissionInput) as Submission[];
 
@@ -87,6 +99,6 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 app.http('getSurveyStatisticHttp', {
     methods: ['GET'],
     authLevel: 'function',
-    extraInputs: [blobInput, submissionInput],
+    extraInputs: [blobInput, submissionInput, surveyInput],
     handler: getSurveyStatisticHttp
 });
