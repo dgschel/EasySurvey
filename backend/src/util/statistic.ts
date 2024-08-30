@@ -3,8 +3,10 @@
  * @param parsedSubmission The parsed submission data
  * @returns The summarized survey statistic data
  */
-export function summarizeSurveyStatistic(parsedSubmission) {
-  return parsedSubmission.data.reduce((acc, curr) => {
+export function summarizeSurveyStatistic(parsedSubmission: {
+  submission?: Record<string, string | string[]>;
+}[]): Record<string, Record<string, number>> {
+  return parsedSubmission.reduce((acc, curr) => {
     const submission = curr.submission;
 
     for (const question in submission) {
@@ -40,6 +42,6 @@ export function summarizeSurveyStatistic(parsedSubmission) {
     }
 
     return acc;
-  }, {});
+  }, {} as Record<string, Record<string, number>>);
 }
 
