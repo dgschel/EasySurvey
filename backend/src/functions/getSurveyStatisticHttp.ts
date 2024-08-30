@@ -86,6 +86,7 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
 app.http('getSurveyStatisticHttp', {
     methods: ['GET'],
+    route: 'survey/{surveyId}/statistic', // Semantic API route
     authLevel: 'function',
     extraInputs: [blobInput, submissionInput, surveyInput],
     handler: getSurveyStatisticHttp
