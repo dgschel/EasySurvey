@@ -29,7 +29,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   models: SurveyModel[] = [];
   form = new FormGroup({});
   surveyId: string = "";
-
+  formSubmitted: boolean = false;
   startSurveyDate: Date = new Date();
 
   ngOnInit(): void {
@@ -57,6 +57,9 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     // Send the submission data to the backend using the Beacon API
     // This is useful for sending data to the server even if the user navigates away or close the browser / tab
     // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+
+    if (this.formSubmitted) return;
+
     navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
   }
 
@@ -64,7 +67,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     const surveyFormData: Record<string, string | string[]> = this.createSurveyFormData();
 
     const submission: Submission = {
-      surveyFormData: surveyFormData,
+      submission: surveyFormData,
       surveyId: this.surveyId,
       status,
       statistic: {
@@ -89,6 +92,10 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
   submit(): void {
     const submission = this.createSubmission("success");
+
+    // dont allow multiple submissions
+    // example scenario: user clicks submit and then leaves the page or destroys the window. then a success and failure submit will be sent
+    this.formSubmitted = true;
 
     this.azureSurveyService.saveSurveySubmission(submission).subscribe({
       next: (response) => {

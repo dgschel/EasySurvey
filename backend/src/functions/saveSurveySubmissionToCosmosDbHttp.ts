@@ -26,7 +26,7 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         }
 
         // Validate the submission data using zod schema definition
-        const parsedSubmission = SubmissionSchema.safeParse(submission);
+        const parsedSubmission = SubmissionSchema.omit({ id: true }).safeParse(submission);
 
         if (!parsedSubmission.success) {
             context.log(`Validation errors:`, parsedSubmission.error.errors);
@@ -36,9 +36,7 @@ export async function saveSurveySubmissionToCosmosDbHttp(request: HttpRequest, c
         // Save the submission data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
             id: context.invocationId, // Unique ID for the document
-            surveyId: parsedSubmission.data.surveyId, // Partition key is the survey
-            status: parsedSubmission.data.status,
-            submission: parsedSubmission.data.surveyFormData,
+            ...parsedSubmission.data
         });
 
         const submissionMessage: SurveySubmissionMessage = {
