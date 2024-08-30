@@ -1,3 +1,5 @@
+import { SurveyStatisticResponse } from "../models/http";
+
 /**
  * Summarize the survey statistic data
  * @param parsedSubmission The parsed submission data
@@ -6,7 +8,7 @@
 export function summarizeSurveyStatistic(parsedSubmission: {
   status?: "success" | "failure";
   submission?: Record<string, string | string[]>;
-}[]): Record<string, Record<string, number>> {
+}[]): SurveyStatisticResponse {
   return parsedSubmission.reduce((acc, curr) => {
     const { status, submission } = curr;
 
