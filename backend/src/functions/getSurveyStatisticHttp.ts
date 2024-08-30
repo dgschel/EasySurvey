@@ -30,13 +30,13 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
     try {
         const surveys = context.extraInputs.get(surveyInput);
         const parsedSurvey = SurveyCosmosDbSchema.array().parse(surveys).at(0); // There should only be one survey since we are querying by id
-        const models = SurveyModelSchema.array().parse(parsedSurvey.models);
+        const models = SurveyModelSchema.array().parse(parsedSurvey.models); // Parse the survey models submission types ['radio', 'checkbox', ...]
 
         const surveyStatistic = context.extraInputs.get(blobInput);
         const submissions = context.extraInputs.get(submissionInput);
 
         const parsedSurveyStatistic = SurveyStatisticSchema.safeParse(surveyStatistic);
-        const parsedSubmission = SubmissionSchema.pick({ id: true, submission: true, status: true }).array().safeParse(submissions);
+        const parsedSubmission = SubmissionSchema.pick({ submission: true }).array().safeParse(submissions);
 
         if (!parsedSurveyStatistic.success) {
             context.log(`Validation errors:`, parsedSurveyStatistic.error.errors);
@@ -48,48 +48,21 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
             throw new Error("Submission data is invalid");
         }
 
-        // Map the submission data to the survey statistic
-        const mappedStatistics = parsedSubmission.data.reduce((acc, curr) => {
+        // Summarize the submission
+        const aggregatedSubmission = summarizeSurveyStatistic(parsedSubmission.data);
+        const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...aggregatedSubmission } }
 
-            // Check if the submission id is in the survey statistic
-            if (curr.id in parsedSurveyStatistic.data.submission) {
-                return {
-                    ...acc,
-                    [curr.id]: {
-                        submission: curr.submission,
-                        status: curr.status
-                    }
-                };
-            }
-
-            return acc;
-        }, {});
-
-
-        const result = summarizeSurveyStatistic(parsedSubmission)
-
-        // Merge the survey statistic data with the replaced submission data
-        const mergedStatistic = {
-            ...parsedSurveyStatistic.data,
-            submission: mappedStatistics
-        }
-
-        // Validate the merged statistic data
-        const parsedMergedStatistic = SurveyStatisticResponseSchema.safeParse(mergedStatistic)
-
-        if (!parsedMergedStatistic.success) {
-            context.log(`Validation errors:`, parsedMergedStatistic.error.errors);
-            throw new Error("Merged statistic data is invalid");
+        // Validate the summarized statistic data
+        const statistic = SurveyStatisticResponseSchema.safeParse(mergedStatistic)
+        if (!statistic.success) {
+            context.log(`Validation errors:`, statistic.error.errors);
+            throw new Error("Summarized survey statistic data is invalid");
         }
 
         return {
             jsonBody: {
                 message: `Statistic for survey ${request.params.surveyId}`,
-                data: {
-                    survey: parsedSurvey,
-                    submission: parsedSubmission.data,
-                    statistic: parsedSurveyStatistic.data
-                }
+                data: statistic.data
             },
             status: 200
         };
