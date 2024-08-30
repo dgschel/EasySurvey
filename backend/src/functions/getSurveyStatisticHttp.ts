@@ -3,7 +3,7 @@ import { SubmissionSchema } from "../schemas/submission";
 import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
 import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
-import { summarizeSurveyStatistic } from "../util/statistic";
+import { mapInputModelToSubmission, summarizeSurveyStatistic } from "../util/statistic";
 import { SubmissionInputCount } from "../models/http";
 
 const blobInput = input.storageBlob({
@@ -53,16 +53,7 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         const aggregatedSubmission = summarizeSurveyStatistic(parsedSubmission.data);
 
         // Map the input model to the aggregated submission
-        const mapInputModel = models.reduce((acc, curr) => {
-            if (curr.type === 'input') {
-                return {
-                    ...acc,
-                    [curr.title]: Object.keys(aggregatedSubmission[curr.title])
-                };
-            }
-            return acc;
-        }, {} as SubmissionInputCount);
-
+        const mapInputModel = mapInputModelToSubmission(models, aggregatedSubmission);
 
         // Merge the survey statistic data with the aggregated submission and input data
         const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...aggregatedSubmission, ...mapInputModel } };

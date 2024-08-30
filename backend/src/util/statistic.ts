@@ -1,4 +1,5 @@
-import { SurveyStatisticResponse } from "../models/http";
+import { SubmissionInputCount, SurveyStatisticResponse } from "../models/http";
+import { SurveyModel } from "../models/survey";
 
 /**
  * Summarize the survey statistic data
@@ -53,3 +54,15 @@ export function summarizeSurveyStatistic(parsedSubmission: {
   }, {} as Record<string, Record<string, number>>);
 }
 
+
+export function mapInputModelToSubmission(models: SurveyModel[], aggregatedSubmission: SurveyStatisticResponse): SubmissionInputCount {
+  return models.reduce((acc, curr) => {
+    if (curr.type === 'input') {
+      return {
+        ...acc,
+        [curr.title]: Object.keys(aggregatedSubmission[curr.title])
+      };
+    }
+    return acc;
+  }, {} as SubmissionInputCount);
+}
