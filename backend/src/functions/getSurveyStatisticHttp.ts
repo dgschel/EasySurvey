@@ -4,6 +4,7 @@ import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
 import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
 import { summarizeSurveyStatistic } from "../util/statistic";
+import { SubmissionInputCount } from "../models/http";
 
 const blobInput = input.storageBlob({
     path: 'statistic/{surveyId}.json', // {surveyId} is a key of the json from the parameter queueItem
@@ -50,10 +51,25 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
         // Summarize the submission
         const aggregatedSubmission = summarizeSurveyStatistic(parsedSubmission.data);
-        const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...aggregatedSubmission } }
+
+        // Map the input model to the aggregated submission
+        const mapInputModel = models.reduce((acc, curr) => {
+            if (curr.type === 'input') {
+                return {
+                    ...acc,
+                    [curr.title]: Object.keys(aggregatedSubmission[curr.title])
+                };
+            }
+            return acc;
+        }, {} as SubmissionInputCount);
+
+
+        // Merge the survey statistic data with the aggregated submission and input data
+        const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...aggregatedSubmission, ...mapInputModel } };
 
         // Validate the summarized statistic data
-        const statistic = SurveyStatisticResponseSchema.safeParse(mergedStatistic)
+        const statistic = SurveyStatisticResponseSchema.safeParse(mergedStatistic);
+
         if (!statistic.success) {
             context.log(`Validation errors:`, statistic.error.errors);
             throw new Error("Summarized survey statistic data is invalid");
