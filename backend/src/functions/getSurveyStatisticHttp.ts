@@ -36,7 +36,7 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         const submissions = context.extraInputs.get(submissionInput);
 
         const parsedSurveyStatistic = SurveyStatisticSchema.safeParse(surveyStatistic);
-        const parsedSubmission = SubmissionSchema.pick({ submission: true }).array().safeParse(submissions);
+        const parsedSubmission = SubmissionSchema.pick({ submission: true, status: true }).array().safeParse(submissions);
 
         if (!parsedSurveyStatistic.success) {
             context.log(`Validation errors:`, parsedSurveyStatistic.error.errors);
