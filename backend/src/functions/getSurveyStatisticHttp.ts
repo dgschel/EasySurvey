@@ -4,7 +4,6 @@ import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
 import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
 import { mapInputModelToSubmission, summarizeSurveyStatistic } from "../util/statistic";
-import { SubmissionInputCount } from "../models/http";
 
 const blobInput = input.storageBlob({
     path: 'statistic/{surveyId}.json', // {surveyId} is a key of the json from the parameter queueItem
