@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { ApexChart, NgApexchartsModule } from 'ng-apexcharts';
+import { Component, Input } from '@angular/core';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ChartOption } from '../../model/chart';
 
 @Component({
   selector: 'app-survey-statistic-diagramm',
@@ -9,17 +10,5 @@ import { ApexChart, NgApexchartsModule } from 'ng-apexcharts';
   styleUrl: './survey-statistic-diagramm.component.scss'
 })
 export class SurveyStatisticDiagrammComponent {
-  chart: ApexChart = {
-    type: 'bar',
-    height: 350
-  }
-
-  title = {
-    text: "Survey Result",
-  };
-
-  series = [{
-    name: "Survey Result",
-    data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-  }];
+  @Input() chartOption: Partial<ChartOption> = {}
 }
