@@ -88,6 +88,7 @@ export class StatisticComponent implements OnInit {
         plotOptions: {
           bar: {
             horizontal: true,
+            borderRadius: 4,
           }
         },
         title: {
