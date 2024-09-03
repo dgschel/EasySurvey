@@ -93,6 +93,10 @@ export class StatisticComponent implements OnInit {
         title: {
           text: key
         },
+        stroke: {
+          colors: ['transparent'],
+          width: 5,
+        },
         legend: {
           position: "right",
           offsetY: 60
