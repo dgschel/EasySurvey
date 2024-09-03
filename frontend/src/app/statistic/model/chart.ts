@@ -1,10 +1,11 @@
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexPlotOptions, ApexYAxis, ApexTooltip, ApexTitleSubtitle, ApexLegend } from "ng-apexcharts";
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexPlotOptions, ApexYAxis, ApexTooltip, ApexTitleSubtitle, ApexLegend, ApexGrid, ApexFill } from "ng-apexcharts";
 
 export type ChartOption = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
+  grid: ApexGrid,
   legend: ApexLegend;
   yaxis: ApexYAxis;
   xaxis: ApexXAxis;
