@@ -44,7 +44,7 @@ export class StatisticComponent implements OnInit {
     }
   }
 
-  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'xaxis' | 'yaxis' | 'title' | 'plotOptions' | 'legend'>[] {
+  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'grid' | 'xaxis' | 'yaxis' | 'title' | 'plotOptions' | 'legend'>[] {
     return Object.keys(submissionCount).map((key) => {
       const submission = submissionCount[key];
       const submissionEntries = Object.entries(submission);
@@ -56,7 +56,11 @@ export class StatisticComponent implements OnInit {
           height: 350,
         },
         series,
+        grid: {
+          show: false
+        },
         xaxis: {
+          axisBorder: { show: false },
           categories: [key],
           labels: {
             show: false,
