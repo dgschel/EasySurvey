@@ -3,7 +3,7 @@ import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-d
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ChartOption } from './model/chart';
-import { SurveyStatisticResponse } from '../util/type/statistic';
+import { SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 
 @Component({
@@ -44,7 +44,9 @@ export class StatisticComponent {
   }
 
   generateChartOptions() {
-    const filteredSubmissionCounts = this.filterSubmissionCounts()
+    const { submission } = this.data;
+
+    const filteredSubmissionCounts = this.filterSubmissionCounts(submission);
     console.log(filteredSubmissionCounts);
   }
 
@@ -52,8 +54,8 @@ export class StatisticComponent {
     this.generateChartOptions();
   }
 
-  private filterSubmissionCounts() {
-    return Object.keys(this.data.submission).filter((key) => isSubmissionCount(this.data.submission[key]))
+  private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
+    return Object.keys(submission).filter((key) => isSubmissionCount(this.data.submission[key]))
   }
 
 
