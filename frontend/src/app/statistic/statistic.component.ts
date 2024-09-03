@@ -5,16 +5,17 @@ import { environment } from '../../environments/environment.development';
 import { ChartOption } from './model/chart';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent],
+  imports: [SurveyStatisticDiagrammComponent, JsonPipe],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
 export class StatisticComponent implements OnInit {
-  chartOption: Partial<ChartOption>[] = [];
+  chartOptions: Partial<ChartOption>[] = [];
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -43,11 +44,27 @@ export class StatisticComponent implements OnInit {
     }
   }
 
-  charts: Partial<Pick<ChartOption, 'chart' | 'series'>>[] = []
-
   // TODO: Build an array of usable charts that only needs to be passed to the survey-statistic-diagramm component
-  generateChartOptions(): [] {
-    return []
+  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'xaxis'>[] {
+    return Object.keys(submissionCount).map((key) => {
+      const submission = submissionCount[key];
+      const answers = Object.keys(submission);
+      const series = answers.map((key) => submission[key]);
+
+      return {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        series: [{
+          name: key,
+          data: series
+        }],
+        xaxis: {
+          categories: answers
+        }
+      }
+    })
   }
 
   constructor(private http: HttpClient) { }
@@ -58,7 +75,8 @@ export class StatisticComponent implements OnInit {
     const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
     const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
 
-    console.log(submissionStatistics)
+    // Use the static data to generate the chart options
+    this.chartOptions = this.generateChartOptions(submissionStatistics);
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
