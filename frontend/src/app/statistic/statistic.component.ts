@@ -54,7 +54,6 @@ export class StatisticComponent implements OnInit {
         chart: {
           type: 'bar',
           height: 350,
-
         },
         series,
         grid: {
@@ -64,11 +63,11 @@ export class StatisticComponent implements OnInit {
           axisBorder: { show: false },
           categories: [key],
           labels: {
-            show: false,
+            show: false
           }
         },
         yaxis: {
-          show: false,
+          show: false
         },
         responsive: [
           {
@@ -76,13 +75,13 @@ export class StatisticComponent implements OnInit {
             options: {
               plotOptions: {
                 bar: {
-                  horizontal: false,
+                  horizontal: false
                 }
               },
               tooltip: {
                 x: {
-                  show: true
-                }
+                  show: false
+                },
               },
               legend: {
                 position: "bottom",
@@ -93,13 +92,15 @@ export class StatisticComponent implements OnInit {
         ],
         tooltip: {
           x: {
-            show: false
-          },
+            show: true
+          }
         },
         plotOptions: {
           bar: {
             horizontal: true,
             borderRadius: 4,
+            barHeight: '40px',
+            columnWidth: '40px'
           }
         },
         title: {
@@ -107,7 +108,7 @@ export class StatisticComponent implements OnInit {
         },
         stroke: {
           colors: ['transparent'],
-          width: 5,
+          width: 5
         },
         legend: {
           position: "right",
