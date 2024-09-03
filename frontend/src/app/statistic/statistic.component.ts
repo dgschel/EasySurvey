@@ -3,7 +3,7 @@ import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-d
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ChartOption } from './model/chart';
-import { SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
+import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 
 @Component({
@@ -46,8 +46,10 @@ export class StatisticComponent {
   generateChartOptions() {
     const { submission } = this.data;
 
-    const filteredSubmissionCounts = this.filterSubmissionCounts(submission);
-    console.log(filteredSubmissionCounts);
+    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
+
+    console.log(submissionStatistics);
   }
 
   constructor(private http: HttpClient) {
@@ -58,6 +60,14 @@ export class StatisticComponent {
     return Object.keys(submission).filter((key) => isSubmissionCount(this.data.submission[key]))
   }
 
+  private buildSubmissionCounts(submission: Record<string, SubmissionCountResponse>, keys: string[]): SubmissionCount {
+    return keys.reduce((acc, key) => {
+      return {
+        ...acc,
+        [key]: submission[key]
+      }
+    }, {})
+  }
 
   fetchSurveyStatistic() {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', '0bef9bc6-02cd-4da8-866d-2c08e721c2b2');
