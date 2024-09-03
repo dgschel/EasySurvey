@@ -69,6 +69,22 @@ export class StatisticComponent implements OnInit {
         yaxis: {
           show: false,
         },
+        responsive: [
+          {
+            breakpoint: 768,
+            options: {
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                }
+              },
+              legend: {
+                position: "bottom",
+                offsetY: 0
+              }
+            }
+          }
+        ],
         plotOptions: {
           bar: {
             horizontal: true,
