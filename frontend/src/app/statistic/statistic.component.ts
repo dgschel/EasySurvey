@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
@@ -13,7 +13,7 @@ import { isSubmissionCount } from '../util/guard/statistic-type';
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
-export class StatisticComponent {
+export class StatisticComponent implements OnInit {
   chartOption: Partial<ChartOption>[] = [];
 
   data: SurveyStatisticResponse = {
@@ -43,17 +43,22 @@ export class StatisticComponent {
     }
   }
 
-  generateChartOptions() {
+  charts: Partial<Pick<ChartOption, 'chart' | 'series'>>[] = []
+
+  // TODO: Build an array of usable charts that only needs to be passed to the survey-statistic-diagramm component
+  generateChartOptions(): [] {
+    return []
+  }
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
     const { submission } = this.data;
 
     const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
     const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
-    
-    console.log(submissionStatistics);
-  }
 
-  constructor(private http: HttpClient) {
-    this.generateChartOptions();
+    console.log(submissionStatistics)
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
