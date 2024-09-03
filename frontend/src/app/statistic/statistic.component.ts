@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ChartOption } from './model/chart';
 import { SurveyStatisticResponse } from '../util/type/statistic';
+import { isSubmissionCount } from '../util/guard/statistic-type';
 
 @Component({
   selector: 'app-statistic',
@@ -42,9 +43,19 @@ export class StatisticComponent {
     }
   }
 
-  constructor(private http: HttpClient) {
-    this.fetchSurveyStatistic();
+  generateChartOptions() {
+    const filteredSubmissionCounts = this.filterSubmissionCounts()
+    console.log(filteredSubmissionCounts);
   }
+
+  constructor(private http: HttpClient) {
+    this.generateChartOptions();
+  }
+
+  private filterSubmissionCounts() {
+    return Object.keys(this.data.submission).filter((key) => isSubmissionCount(this.data.submission[key]))
+  }
+
 
   fetchSurveyStatistic() {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', '0bef9bc6-02cd-4da8-866d-2c08e721c2b2');
