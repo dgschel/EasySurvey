@@ -71,7 +71,7 @@ export class StatisticComponent implements OnInit {
         },
         responsive: [
           {
-            breakpoint: 768,
+            breakpoint: 767,
             options: {
               plotOptions: {
                 bar: {
