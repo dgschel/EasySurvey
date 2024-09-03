@@ -44,29 +44,38 @@ export class StatisticComponent implements OnInit {
     }
   }
 
-  // TODO: Build an array of usable charts that only needs to be passed to the survey-statistic-diagramm component
-  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'xaxis' | 'plotOptions'>[] {
+  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'xaxis' | 'yaxis' | 'title' | 'plotOptions' | 'legend'>[] {
     return Object.keys(submissionCount).map((key) => {
       const submission = submissionCount[key];
-      const answers = Object.keys(submission);
-      const series = answers.map((key) => submission[key]);
+      const submissionEntries = Object.entries(submission);
+      const series = submissionEntries.map(([key, value]) => ({ name: key, data: [value] }));
 
       return {
         chart: {
           type: 'bar',
-          height: 350
+          height: 350,
         },
-        series: [{
-          name: key,
-          data: series
-        }],
+        series,
         xaxis: {
-          categories: answers
+          categories: [key],
+          labels: {
+            show: false,
+          }
+        },
+        yaxis: {
+          show: false,
         },
         plotOptions: {
           bar: {
-            horizontal: true
+            horizontal: true,
           }
+        },
+        title: {
+          text: key
+        },
+        legend: {
+          position: "right",
+          offsetY: 60
         }
       }
     })
