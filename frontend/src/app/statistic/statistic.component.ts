@@ -48,7 +48,7 @@ export class StatisticComponent {
 
     const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
     const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
-
+    
     console.log(submissionStatistics);
   }
 
@@ -60,7 +60,7 @@ export class StatisticComponent {
     return Object.keys(submission).filter((key) => isSubmissionCount(this.data.submission[key]))
   }
 
-  private buildSubmissionCounts(submission: Record<string, SubmissionCountResponse>, keys: string[]): SubmissionCount {
+  private buildSubmissionCounts(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionCount> {
     return keys.reduce((acc, key) => {
       return {
         ...acc,
