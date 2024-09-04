@@ -112,18 +112,22 @@ export class StatisticComponent implements OnInit {
             horizontal: true,
             borderRadius: 4,
             barHeight: '40px',
-            columnWidth: '40px',
+            columnWidth: '40px'
           }
         },
         title: {
-          text: key, // TODO: if possible then break into multiple lines
+          text: key, // TODO: if possible then break into multiple lines,
+          style: {
+            fontFamily: 'inherit',
+          }
         },
         stroke: {
           colors: ['transparent'],
           width: 5
         },
         legend: {
-          position: "right"
+          position: "right",
+          fontFamily: 'inherit',
         }
       }
     })
