@@ -5,3 +5,7 @@ apx-chart {
 ::ng-deep .apexcharts-legend {
   align-self: center;
 }
+
+::ng-deep .apexcharts-title-text {
+  transform: translateY(5px); // move title a bit down
+}

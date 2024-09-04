@@ -61,6 +61,10 @@ export class StatisticComponent implements OnInit {
           height,
           parentHeightOffset: 0,
           fontFamily: 'inherit',
+          toolbar: {
+            offsetX: -8,
+            offsetY: 8,
+          }
         },
         series,
         grid: {
@@ -112,7 +116,7 @@ export class StatisticComponent implements OnInit {
             horizontal: true,
             borderRadius: 4,
             barHeight: '40px',
-            columnWidth: '40px'
+            columnWidth: '40px',
           }
         },
         title: {
