@@ -8,6 +8,11 @@ import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } fro
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 
+type ChartModel = {
+  title: string;
+  config: Partial<ChartOption>;
+};
+
 @Component({
   selector: 'app-statistic',
   standalone: true,
@@ -16,7 +21,7 @@ import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component
   styleUrl: './statistic.component.scss'
 })
 export class StatisticComponent implements OnInit {
-  chartOptions: Partial<ChartOption>[] = [];
+  chartList: ChartModel[] = [];
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -48,7 +53,7 @@ export class StatisticComponent implements OnInit {
     }
   }
 
-  generateChartOptions(submissionCount: Record<string, SubmissionCount>): Pick<ChartOption, 'chart' | 'series' | 'grid' | 'xaxis' | 'yaxis' | 'tooltip' | 'title' | 'plotOptions' | 'legend'>[] {
+  generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
     return Object.keys(submissionCount).map((key) => {
       const submission = submissionCount[key];
       const submissionEntries = Object.entries(submission);
@@ -56,84 +61,88 @@ export class StatisticComponent implements OnInit {
       const height = this.calculateChartHeight(series.length) || 250;
 
       return {
-        chart: {
-          type: 'bar',
-          height,
-          parentHeightOffset: 0,
-          fontFamily: 'inherit',
-          toolbar: {
-            offsetX: -8,
-            offsetY: 8,
-          }
-        },
-        series,
-        grid: {
-          show: false,
-          padding: {
-            left: 0,
-            top: -20,
+        title: key,
+        config: {
+          chart: {
+            type: 'bar',
+            height,
+            parentHeightOffset: 0,
+            fontFamily: 'inherit',
+            toolbar: {
+              offsetX: -8,
+              offsetY: 8,
+            }
           },
-        },
-        xaxis: {
-          axisBorder: { show: false },
-          categories: [key],
-          labels: {
+          series,
+          grid: {
+            show: false,
+            padding: {
+              left: 0,
+              top: 0,
+            },
+          },
+          xaxis: {
+            axisBorder: { show: false },
+            categories: [key],
+            labels: {
+              show: false
+            }
+          },
+          yaxis: {
             show: false
-          }
-        },
-        yaxis: {
-          show: false
-        },
-        responsive: [
-          {
-            breakpoint: 767,
-            options: {
-              plotOptions: {
-                bar: {
-                  horizontal: false
-                }
-              },
-              tooltip: {
-                x: {
-                  show: false
+          },
+          responsive: [
+            {
+              breakpoint: 767,
+              options: {
+                plotOptions: {
+                  bar: {
+                    horizontal: false
+                  }
                 },
-              },
-              legend: {
-                position: "bottom",
-                offsetY: 0
+                tooltip: {
+                  x: {
+                    show: false
+                  },
+                },
+                legend: {
+                  position: "bottom",
+                  offsetY: 0
+                }
               }
             }
-          }
-        ],
-        tooltip: {
-          x: {
-            show: true,
+          ],
+          tooltip: {
+            x: {
+              show: true,
+            },
+            followCursor: true,
           },
-          followCursor: true,
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true,
-            borderRadius: 4,
-            barHeight: '40px',
-            columnWidth: '40px',
-          }
-        },
-        title: {
-          text: key, // TODO: if possible then break into multiple lines,
-          style: {
+          plotOptions: {
+            bar: {
+              horizontal: true,
+              borderRadius: 4,
+              barHeight: '40px',
+              columnWidth: '40px',
+            }
+          },
+          title: {
+            text: key,
+            style: {
+              fontFamily: 'inherit',
+              fontSize: '20px',
+              fontWeight: '600',
+            },
+            margin: 5,
+          },
+          stroke: {
+            colors: ['transparent'],
+            width: 5
+          },
+          legend: {
+            position: "right",
             fontFamily: 'inherit',
-            fontSize: '20px',
-            fontWeight: '600',
           }
-        },
-        stroke: {
-          colors: ['transparent'],
-          width: 5
-        },
-        legend: {
-          position: "right",
-          fontFamily: 'inherit',
         }
       }
     })
@@ -152,7 +161,8 @@ export class StatisticComponent implements OnInit {
     const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
 
     // Use the static data to generate the chart options
-    this.chartOptions = this.generateChartOptions(submissionStatistics);
+    const charts = this.generateChart(submissionStatistics)
+    this.chartList.push(...charts);
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
