@@ -15,3 +15,8 @@ export type ChartOption = {
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
 };
+
+export type ChartModel = {
+  title: string;
+  config: Partial<ChartOption>;
+};

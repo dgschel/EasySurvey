@@ -2,16 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
 
-import { ChartOption } from './model/chart';
 import { environment } from '../../environments/environment.development';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
-
-type ChartModel = {
-  title: string;
-  config: Partial<ChartOption>;
-};
+import { ChartModel } from './model/chart';
 
 @Component({
   selector: 'app-statistic',
