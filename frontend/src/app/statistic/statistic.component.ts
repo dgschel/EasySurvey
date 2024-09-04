@@ -6,11 +6,12 @@ import { ChartOption } from './model/chart';
 import { environment } from '../../environments/environment.development';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
+import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent],
+  imports: [SurveyStatisticDiagrammComponent, BasicCardComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
@@ -58,11 +59,16 @@ export class StatisticComponent implements OnInit {
         chart: {
           type: 'bar',
           height,
-          parentHeightOffset: 0
+          parentHeightOffset: 0,
+          fontFamily: 'inherit',
         },
         series,
         grid: {
           show: false,
+          padding: {
+            left: 0,
+            top: -20,
+          },
         },
         xaxis: {
           axisBorder: { show: false },
