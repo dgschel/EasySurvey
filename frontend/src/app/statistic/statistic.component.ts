@@ -7,6 +7,7 @@ import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } fro
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { ChartModel, ChartOption } from './model/chart';
+import { M } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-statistic',
@@ -89,6 +90,8 @@ export class StatisticComponent implements OnInit {
       xaxis: {
         axisBorder: { show: false },
         categories: [key],
+        max: this.getMaximumValue(series) + 1, // Add 1 to the maximum value to make the chart more readable
+        stepSize: 1,
         labels: {
           show: false
         }
@@ -153,6 +156,12 @@ export class StatisticComponent implements OnInit {
 
   private calculateChartHeight(length: number): number {
     return (length * 40) + 64 // 40px for each series (bar width and height) and 64px for the title
+  }
+
+  private getMaximumValue(series: { name: string, data: number[] }[]): number {
+    return series.reduce((acc, { data }) => {
+      return Math.max(acc, data[0]);
+    }, 0)
   }
 
   constructor(private http: HttpClient) { }
