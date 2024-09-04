@@ -1,3 +1,13 @@
+<div class="stats shadow">
+  @for (stat of statisticData; track $index) {
+  <div class="stat">
+    <div class="stat-title">{{ stat.title }}</div>
+    <div class="stat-value">{{ stat.value }}</div>
+    <div class="stat-desc">21% more than last month</div>
+  </div>
+  }
+</div>
+
 <div class="flex flex-col gap-4">
   @for (chart of chartList; track $index) {
   <app-basic-card>
