@@ -34,23 +34,16 @@ export class StatisticComponent implements OnInit {
         "Strongly Disagree": 1,
         "Don't know": 1
       },
-      "I took an action or will take an action soon based on the information shared by the expert": {
-        "Strongly Agree": 1,
-        "Agree": 2,
-        "Disagree": 1
-      },
       "Overall, my expectations were:": {
         "Exceed": 1,
         "Met": 1,
         "No answer": 1
       },
-      "Additional Feedback": [
-        "",
-        "Toller Coach!",
-        "No answer",
-        "New test",
-        "Hello"
-      ]
+      "I took an action or will take an action soon based on the information shared by the expert": {
+        "Strongly Agree": 1,
+        "Agree": 2,
+        "Disagree": 1
+      },
     }
   }
 
@@ -59,11 +52,12 @@ export class StatisticComponent implements OnInit {
       const submission = submissionCount[key];
       const submissionEntries = Object.entries(submission);
       const series = submissionEntries.map(([key, value]) => ({ name: key, data: [value] }));
+      const height = this.calculateChartHeight(series.length) || 250;
 
       return {
         chart: {
           type: 'bar',
-          height: 400, // TODO: calcuate the height based on the number of series
+          height,
           parentHeightOffset: 0
         },
         series,
@@ -133,6 +127,10 @@ export class StatisticComponent implements OnInit {
         }
       }
     })
+  }
+
+  calculateChartHeight(length: number): number {
+    return (length * 40) + 64 // 40px for each series (bar width and height) and 64px for the title
   }
 
   constructor(private http: HttpClient) { }
