@@ -1,0 +1,8 @@
+<div #chart>
+  <apx-chart [series]="chartOption.series || []" [chart]="chartOption.chart || { type: 'line' }"
+    [xaxis]="chartOption.xaxis || {}" [dataLabels]="chartOption.dataLabels || {}" [title]="chartOption.title || {}"
+    [yaxis]="chartOption.yaxis || {}" [tooltip]="chartOption.tooltip || {}" [grid]="chartOption.grid || {}"
+    [legend]="chartOption.legend || {}" [plotOptions]="chartOption.plotOptions || {}"
+    [responsive]="chartOption.responsive || []" [colors]="chartOption.colors || []"
+    [stroke]="chartOption.stroke || {}" />
+</div>

@@ -1,0 +1,11 @@
+apx-chart {
+  display: block;
+}
+
+::ng-deep .apexcharts-legend {
+  align-self: center;
+}
+
+::ng-deep .apexcharts-title-text {
+  visibility: hidden; // hidden only for user but not for download
+}
