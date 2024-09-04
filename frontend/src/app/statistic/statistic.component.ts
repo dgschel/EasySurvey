@@ -101,7 +101,7 @@ export class StatisticComponent implements OnInit {
       },
       responsive: [
         {
-          breakpoint: 767,
+          breakpoint: 767, // Chart will be responsive on mobile devices
           options: {
             plotOptions: {
               bar: {
