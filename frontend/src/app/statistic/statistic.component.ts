@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
-import { ChartModel } from './model/chart';
+import { ChartModel, ChartOption } from './model/chart';
 
 @Component({
   selector: 'app-statistic',
@@ -51,99 +51,106 @@ export class StatisticComponent implements OnInit {
   generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
     return Object.keys(submissionCount).map((key) => {
       const submission = submissionCount[key];
-      const submissionEntries = Object.entries(submission);
-      const series = submissionEntries.map(([key, value]) => ({ name: key, data: [value] }));
+      const series = this.buildSeries(submission);
       const height = this.calculateChartHeight(series.length) || 250;
 
       return {
         title: key,
-        config: {
-          chart: {
-            type: 'bar',
-            height,
-            parentHeightOffset: 0,
-            fontFamily: 'inherit',
-            toolbar: {
-              offsetX: -8,
-              offsetY: 8,
-            }
-          },
-          series,
-          grid: {
-            show: false,
-            padding: {
-              left: 0,
-              top: 0,
-            },
-          },
-          xaxis: {
-            axisBorder: { show: false },
-            categories: [key],
-            labels: {
-              show: false
-            }
-          },
-          yaxis: {
-            show: false
-          },
-          responsive: [
-            {
-              breakpoint: 767,
-              options: {
-                plotOptions: {
-                  bar: {
-                    horizontal: false
-                  }
-                },
-                tooltip: {
-                  x: {
-                    show: false
-                  },
-                },
-                legend: {
-                  position: "bottom",
-                  offsetY: 0
-                }
-              }
-            }
-          ],
-          tooltip: {
-            x: {
-              show: true,
-            },
-            followCursor: true,
-          },
-          plotOptions: {
-            bar: {
-              horizontal: true,
-              borderRadius: 4,
-              barHeight: '40px',
-              columnWidth: '40px',
-            }
-          },
-          title: {
-            text: key,
-            style: {
-              fontFamily: 'inherit',
-              fontSize: '20px',
-              fontWeight: '600',
-            },
-            margin: 5,
-          },
-          stroke: {
-            colors: ['transparent'],
-            width: 5
-          },
-          legend: {
-            position: "right",
-            fontFamily: 'inherit',
-          }
-        }
+        config: this.buildChartConfig(key, series, height)
       }
     })
   }
 
-  calculateChartHeight(length: number): number {
+  private buildSeries(submission: SubmissionCount): { name: string, data: number[] }[] {
+    return Object.entries(submission).map(([key, value]) => ({ name: key, data: [value] }));
+  }
+
+  private buildChartConfig(key: string, series: { name: string, data: number[] }[], height: number): Partial<ChartOption> {
+    return {
+      chart: {
+        type: 'bar',
+        height,
+        parentHeightOffset: 0,
+        fontFamily: 'inherit',
+        toolbar: {
+          offsetX: -8,
+          offsetY: 8,
+        }
+      },
+      series,
+      grid: {
+        show: false,
+        padding: {
+          left: 0,
+          top: 0,
+        },
+      },
+      xaxis: {
+        axisBorder: { show: false },
+        categories: [key],
+        labels: {
+          show: false
+        }
+      },
+      yaxis: {
+        show: false
+      },
+      responsive: [
+        {
+          breakpoint: 767,
+          options: {
+            plotOptions: {
+              bar: {
+                horizontal: false
+              }
+            },
+            tooltip: {
+              x: {
+                show: false
+              },
+            },
+            legend: {
+              position: "bottom",
+              offsetY: 0
+            }
+          }
+        }
+      ],
+      tooltip: {
+        x: {
+          show: true,
+        },
+        followCursor: true,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          borderRadius: 4,
+          barHeight: '40px',
+          columnWidth: '40px',
+        }
+      },
+      title: {
+        text: key,
+        style: {
+          fontFamily: 'inherit',
+          fontSize: '20px',
+          fontWeight: '600',
+        },
+        margin: 5,
+      },
+      stroke: {
+        colors: ['transparent'],
+        width: 5
+      },
+      legend: {
+        position: "right",
+        fontFamily: 'inherit',
+      }
+    };
+  }
+
+  private calculateChartHeight(length: number): number {
     return (length * 40) + 64 // 40px for each series (bar width and height) and 64px for the title
   }
 
