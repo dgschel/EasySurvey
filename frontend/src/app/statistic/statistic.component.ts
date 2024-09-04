@@ -18,6 +18,7 @@ import { M } from '@angular/cdk/keycodes';
 })
 export class StatisticComponent implements OnInit {
   chartList: ChartModel[] = [];
+  statisticData: { title: string, value: number }[] = [];
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -47,6 +48,19 @@ export class StatisticComponent implements OnInit {
         "Disagree": 1
       },
     }
+  }
+
+  extractStatisticData(data: SurveyStatisticResponse): { title: string, value: number }[] {
+    return [{
+      title: 'Total Submissions',
+      value: data.submissionTotalCount,
+    }, {
+      title: 'Successful Submissions',
+      value: data.submissionSuccessCount,
+    }, {
+      title: 'Average Submission Duration',
+      value: data.submissionAverageDurationInMS,
+    }]
   }
 
   generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
@@ -175,6 +189,8 @@ export class StatisticComponent implements OnInit {
     // Use the static data to generate the chart options
     const charts = this.generateChart(submissionStatistics)
     this.chartList.push(...charts);
+
+    this.statisticData = this.extractStatisticData(this.data);
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
