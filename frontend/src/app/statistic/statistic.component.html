@@ -1,1 +1,3 @@
-<app-survey-statistic-diagramm />
+@for (chart of chartOptions; track $index) {
+<app-survey-statistic-diagramm [chartOption]="chart" />
+}
