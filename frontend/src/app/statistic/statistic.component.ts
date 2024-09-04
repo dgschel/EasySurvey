@@ -119,6 +119,8 @@ export class StatisticComponent implements OnInit {
           text: key, // TODO: if possible then break into multiple lines,
           style: {
             fontFamily: 'inherit',
+            fontSize: '20px',
+            fontWeight: '600',
           }
         },
         stroke: {
