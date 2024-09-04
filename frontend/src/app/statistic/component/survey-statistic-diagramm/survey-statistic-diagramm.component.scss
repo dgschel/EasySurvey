@@ -1,3 +1,7 @@
 apx-chart {
   display: block;
 }
+
+::ng-deep .apexcharts-legend {
+  align-self: center;
+}
