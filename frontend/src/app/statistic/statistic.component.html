@@ -1,3 +1,8 @@
-@for (chart of chartOptions; track $index) {
-<app-survey-statistic-diagramm [chartOption]="chart" />
-}
+<div class="flex flex-col gap-4">
+  @for (chart of chartList; track $index) {
+  <app-basic-card>
+    {{ chart.title }}
+    <app-survey-statistic-diagramm [chartOption]="chart.config" />
+  </app-basic-card>
+  }
+</div>
