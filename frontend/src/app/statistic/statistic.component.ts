@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+
 import { ChartOption } from './model/chart';
+import { environment } from '../../environments/environment.development';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, JsonPipe],
+  imports: [SurveyStatisticDiagrammComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
@@ -34,6 +34,16 @@ export class StatisticComponent implements OnInit {
         "Strongly Disagree": 1,
         "Don't know": 1
       },
+      "I took an action or will take an action soon based on the information shared by the expert": {
+        "Strongly Agree": 1,
+        "Agree": 2,
+        "Disagree": 1
+      },
+      "Overall, my expectations were:": {
+        "Exceed": 1,
+        "Met": 1,
+        "No answer": 1
+      },
       "Additional Feedback": [
         "",
         "Toller Coach!",
@@ -53,11 +63,12 @@ export class StatisticComponent implements OnInit {
       return {
         chart: {
           type: 'bar',
-          height: 350,
+          height: 400, // TODO: calcuate the height based on the number of series
+          parentHeightOffset: 0
         },
         series,
         grid: {
-          show: false
+          show: false,
         },
         xaxis: {
           axisBorder: { show: false },
@@ -92,27 +103,27 @@ export class StatisticComponent implements OnInit {
         ],
         tooltip: {
           x: {
-            show: true
-          }
+            show: true,
+          },
+          followCursor: true,
         },
         plotOptions: {
           bar: {
             horizontal: true,
             borderRadius: 4,
             barHeight: '40px',
-            columnWidth: '40px'
+            columnWidth: '40px',
           }
         },
         title: {
-          text: key
+          text: key, // TODO: if possible then break into multiple lines
         },
         stroke: {
           colors: ['transparent'],
           width: 5
         },
         legend: {
-          position: "right",
-          offsetY: 60
+          position: "right"
         }
       }
     })
