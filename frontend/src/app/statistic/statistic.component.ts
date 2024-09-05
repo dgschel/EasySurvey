@@ -9,6 +9,7 @@ import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component
 import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
+import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 
 @Component({
   selector: 'app-statistic',
@@ -27,7 +28,7 @@ export class StatisticComponent implements OnInit {
     "submissionFailureCount": 3,
     "submissionSuccessRate": 81,
     "submissionFailureRate": 19,
-    "submissionAverageDurationInMS": 14314,
+    "submissionAverageDurationInMS": 412393,
     "submission": {
       "The expert who responded to my question was knowledgable": {
         "Strongly Agree": 4,
@@ -71,7 +72,7 @@ export class StatisticComponent implements OnInit {
     return [{
       title: 'Einreichungen',
       value: data.submissionTotalCount,
-      description: 'Gesamtanzahl der Einreichungen',
+      description: 'Gesamteinreichungen',
       icon: {
         name: 'arrow-up-right',
         class: 'text-primary',
@@ -79,8 +80,8 @@ export class StatisticComponent implements OnInit {
     },
     {
       title: 'Dauer',
-      value: data.submissionAverageDurationInMS,
-      description: 'Durchschnittsdauer in ms',
+      value: convertMilisecondsToSecondOrMinutes(data.submissionAverageDurationInMS),
+      description: `Durchschnittsdauer in ${getDisplayUnit(data.submissionAverageDurationInMS)}`,
       icon: {
         name: 'stopwatch',
         class: 'text-secondary'
