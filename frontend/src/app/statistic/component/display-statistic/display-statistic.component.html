@@ -1,11 +1,12 @@
-<div class="stats shadow">
+<div class="stats rounded-md shadow w-full">
   @for (stat of statistics; track $index) {
   <div class="stat">
     <div class="stat-figure">
-      <svg-icon [name]="stat.icon" svgClass="size-8" class="text-primary"></svg-icon>
+      <svg-icon [name]="stat.icon.name" svgClass="size-10" [class]="stat.icon.class"></svg-icon>
     </div>
     <div class="stat-title">{{ stat.title }}</div>
     <div class="stat-value ">{{ stat.value }}</div>
+    <div class="stat-desc">{{ stat.description }}</div>
   </div>
   }
 </div>
