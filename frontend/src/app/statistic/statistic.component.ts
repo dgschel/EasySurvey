@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
+import { SvgIconRegistryService } from 'angular-svg-icon';
 
 import { environment } from '../../environments/environment.development';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { ChartModel, ChartOption } from './model/chart';
-import { M } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-statistic',
@@ -178,7 +178,9 @@ export class StatisticComponent implements OnInit {
     }, 0)
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private iconReg: SvgIconRegistryService) {
+    this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe(x => console.log(x));
+  }
 
   ngOnInit() {
     const { submission } = this.data;
