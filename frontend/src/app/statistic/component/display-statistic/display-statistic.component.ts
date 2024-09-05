@@ -19,11 +19,13 @@ export class DisplayStatisticComponent implements OnInit, OnDestroy {
     this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe();
     this.iconReg.loadSvg('/svg/check.svg', 'check')?.subscribe();
     this.iconReg.loadSvg('/svg/arrow-up-right.svg', 'arrow-up-right')?.subscribe();
+    this.iconReg.loadSvg('/svg/x.svg', 'x')?.subscribe();
   }
 
   ngOnDestroy(): void {
     this.iconReg.unloadSvg('stopwatch');
     this.iconReg.unloadSvg('check');
     this.iconReg.unloadSvg('arrow-up-right');
+    this.iconReg.unloadSvg('x');
   }
 }
