@@ -80,7 +80,7 @@ export class StatisticComponent implements OnInit {
     {
       title: 'Dauer',
       value: data.submissionAverageDurationInMS,
-      description: 'Durchschnittliche Dauer in Millisekunden',
+      description: 'Durchschnittsdauer in ms',
       icon: {
         name: 'stopwatch',
         class: 'text-secondary'
