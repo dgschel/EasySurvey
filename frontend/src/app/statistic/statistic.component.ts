@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
-
 import { environment } from '../../environments/environment.development';
+
+import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
+import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { ChartModel, ChartOption } from './model/chart';
-import { M } from '@angular/cdk/keycodes';
+import { StatisticalInfo } from './model/statistic';
+import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, BasicCardComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, BasicCardComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
 export class StatisticComponent implements OnInit {
   chartList: ChartModel[] = [];
+  statistics: StatisticalInfo[] = [];
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -25,7 +28,7 @@ export class StatisticComponent implements OnInit {
     "submissionFailureCount": 3,
     "submissionSuccessRate": 81,
     "submissionFailureRate": 19,
-    "submissionAverageDurationInMS": 14314,
+    "submissionAverageDurationInMS": 412393,
     "submission": {
       "The expert who responded to my question was knowledgable": {
         "Strongly Agree": 4,
@@ -47,6 +50,61 @@ export class StatisticComponent implements OnInit {
         "Disagree": 1
       },
     }
+  }
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    const { submission } = this.data;
+
+    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
+
+    // Use the static data to generate the chart options
+    const charts = this.generateChart(submissionStatistics)
+    this.chartList.push(...charts);
+
+    // Use the static data to generate the statistic information
+    this.statistics = this.extractStatistic(this.data);
+  }
+
+  extractStatistic(data: SurveyStatisticResponse): StatisticalInfo[] {
+    return [{
+      title: 'Einreichungen',
+      value: data.submissionTotalCount,
+      description: 'Gesamteinreichungen',
+      icon: {
+        name: 'arrow-up-right',
+        class: 'text-primary',
+      }
+    },
+    {
+      title: 'Dauer',
+      value: convertMilisecondsToSecondOrMinutes(data.submissionAverageDurationInMS),
+      description: `Durchschnittsdauer in ${getDisplayUnit(data.submissionAverageDurationInMS)}`,
+      icon: {
+        name: 'stopwatch',
+        class: 'text-secondary'
+      }
+    },
+    {
+      title: 'Erfolgreich',
+      value: data.submissionSuccessCount,
+      description: `${data.submissionSuccessRate}% Erfolgsrate`,
+      icon: {
+        name: 'check',
+        class: 'text-success'
+      }
+    },
+    {
+      title: 'Fehlgeschlagen',
+      value: data.submissionFailureCount,
+      description: `${data.submissionFailureRate}% Fehlerrate`,
+      icon: {
+        name: 'x',
+        class: 'text-error'
+      }
+    }]
   }
 
   generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
@@ -101,7 +159,7 @@ export class StatisticComponent implements OnInit {
       },
       responsive: [
         {
-          breakpoint: 767,
+          breakpoint: 767, // Chart will be responsive on mobile devices
           options: {
             plotOptions: {
               bar: {
@@ -162,19 +220,6 @@ export class StatisticComponent implements OnInit {
     return series.reduce((acc, { data }) => {
       return Math.max(acc, data[0]);
     }, 0)
-  }
-
-  constructor(private http: HttpClient) { }
-
-  ngOnInit() {
-    const { submission } = this.data;
-
-    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
-    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
-
-    // Use the static data to generate the chart options
-    const charts = this.generateChart(submissionStatistics)
-    this.chartList.push(...charts);
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {

@@ -1,0 +1,12 @@
+<div class="stats stats-vertical auto-cols-fr md:grid-cols-2 md:grid-flow-row md:stats-horizontal lg:grid-flow-col lg:grid-cols-1 rounded-md shadow w-full">
+  @for (stat of statistics; track $index) {
+  <div class="stat">
+    <div class="stat-figure">
+      <svg-icon [name]="stat.icon.name" svgClass="size-10" [class]="stat.icon.class"></svg-icon>
+    </div>
+    <div class="stat-title">{{ stat.title }}</div>
+    <div class="stat-value ">{{ stat.value }}</div>
+    <div class="stat-desc">{{ stat.description }}</div>
+  </div>
+  }
+</div>
