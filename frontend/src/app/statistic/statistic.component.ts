@@ -50,6 +50,23 @@ export class StatisticComponent implements OnInit {
     }
   }
 
+  constructor(private http: HttpClient, private iconReg: SvgIconRegistryService) {
+    this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe(x => console.log(x));
+  }
+
+  ngOnInit() {
+    const { submission } = this.data;
+
+    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
+
+    // Use the static data to generate the chart options
+    const charts = this.generateChart(submissionStatistics)
+    this.chartList.push(...charts);
+
+    this.statisticData = this.extractStatisticData(this.data);
+  }
+
   extractStatisticData(data: SurveyStatisticResponse): { title: string, value: number }[] {
     return [{
       title: 'Total Submissions',
@@ -176,23 +193,6 @@ export class StatisticComponent implements OnInit {
     return series.reduce((acc, { data }) => {
       return Math.max(acc, data[0]);
     }, 0)
-  }
-
-  constructor(private http: HttpClient, private iconReg: SvgIconRegistryService) {
-    this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe(x => console.log(x));
-  }
-
-  ngOnInit() {
-    const { submission } = this.data;
-
-    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
-    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
-
-    // Use the static data to generate the chart options
-    const charts = this.generateChart(submissionStatistics)
-    this.chartList.push(...charts);
-
-    this.statisticData = this.extractStatisticData(this.data);
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
