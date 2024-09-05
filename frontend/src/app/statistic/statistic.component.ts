@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { HttpClient } from '@angular/common/http';
 import { SvgIconRegistryService } from 'angular-svg-icon';
@@ -16,7 +16,7 @@ import { ChartModel, ChartOption } from './model/chart';
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
-export class StatisticComponent implements OnInit {
+export class StatisticComponent implements OnInit, OnDestroy {
   chartList: ChartModel[] = [];
   statisticData: { title: string, value: number }[] = [];
 
@@ -65,6 +65,10 @@ export class StatisticComponent implements OnInit {
     this.chartList.push(...charts);
 
     this.statisticData = this.extractStatisticData(this.data);
+  }
+
+  ngOnDestroy(): void {
+    this.iconReg.unloadSvg('stopwatch');
   }
 
   extractStatisticData(data: SurveyStatisticResponse): { title: string, value: number }[] {
