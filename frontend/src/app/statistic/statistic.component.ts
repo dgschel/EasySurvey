@@ -1,24 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SvgIconRegistryService } from 'angular-svg-icon';
-
 import { environment } from '../../environments/environment.development';
+
+import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
+import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { ChartModel, ChartOption } from './model/chart';
+import { StatisticalInfo } from './model/statistic';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, BasicCardComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, BasicCardComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
-export class StatisticComponent implements OnInit, OnDestroy {
+export class StatisticComponent implements OnInit {
   chartList: ChartModel[] = [];
-  statisticData: { title: string, value: number }[] = [];
+  statistics: StatisticalInfo[] = [];
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -50,9 +51,7 @@ export class StatisticComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private http: HttpClient, private iconReg: SvgIconRegistryService) {
-    this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe(x => console.log(x));
-  }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     const { submission } = this.data;
@@ -64,23 +63,25 @@ export class StatisticComponent implements OnInit, OnDestroy {
     const charts = this.generateChart(submissionStatistics)
     this.chartList.push(...charts);
 
-    this.statisticData = this.extractStatisticData(this.data);
+    // Use the static data to generate the statistic information
+    this.statistics = this.extractStatistic(this.data);
   }
 
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('stopwatch');
-  }
-
-  extractStatisticData(data: SurveyStatisticResponse): { title: string, value: number }[] {
+  extractStatistic(data: SurveyStatisticResponse): { title: string, value: number, icon: string }[] {
     return [{
       title: 'Total Submissions',
       value: data.submissionTotalCount,
+      icon: 'stopwatch'
     }, {
       title: 'Successful Submissions',
       value: data.submissionSuccessCount,
+      icon: 'check'
+
     }, {
       title: 'Average Submission Duration',
       value: data.submissionAverageDurationInMS,
+      icon: 'arrow-up-right'
+
     }]
   }
 
