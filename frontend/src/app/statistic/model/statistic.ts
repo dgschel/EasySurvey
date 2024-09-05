@@ -1,5 +1,9 @@
 export type StatisticalInfo = {
   title: string;
   value: number;
-  icon: string;
+  description?: string;
+  icon: {
+    name: string;
+    class: string;
+  }
 };
