@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { StatisticalInfo } from '../../model/statistic';
 
 @Component({
   selector: 'app-display-statistic',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './display-statistic.component.scss'
 })
 export class DisplayStatisticComponent {
-
+  @Input('statisticData') statistics: StatisticalInfo[] = [];
 }
