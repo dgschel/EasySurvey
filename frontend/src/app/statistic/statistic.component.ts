@@ -67,21 +67,42 @@ export class StatisticComponent implements OnInit {
     this.statistics = this.extractStatistic(this.data);
   }
 
-  extractStatistic(data: SurveyStatisticResponse): { title: string, value: number, icon: string }[] {
+  extractStatistic(data: SurveyStatisticResponse): StatisticalInfo[] {
     return [{
-      title: 'Total Submissions',
+      title: 'Einreichungen',
       value: data.submissionTotalCount,
-      icon: 'stopwatch'
-    }, {
-      title: 'Successful Submissions',
-      value: data.submissionSuccessCount,
-      icon: 'check'
-
-    }, {
-      title: 'Average Submission Duration',
+      description: 'Gesamtanzahl der Einreichungen',
+      icon: {
+        name: 'arrow-up-right',
+        class: 'text-primary',
+      }
+    },
+    {
+      title: 'Dauer',
       value: data.submissionAverageDurationInMS,
-      icon: 'arrow-up-right'
-
+      description: 'Durchschnittliche Dauer in Millisekunden',
+      icon: {
+        name: 'stopwatch',
+        class: 'text-secondary'
+      }
+    },
+    {
+      title: 'Erfolgreich',
+      value: data.submissionSuccessCount,
+      description: `${data.submissionSuccessRate}% Erfolgsrate`,
+      icon: {
+        name: 'check',
+        class: 'text-success'
+      }
+    },
+    {
+      title: 'Fehlgeschlagen',
+      value: data.submissionFailureCount,
+      description: `${data.submissionFailureRate}% Fehlerrate`,
+      icon: {
+        name: 'x',
+        class: 'text-error'
+      }
     }]
   }
 
