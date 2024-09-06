@@ -57,6 +57,9 @@ export class StatisticComponent implements OnInit {
         "No answer",
         "New test",
         "Hello"
+      ],
+      "What would you do if the expert did not qualified to be as an expert?": [
+        "Amazing!",
       ]
     }
   }
