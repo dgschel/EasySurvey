@@ -1,6 +1,8 @@
 <div class="container grid gap-4 max-w-screen-lg mx-auto">
+  <!-- Display survey statistics -->
   <app-display-statistic [statistic]="statistics"></app-display-statistic>
 
+  <!-- Display charts -->
   @for (chart of chartList; track $index) {
   <app-basic-card>
     <h2 class="text-lg leading-tight font-medium absolute pr-12 pt-2 pl-4">{{ chart.title }}</h2>
@@ -8,6 +10,7 @@
   </app-basic-card>
   }
 
+  <!-- Display table statistic -->
   <app-basic-card>
     <app-table-statistic [statistic]="submissionTable"></app-table-statistic>
   </app-basic-card>
