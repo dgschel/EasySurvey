@@ -13,7 +13,7 @@ import { StatisticalInfo } from '../../model/statistic';
 export class DisplayStatisticComponent implements OnInit, OnDestroy {
   private iconReg = inject(SvgIconRegistryService);
 
-  @Input('statistic') statistics: StatisticalInfo[] = [];
+  @Input('statistics') statistics: StatisticalInfo[] = [];
 
   ngOnInit(): void {
     this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe();

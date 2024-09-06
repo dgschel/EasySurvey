@@ -21,7 +21,7 @@ import { TableStatisticComponent } from "./component/table-statistic/table-stati
 })
 export class StatisticComponent implements OnInit {
   chartList: ChartModel[] = [];
-  statistics: StatisticalInfo[] = [];
+  surveyStatistics: StatisticalInfo[] = [];
   submissionTable: Record<string, SubmissionInputCount> = {};
 
   data: SurveyStatisticResponse = {
@@ -35,7 +35,6 @@ export class StatisticComponent implements OnInit {
       "The expert who responded to my question was knowledgable": {
         "Strongly Agree": 4,
         "No answer": 2,
-        "": 1,
         "Disagree": 1,
         "Agree": 5,
         "Strongly Disagree": 1,
@@ -52,7 +51,6 @@ export class StatisticComponent implements OnInit {
         "Disagree": 1
       },
       "Additional Feedback": [
-        "",
         "Toller Coach!",
         "No answer",
         "New test",
@@ -77,7 +75,7 @@ export class StatisticComponent implements OnInit {
     this.chartList.push(...charts);
 
     // Use the static data to generate the statistic information
-    this.statistics = this.extractStatistic(this.data);
+    this.surveyStatistics = this.extractStatistic(this.data);
 
     // Use the static data to generate the user input information
     const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
