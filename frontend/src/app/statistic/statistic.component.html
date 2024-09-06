@@ -1,10 +1,11 @@
-<app-display-statistic [statisticData]="statistics"></app-display-statistic>
-
-<div class="flex flex-col gap-4 mt-4">
-  @for (chart of chartList; track $index) {
-  <app-basic-card>
-    <h2 class="text-lg leading-tight font-medium absolute pr-12 pt-2 pl-4">{{ chart.title }}</h2>
-    <app-survey-statistic-diagramm [chartOption]="chart.config" />
-  </app-basic-card>
-  }
+<div class="container max-w-screen-lg mx-auto">
+  <app-display-statistic [statisticData]="statistics"></app-display-statistic>
+  <div class="flex flex-col gap-4 mt-4">
+    @for (chart of chartList; track $index) {
+    <app-basic-card>
+      <h2 class="text-lg leading-tight font-medium absolute pr-12 pt-2 pl-4">{{ chart.title }}</h2>
+      <app-survey-statistic-diagramm [chartOption]="chart.config" />
+    </app-basic-card>
+    }
+  </div>
 </div>
