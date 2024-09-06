@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import { ActivatedRoute } from '@angular/router';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionCount, SubmissionInputCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
@@ -11,6 +12,7 @@ import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
+import { map, filter, switchMap, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-statistic',
@@ -20,6 +22,9 @@ import { TableStatisticComponent } from "./component/table-statistic/table-stati
   styleUrl: './statistic.component.scss'
 })
 export class StatisticComponent implements OnInit {
+  private activatedRoute = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+
   chartList: ChartModel[] = [];
   surveyStatistics: StatisticalInfo[] = [];
   submissionTable: Record<string, SubmissionInputCount> = {};
@@ -62,24 +67,28 @@ export class StatisticComponent implements OnInit {
     }
   }
 
-  constructor(private http: HttpClient) { }
-
   ngOnInit() {
-    const { submission } = this.data;
+    this.activatedRoute.paramMap.pipe(
+      filter(params => params.has('id')),
+      map(params => params.get('id') as string),
+      switchMap(id => this.fetchSurveyStatistic(id))
+    ).subscribe((response: any) => {
+      const { submission } = response.data
 
-    const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
-    const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
+      const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+      const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
 
-    // Use the static data to generate the chart options
-    const charts = this.generateChart(submissionStatistics)
-    this.chartList.push(...charts);
+      // Use the static data to generate the chart options
+      const charts = this.generateChart(submissionStatistics);
+      this.chartList.push(...charts);
 
-    // Use the static data to generate the statistic information
-    this.surveyStatistics = this.extractStatistic(this.data);
+      // Use the static data to generate the statistic information
+      this.surveyStatistics = this.extractStatistic(this.data);
 
-    // Use the static data to generate the user input information
-    const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
-    this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+      // Use the static data to generate the user input information
+      const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
+      this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+    });
   }
 
   buildSubmissionTable(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionInputCount> {
@@ -262,8 +271,8 @@ export class StatisticComponent implements OnInit {
     }, {})
   }
 
-  fetchSurveyStatistic() {
-    const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', '0bef9bc6-02cd-4da8-866d-2c08e721c2b2');
-    return this.http.get(url).subscribe({ next: (response) => { console.log(response) }, error: (err) => console.log(err) });
+  fetchSurveyStatistic(surveyId: string) {
+    const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', surveyId);
+    return this.http.get<SurveyStatisticResponse>(url);
   }
 }
