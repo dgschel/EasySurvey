@@ -3,24 +3,26 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
-import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
+import { SubmissionCount, SubmissionInputCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
 import { isSubmissionCount, isSubmissionInputCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
+import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, BasicCardComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, BasicCardComponent, TableStatisticComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
 export class StatisticComponent implements OnInit {
   chartList: ChartModel[] = [];
   statistics: StatisticalInfo[] = [];
+  submissionTable: Record<string, SubmissionInputCount> = {};
 
   data: SurveyStatisticResponse = {
     "submissionTotalCount": 16,
@@ -75,8 +77,17 @@ export class StatisticComponent implements OnInit {
     this.statistics = this.extractStatistic(this.data);
 
     // Use the static data to generate the user input information
-    const filteredSubmissionInputs = this.filterInputSubmission(submission);
-    console.log(filteredSubmissionInputs);
+    const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
+    this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+  }
+
+  buildSubmissionTable(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionInputCount> {
+    return keys.reduce((acc, key) => {
+      return {
+        ...acc,
+        [key]: submission[key]
+      }
+    }, {})
   }
 
   extractStatistic(data: SurveyStatisticResponse): StatisticalInfo[] {
