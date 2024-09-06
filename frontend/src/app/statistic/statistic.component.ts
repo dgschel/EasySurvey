@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment.development';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
-import { isSubmissionCount } from '../util/guard/statistic-type';
+import { isSubmissionCount, isSubmissionInputCount } from '../util/guard/statistic-type';
 import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
 import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { ChartModel, ChartOption } from './model/chart';
@@ -49,6 +49,13 @@ export class StatisticComponent implements OnInit {
         "Agree": 2,
         "Disagree": 1
       },
+      "Additional Feedback": [
+        "",
+        "Toller Coach!",
+        "No answer",
+        "New test",
+        "Hello"
+      ]
     }
   }
 
@@ -66,6 +73,10 @@ export class StatisticComponent implements OnInit {
 
     // Use the static data to generate the statistic information
     this.statistics = this.extractStatistic(this.data);
+
+    // Use the static data to generate the user input information
+    const filteredSubmissionInputs = this.filterInputSubmission(submission);
+    console.log(filteredSubmissionInputs);
   }
 
   extractStatistic(data: SurveyStatisticResponse): StatisticalInfo[] {
@@ -224,6 +235,10 @@ export class StatisticComponent implements OnInit {
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
     return Object.keys(submission).filter((key) => isSubmissionCount(this.data.submission[key]))
+  }
+
+  private filterInputSubmission(submission: Record<string, SubmissionCountResponse>): string[] {
+    return Object.keys(submission).filter((key) => isSubmissionInputCount(submission[key]))
   }
 
   private buildSubmissionCounts(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionCount> {
