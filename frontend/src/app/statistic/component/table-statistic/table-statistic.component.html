@@ -1,1 +1,16 @@
-<p>table-statistic works!</p>
+<table class="table table-fixed">
+  <tbody>
+    @for (row of statistic | keyvalue; track $index) {
+    <tr>
+      <th [width]="48"></th>
+      <th scope="colgroup" class="text-xs text-gray-500">{{ row.key }}</th>
+    </tr>
+    @for (value of row.value; track $index) {
+    <tr>
+      <td>{{ $index + 1 }}.</td>
+      <td>{{ value }}</td>
+    </tr>
+    }
+    }
+  </tbody>
+</table>
