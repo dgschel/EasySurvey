@@ -20,7 +20,7 @@ export class SurveyStatisticDiagrammComponent implements AfterViewInit, OnDestro
     // This is necessary because the chart does not automatically adjust its width when the window is resized
     // We need this code since if more than one chart is displayed, the automatic width adjustment does not work
     this.resizeSubscription = fromEvent(window, 'resize').pipe(debounceTime(500)).subscribe(() => {
-      this.chart.nativeElement.style.width = window.innerWidth - 52 + 'px';
+      this.chart.nativeElement.style.width = window.innerWidth - 56 + 'px';
     });
   }
 
