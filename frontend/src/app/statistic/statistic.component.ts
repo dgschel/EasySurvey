@@ -45,7 +45,7 @@ export class StatisticComponent implements OnInit {
       this.chartList.push(...charts);
 
       // Use the static data to generate the statistic information
-      this.surveyStatistics = this.extractStatistic(this.data);
+      this.surveyStatistics = this.extractStatistic(response.data);
 
       // Use the static data to generate the user input information
       const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
@@ -217,7 +217,7 @@ export class StatisticComponent implements OnInit {
   }
 
   private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
-    return Object.keys(submission).filter((key) => isSubmissionCount(this.data.submission[key]))
+    return Object.keys(submission).filter((key) => isSubmissionCount(submission[key]))
   }
 
   private filterInputSubmission(submission: Record<string, SubmissionCountResponse>): string[] {
