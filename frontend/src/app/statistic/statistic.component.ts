@@ -29,44 +29,6 @@ export class StatisticComponent implements OnInit {
   surveyStatistics: StatisticalInfo[] = [];
   submissionTable: Record<string, SubmissionInputCount> = {};
 
-  data: SurveyStatisticResponse = {
-    "submissionTotalCount": 16,
-    "submissionSuccessCount": 13,
-    "submissionFailureCount": 3,
-    "submissionSuccessRate": 81,
-    "submissionFailureRate": 19,
-    "submissionAverageDurationInMS": 412393,
-    "submission": {
-      "The expert who responded to my question was knowledgable": {
-        "Strongly Agree": 4,
-        "No answer": 2,
-        "Disagree": 1,
-        "Agree": 5,
-        "Strongly Disagree": 1,
-        "Don't know": 1
-      },
-      "Overall, my expectations were:": {
-        "Exceed": 1,
-        "Met": 1,
-        "No answer": 1
-      },
-      "I took an action or will take an action soon based on the information shared by the expert": {
-        "Strongly Agree": 1,
-        "Agree": 2,
-        "Disagree": 1
-      },
-      "Additional Feedback": [
-        "Toller Coach!",
-        "No answer",
-        "New test",
-        "Hello"
-      ],
-      "What would you do if the expert did not qualified to be as an expert?": [
-        "Amazing!",
-      ]
-    }
-  }
-
   ngOnInit() {
     this.activatedRoute.paramMap.pipe(
       filter(params => params.has('id')),
