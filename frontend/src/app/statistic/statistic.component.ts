@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
-import { map, filter, switchMap } from 'rxjs';
+import { map, filter, switchMap, of, catchError, EMPTY } from 'rxjs';
 import { HttpWrapper } from '../util/type/http';
 
 @Component({
@@ -26,6 +26,7 @@ export class StatisticComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private http = inject(HttpClient);
 
+  errorMessage: string = '';
   chartList: ChartModel[] = [];
   surveyStatistics: StatisticalInfo[] = [];
   submissionTable: Record<string, SubmissionInputCount> = {};
@@ -34,23 +35,35 @@ export class StatisticComponent implements OnInit {
     this.activatedRoute.paramMap.pipe(
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
-      switchMap(id => this.fetchSurveyStatistic(id))
-    ).subscribe((response) => {
-      const { submission } = response.data
+      switchMap(id => this.fetchSurveyStatistic(id).pipe(
+        catchError((error: HttpErrorResponse) => {
+          // Handle the from the server
+          this.errorMessage = "Fehler beim Laden der Statistikdaten. Bitte versuchen Sie es später erneut";
+          return EMPTY;
+        })
+      )),
+    ).subscribe({
+      next: (response) => {
+        const { submission } = response.data
 
-      const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
-      const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
+        const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+        const submissionStatistics = this.buildSubmissionCounts(submission, filteredSubmissionCountKeys);
 
-      // Use the static data to generate the chart options
-      const charts = this.generateChart(submissionStatistics);
-      this.chartList.push(...charts);
+        // Use the static data to generate the chart options
+        const charts = this.generateChart(submissionStatistics);
+        this.chartList.push(...charts);
 
-      // Use the static data to generate the statistic information
-      this.surveyStatistics = this.extractStatistic(response.data);
+        // Use the static data to generate the statistic information
+        this.surveyStatistics = this.extractStatistic(response.data);
 
-      // Use the static data to generate the user input information
-      const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
-      this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+        // Use the static data to generate the user input information
+        const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
+        this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+      }, error: (error) => {
+        // Handle error from the client
+        this.errorMessage = "Fehler beim Laden der Statistikdaten. Bitte versuchen Sie es später erneut";
+        console.error("error", error);
+      }
     });
   }
 
