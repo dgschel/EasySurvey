@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ActivatedRoute } from '@angular/router';
+import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionCount, SubmissionInputCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
@@ -12,7 +13,6 @@ import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
-import { map, filter, switchMap, of, catchError, EMPTY } from 'rxjs';
 import { HttpWrapper } from '../util/type/http';
 
 @Component({
@@ -26,6 +26,7 @@ export class StatisticComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private http = inject(HttpClient);
 
+  isLoading: boolean = true;
   errorMessage: string = '';
   chartList: ChartModel[] = [];
   surveyStatistics: StatisticalInfo[] = [];
@@ -35,15 +36,18 @@ export class StatisticComponent implements OnInit {
     this.activatedRoute.paramMap.pipe(
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
-      switchMap(id => this.fetchSurveyStatistic(id).pipe(
+      switchMap(id => this.fetchSurveyStatistic(id as string).pipe(
         catchError((error: HttpErrorResponse) => {
           // Handle the from the server
+          this.isLoading = false;
           this.errorMessage = "Fehler beim Laden der Statistikdaten. Bitte versuchen Sie es später erneut";
           return EMPTY;
         })
       )),
     ).subscribe({
       next: (response) => {
+        this.isLoading = false;
+
         const { submission } = response.data
 
         const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
@@ -60,6 +64,8 @@ export class StatisticComponent implements OnInit {
         const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
         this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
       }, error: (error) => {
+        this.isLoading = false;
+        console.log("asd")
         // Handle error from the client
         this.errorMessage = "Fehler beim Laden der Statistikdaten. Bitte versuchen Sie es später erneut";
         console.error("error", error);
