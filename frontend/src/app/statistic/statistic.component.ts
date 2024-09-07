@@ -12,7 +12,8 @@ import { ChartModel, ChartOption } from './model/chart';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
-import { map, filter, switchMap, Observable } from 'rxjs';
+import { map, filter, switchMap } from 'rxjs';
+import { HttpWrapper } from '../util/type/http';
 
 @Component({
   selector: 'app-statistic',
@@ -34,7 +35,7 @@ export class StatisticComponent implements OnInit {
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
       switchMap(id => this.fetchSurveyStatistic(id))
-    ).subscribe((response: any) => {
+    ).subscribe((response) => {
       const { submission } = response.data
 
       const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
@@ -235,6 +236,6 @@ export class StatisticComponent implements OnInit {
 
   fetchSurveyStatistic(surveyId: string) {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', surveyId);
-    return this.http.get<SurveyStatisticResponse>(url);
+    return this.http.get<HttpWrapper<SurveyStatisticResponse>>(url);
   }
 }
