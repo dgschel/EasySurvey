@@ -1,10 +1,11 @@
-<div class="container grid gap-4 max-w-screen-lg mx-auto">
+<div class="h-full max-h-svh overflow-hidden container grid gap-4 max-w-screen-lg mx-auto relative">
+
   @if (isLoading) {
-  <span class="loading loading-infinity loading-lg"></span>
+  <app-loading></app-loading>
   }
 
   @if (errorMessage) {
-  <div role="alert" class="alert alert-error">
+  <div role="alert" class="alert h-fit alert-error">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />

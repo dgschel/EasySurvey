@@ -13,11 +13,12 @@ import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/hel
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
 import { HttpWrapper } from '../util/type/http';
 import { ChartListComponent } from './component/chart-list/chart-list.component';
+import { LoadingComponent } from '../shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent, LoadingComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
