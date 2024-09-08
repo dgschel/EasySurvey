@@ -18,12 +18,9 @@
   <app-display-statistic [statistics]="surveyStatistics"></app-display-statistic>
 
   <!-- Display charts -->
-  <app-chart-list [submission]="submission" />
+  <app-chart-list [submission]="submissionCounts" />
 
   <!-- Display table statistic -->
-  <h3 class="text-xl mt-4">Benutzerdefinierte Antworten</h3>
-  <app-basic-card>
-    <app-table-statistic [statistic]="submissionTable"></app-table-statistic>
-  </app-basic-card>
+  <app-table-statistic [submission]="submissionInputs"></app-table-statistic>
   }
 </div>
