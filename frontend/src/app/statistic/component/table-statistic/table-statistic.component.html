@@ -2,7 +2,7 @@
 <app-basic-card>
   <table class="table table-fixed">
     <tbody>
-      @for (row of statistic | keyvalue; track $index) {
+      @for (row of submission | keyvalue; track $index) {
       <tr>
         <th [width]="48"></th>
         <th scope="colgroup" class="text-xs text-gray-500">{{ row.key }}</th>

@@ -1,14 +1,15 @@
 import { KeyValuePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { SubmissionInputCount } from '../../../util/type/statistic';
+import { SubmissionInputs } from '../../../util/type/statistic';
+import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
 
 @Component({
   selector: 'app-table-statistic',
   standalone: true,
-  imports: [KeyValuePipe],
+  imports: [KeyValuePipe, BasicCardComponent],
   templateUrl: './table-statistic.component.html',
   styleUrl: './table-statistic.component.scss'
 })
 export class TableStatisticComponent {
-  @Input('statistic') statistic: Record<string, SubmissionInputCount> = {};
+  @Input('submission') submission: Record<string, SubmissionInputs> = {};
 }
