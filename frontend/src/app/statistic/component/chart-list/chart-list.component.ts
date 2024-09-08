@@ -13,20 +13,12 @@ import { isSubmissionCount } from '../../../util/guard/statistic-type';
   styleUrl: './chart-list.component.scss'
 })
 export class ChartListComponent implements OnInit {
-  @Input() submission: Record<string, SubmissionCountResponse> = {};
+  @Input() submission: Record<string, SubmissionCount> = {};
   chartList: ChartModel[] = [];
 
   ngOnInit(): void {
-    const filteredSubmissionCountKeys = this.filterSubmissionCounts(this.submission);
-    const submissionStatistics = this.buildSubmissionCounts(this.submission, filteredSubmissionCountKeys);
-
-    // Use the static data to generate the chart options
-    const charts = this.generateChart(submissionStatistics);
+    const charts = this.generateChart(this.submission);
     this.chartList.push(...charts);
-  }
-
-  private filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
-    return Object.keys(submission).filter((key) => isSubmissionCount(submission[key]))
   }
 
   generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
@@ -40,15 +32,6 @@ export class ChartListComponent implements OnInit {
         config: this.buildChartConfig(key, series, height)
       }
     })
-  }
-
-  private buildSubmissionCounts(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionCount> {
-    return keys.reduce((acc, key) => {
-      return {
-        ...acc,
-        [key]: submission[key]
-      }
-    }, {})
   }
 
   private buildSeries(submission: SubmissionCount): { name: string, data: number[] }[] {
