@@ -10,8 +10,8 @@ export type SubmissionStatistic = {
  * @path backend\src\schemas\http.ts
 */
 export type SubmissionCount = Record<string, number>;
-export type SubmissionInputCount = string[];
-export type SubmissionCountResponse = SubmissionCount | SubmissionInputCount;
+export type SubmissionInputs = string[];
+export type SubmissionCountResponse = SubmissionCount | SubmissionInputs;
 export type SurveyStatisticResponse = {
   submissionTotalCount: number;
   submissionSuccessCount: number;
