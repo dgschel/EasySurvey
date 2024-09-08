@@ -9,7 +9,7 @@ export const routes: Routes = [
   { path: 'home/:template', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'store', component: StoreFormComponent },
-  { path: 'statistic', component: StatisticComponent },
+  { path: ':id/statistic', component: StatisticComponent },
   { path: ':id/viewform', component: ViewSurveyFormComponent },
   { path: '**', redirectTo: '/home' }
 ];

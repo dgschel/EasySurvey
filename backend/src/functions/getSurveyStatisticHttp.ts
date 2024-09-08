@@ -29,6 +29,12 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
 
     try {
         const surveys = context.extraInputs.get(surveyInput);
+
+        if (Array.isArray(surveys) && surveys.length === 0) {
+            context.log(`Survey not found for id ${request.params.surveyId}`);
+            throw new Error(`Survey not found for id ${request.params.surveyId}`);
+        }
+
         const parsedSurvey = SurveyCosmosDbSchema.array().parse(surveys).at(0); // There should only be one survey since we are querying by id
         const models = SurveyModelSchema.array().parse(parsedSurvey.models); // Parse the survey models submission types ['radio', 'checkbox', ...]
 
