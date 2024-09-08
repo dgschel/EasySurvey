@@ -5,9 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
-import { SubmissionInputCount, SubmissionCountResponse, SurveyStatisticResponse } from '../util/type/statistic';
-import { isSubmissionInputCount } from '../util/guard/statistic-type';
-import { BasicCardComponent } from '../shared/ui/basic-card/basic-card.component';
+import { SubmissionInputs, SubmissionCountResponse, SurveyStatisticResponse, SubmissionCount } from '../util/type/statistic';
+import { isSubmissionCount, isSubmissionInputCount } from '../util/guard/statistic-type';
 import { DisplayStatisticComponent } from './component/display-statistic/display-statistic.component';
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
@@ -18,7 +17,7 @@ import { ChartListComponent } from './component/chart-list/chart-list.component'
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, BasicCardComponent, TableStatisticComponent, ChartListComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
@@ -29,8 +28,8 @@ export class StatisticComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
   surveyStatistics: StatisticalInfo[] = [];
-  submissionTable: Record<string, SubmissionInputCount> = {};
-  submission: Record<string, SubmissionCountResponse> = {};
+  submissionInputs: Record<string, SubmissionInputs> = {};
+  submissionCounts: Record<string, SubmissionCount> = {};
 
   ngOnInit() {
     this.activatedRoute.paramMap.pipe(
@@ -46,17 +45,20 @@ export class StatisticComponent implements OnInit {
       )),
     ).subscribe({
       next: (response) => {
+        this.isLoading = false;
         const { submission } = response.data;
 
-        this.submission = submission;
-        this.isLoading = false;
+        // Build the submission count table
+        const filteredSubmissionCountKeys = this.filterSubmissionCounts(submission);
+        this.submissionCounts = this.buildSubmission(submission, filteredSubmissionCountKeys) as Record<string, SubmissionCount>;
 
-        // Use the static data to generate the statistic information
+        // Build the statistic info
         this.surveyStatistics = this.extractStatistic(response.data);
 
-        // Use the static data to generate the user input information
-        const filteredSubmissionInputsKeys = this.filterInputSubmission(submission);
-        this.submissionTable = this.buildSubmissionTable(submission, filteredSubmissionInputsKeys);
+        // Build the submission input table
+        const filteredSubmissionInputsKeys = this.filterSubmissionInputs(submission);
+        this.submissionInputs = this.buildSubmission(submission, filteredSubmissionInputsKeys) as Record<string, SubmissionInputs>;
+
       }, error: (error) => {
         this.isLoading = false;
         // Handle error from the client
@@ -66,7 +68,7 @@ export class StatisticComponent implements OnInit {
     });
   }
 
-  buildSubmissionTable(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionInputCount> {
+  buildSubmission(submission: Record<string, SubmissionCountResponse>, keys: string[]): Record<string, SubmissionCountResponse> {
     return keys.reduce((acc, key) => {
       return {
         ...acc,
@@ -114,7 +116,11 @@ export class StatisticComponent implements OnInit {
     }]
   }
 
-  private filterInputSubmission(submission: Record<string, SubmissionCountResponse>): string[] {
+  filterSubmissionCounts(submission: Record<string, SubmissionCountResponse>): string[] {
+    return Object.keys(submission).filter((key) => isSubmissionCount(submission[key]))
+  }
+
+  filterSubmissionInputs(submission: Record<string, SubmissionCountResponse>): string[] {
     return Object.keys(submission).filter((key) => isSubmissionInputCount(submission[key]))
   }
 
