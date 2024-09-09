@@ -1,17 +1,28 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import * as QRCode from 'qrcode';
+import { QRCodeSchema } from "../schemas/qr-code";
 
 export async function createQRCodeHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-        const svg = await QRCode.toString('Test', { type: 'svg', color: { light: '#0000' } }); // Transparent background
+        const payload = await request.json();
+
+        // Validate the payload
+        const parsedPayload = QRCodeSchema.safeParse(payload);
+
+        if (!parsedPayload.success) {
+            context.log("Validation Error", parsedPayload.error.errors);
+            throw new Error("Payload is invalid");
+        }
+
+        const svg = await QRCode.toString(parsedPayload.data.link, { type: 'svg', color: { light: '#0000' } }); // Transparent background
         context.log(`QR Code created`);
 
         return {
             jsonBody: {
                 message: `QR Code created`,
-                data: svg
+                data: { svg }
             },
             status: 200
         };
@@ -19,7 +30,7 @@ export async function createQRCodeHttp(request: HttpRequest, context: Invocation
         return {
             jsonBody: {
                 message: `Failed to create QR Code`,
-                error: error.message
+                error: error.message || "An unexpected error occurred"
             },
             status: 500
         };
