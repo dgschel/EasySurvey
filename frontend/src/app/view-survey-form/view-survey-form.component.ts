@@ -60,7 +60,8 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
     if (this.formSubmitted) return;
 
-    navigator.sendBeacon(environment.endpoints.saveSubmission, JSON.stringify(submission));
+    const saveSubmissionUrl = `${environment.apiUrl}/${environment.endpoints.saveSubmission}`;
+    navigator.sendBeacon(saveSubmissionUrl, JSON.stringify(submission));
   }
 
   private createSubmission(status: "success" | "failure") {
