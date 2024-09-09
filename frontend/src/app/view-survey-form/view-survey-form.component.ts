@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel } from '../util/type/survey-type';
-import { AzureSurveyService } from '../core/service/azure-survey.service';
 import { Submission } from '../util/type/submission';
 import { environment } from '../../environments/environment.development';
+import { HttpService } from '../core/service/http.service';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -18,7 +18,7 @@ import { environment } from '../../environments/environment.development';
 })
 export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
-  private azureSurveyService = inject(AzureSurveyService);
+  private httpService = inject(HttpService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
@@ -42,7 +42,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
     this.surveyId = surveyId;
 
-    this.azureSurveyService.fetchSurveyData(surveyId).subscribe({
+    this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: surveyId }).subscribe({
       next: (response) => {
         this.models = response.data
         this.cdr.detectChanges();
@@ -97,7 +97,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     // example scenario: user clicks submit and then leaves the page or destroys the window. then a success and failure submit will be sent
     this.formSubmitted = true;
 
-    this.azureSurveyService.saveSurveySubmission(submission).subscribe({
+    this.httpService.post(environment.endpoints.saveSubmission, submission).subscribe({
       next: (response) => {
         console.log("Response", response);
       },

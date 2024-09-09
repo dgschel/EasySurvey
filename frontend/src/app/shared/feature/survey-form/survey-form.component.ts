@@ -3,7 +3,8 @@ import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-dro
 
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
-import { AzureSurveyService } from '../../../core/service/azure-survey.service';
+import { HttpService } from '../../../core/service/http.service';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-survey-form',
@@ -14,7 +15,7 @@ import { AzureSurveyService } from '../../../core/service/azure-survey.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SurveyFormComponent implements AfterViewInit {
-  private azureSurveyService = inject(AzureSurveyService)
+  private httpService = inject(HttpService)
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   @Input() models: SurveyModel[] = [];
 
@@ -65,7 +66,7 @@ export class SurveyFormComponent implements AfterViewInit {
     const radioModels = surveyModels.filter((model) => model.type === 'radio') as SurveyRadioModel[];
     this.generateRadioNames(radioModels);
 
-    this.azureSurveyService.saveSurveyData(surveyModels).subscribe(data => console.log("Data saved", data));
+    this.httpService.post<SurveyModel[]>(environment.endpoints.saveSurvey, surveyModels).subscribe(data => console.log("Data saved", data));
   }
 
   generateRadioNames(models: SurveyRadioModel[]) {

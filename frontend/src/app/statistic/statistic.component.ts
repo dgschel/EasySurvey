@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
 import { ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
@@ -11,9 +11,9 @@ import { DisplayStatisticComponent } from './component/display-statistic/display
 import { StatisticalInfo } from './model/statistic';
 import { convertMilisecondsToSecondOrMinutes, getDisplayUnit } from '../util/helper/time';
 import { TableStatisticComponent } from "./component/table-statistic/table-statistic.component";
-import { HttpWrapper } from '../util/type/http';
 import { ChartListComponent } from './component/chart-list/chart-list.component';
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
+import { HttpService } from '../core/service/http.service';
 
 @Component({
   selector: 'app-statistic',
@@ -24,7 +24,7 @@ import { LoadingComponent } from '../shared/ui/loading/loading.component';
 })
 export class StatisticComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
-  private http = inject(HttpClient);
+  private httpService = inject(HttpService);
 
   isLoading: boolean = true;
   errorMessage: string = '';
@@ -36,7 +36,7 @@ export class StatisticComponent implements OnInit {
     this.activatedRoute.paramMap.pipe(
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
-      switchMap(id => this.fetchSurveyStatistic(id as string).pipe(
+      switchMap(id => this.fetchSurveyStatistic(id).pipe(
         catchError((error: HttpErrorResponse) => {
           // Handle the from the server
           this.isLoading = false;
@@ -127,6 +127,6 @@ export class StatisticComponent implements OnInit {
 
   fetchSurveyStatistic(surveyId: string) {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', surveyId);
-    return this.http.get<HttpWrapper<SurveyStatisticResponse>>(url);
+    return this.httpService.get<SurveyStatisticResponse>(url);
   }
 }
