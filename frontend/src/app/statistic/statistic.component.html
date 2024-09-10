@@ -1,7 +1,8 @@
-<div class="h-full overflow-hidden container grid gap-4 max-w-screen-lg mx-auto relative">
-
+<div class="container max-w-screen-lg mx-auto relative grid gap-4">
   @if (isLoading) {
-  <app-loading></app-loading>
+  <div class="min-h-80">
+    <app-loading></app-loading>
+  </div>
   }
 
   @if (errorMessage) {
