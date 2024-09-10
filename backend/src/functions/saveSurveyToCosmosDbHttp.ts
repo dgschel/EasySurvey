@@ -1,9 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
-import { v4 as uuidv4 } from 'uuid';
 import { SurveyModelSchema } from "../schemas/survey";
 import { SurveyStatistic } from "../models/statistic";
-
-const id = uuidv4(); // Generate a unique ID for the survey and statistic file
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -45,7 +42,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
-            id,
+            id: context.invocationId, // Unique ID for the survey
             status: 'not paid',
             models: parsedSurvey.data
         });
@@ -62,13 +59,13 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
         }
 
         // Send a message to a storage queue to create a statistic file
-        context.log(`Sending survey creation statistic message to the queue with survey ID: ${id}`);
-        context.extraOutputs.set(storageQueueOutput, { id });
+        context.log(`Sending survey creation statistic message to the queue with survey ID: ${context.invocationId}`);
+        context.extraOutputs.set(storageQueueOutput, { surveyId: context.invocationId, statistic: initialStatistic });
 
         return {
             jsonBody: {
                 message: "Survey saved successfully",
-                data: { id }
+                data: { id: context.invocationId }
             },
             status: 201
         };
