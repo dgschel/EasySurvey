@@ -6,11 +6,10 @@ import { SurveyModel, SurveyStatisticSummary } from "../models/survey";
  * @returns The summarized survey statistic data
  */
 export function summarizeSurveyStatistic(parsedSubmission: {
-  status?: "success" | "failure";
   submission?: Record<string, string | string[]>;
 }[]) {
   return parsedSubmission.reduce((acc, curr) => {
-    const { status, submission } = curr;
+    const { submission } = curr;
 
     for (const question in submission) {
       const answer = submission[question];
@@ -37,7 +36,7 @@ export function summarizeSurveyStatistic(parsedSubmission: {
 
       else {
         // If the answer was not provided, use "No answer" as the key
-        const key = status === "failure" && answer === "" ? "No answer" : answer;
+        const key = answer === "" ? "No answer" : answer;
 
         // Initialize the answer count if not already initialized
         if (!acc[question][key]) {
