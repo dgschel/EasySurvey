@@ -1,9 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
-import { v4 as uuidv4 } from 'uuid';
 import { SurveyModelSchema } from "../schemas/survey";
-import { SurveyStatistic } from "../models/statistic";
-
-const id = uuidv4(); // Generate a unique ID for the survey and statistic file
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -12,8 +8,8 @@ const cosmosOutput = output.cosmosDB({
     partitionKey: '/id',
 });
 
-const blobOutput = output.storageBlob({
-    path: `statistic/${id}.json`,
+const storageQueueOutput = output.storageQueue({
+    queueName: 'survey-statistic-message-001',
     connection: 'storageConnection',
 })
 
@@ -45,28 +41,19 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
-            id,
+            id: context.invocationId, // Unique ID for the survey
             status: 'not paid',
             models: parsedSurvey.data
         });
 
-        // Create blob and save initial statistic
-        const initialStatistic: SurveyStatistic = {
-            submissionTotalCount: 0,
-            submissionSuccessCount: 0,
-            submissionFailureCount: 0,
-            submissionSuccessRate: 0,
-            submissionFailureRate: 0,
-            submissionAverageDurationInMS: 0,
-            submission: {}
-        }
-
-        context.extraOutputs.set(blobOutput, initialStatistic)
+        // Send a message to a storage queue to create a statistic file
+        context.log(`Sending survey creation statistic message to the queue with survey ID: ${context.invocationId}`);
+        context.extraOutputs.set(storageQueueOutput, { surveyId: context.invocationId });
 
         return {
             jsonBody: {
                 message: "Survey saved successfully",
-                data: { id }
+                data: { surveyId: context.invocationId }
             },
             status: 201
         };
@@ -86,6 +73,6 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 app.http('saveSurveyToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
-    extraOutputs: [cosmosOutput, blobOutput],
+    extraOutputs: [cosmosOutput, storageQueueOutput],
     handler: saveSurveyToCosmosDbHttp
 });
