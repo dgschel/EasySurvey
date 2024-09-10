@@ -20,9 +20,5 @@
       "newBatchThreshold": 0,
       "messageEncoding": "base64"
     }
-  },
-  "concurrency": {
-    "dynamicConcurrencyEnabled": true,
-    "snapshotPersistenceEnabled": true
   }
 }
