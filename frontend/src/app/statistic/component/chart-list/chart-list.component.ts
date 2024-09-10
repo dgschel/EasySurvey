@@ -21,6 +21,10 @@ export class ChartListComponent implements OnInit {
     this.chartList.push(...charts);
   }
 
+  get hasSubmission(): boolean {
+    return Object.keys(this.submission).length > 0;
+  }
+
   generateChart(submissionCount: Record<string, SubmissionCount>): ChartModel[] {
     return Object.keys(submissionCount).map((key) => {
       const submission = submissionCount[key];

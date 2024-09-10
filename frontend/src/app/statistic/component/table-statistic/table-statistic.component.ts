@@ -12,4 +12,8 @@ import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.com
 })
 export class TableStatisticComponent {
   @Input('submission') submission: Record<string, SubmissionInputs> = {};
+
+  get hasSubmission() {
+    return Object.keys(this.submission).length > 0;
+  }
 }
