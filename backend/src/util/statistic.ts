@@ -1,5 +1,4 @@
-import { SubmissionInputCount, SurveyStatisticResponse } from "../models/http";
-import { SurveyModel } from "../models/survey";
+import { SurveyModel, SurveyStatisticSummary } from "../models/survey";
 
 /**
  * Summarize the survey statistic data
@@ -9,7 +8,7 @@ import { SurveyModel } from "../models/survey";
 export function summarizeSurveyStatistic(parsedSubmission: {
   status?: "success" | "failure";
   submission?: Record<string, string | string[]>;
-}[]): SurveyStatisticResponse {
+}[]) {
   return parsedSubmission.reduce((acc, curr) => {
     const { status, submission } = curr;
 
@@ -51,11 +50,13 @@ export function summarizeSurveyStatistic(parsedSubmission: {
     }
 
     return acc;
-  }, {} as Record<string, Record<string, number>>);
+  }, {} as SurveyStatisticSummary);
 }
 
 
-export function mapInputModelToSubmission(models: SurveyModel[], aggregatedSubmission: SurveyStatisticResponse): SubmissionInputCount {
+export function mapInputModelToSubmission(models: SurveyModel[], aggregatedSubmission: SurveyStatisticSummary) {
+  if (!models || models.length === 0 || !aggregatedSubmission || Object.keys(aggregatedSubmission).length === 0) return {};
+
   return models.reduce((acc, curr) => {
     if (curr.type === 'input') {
       return {
@@ -64,5 +65,5 @@ export function mapInputModelToSubmission(models: SurveyModel[], aggregatedSubmi
       };
     }
     return acc;
-  }, {} as SubmissionInputCount);
+  }, {} as Record<string, string[]>);
 }

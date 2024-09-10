@@ -47,3 +47,5 @@ export const SurveyCosmosDbSchema = z.object({
   status: z.string(),
   models: z.array(SurveyModelSchema)
 });
+
+export const SurveyStatisticSummarySchema = z.record(z.string(), z.record(z.string(), z.number()));

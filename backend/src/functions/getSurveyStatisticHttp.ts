@@ -4,6 +4,7 @@ import { SurveyStatisticSchema } from "../schemas/statistic";
 import { SurveyStatisticResponseSchema } from "../schemas/http";
 import { SurveyCosmosDbSchema, SurveyModelSchema } from "../schemas/survey";
 import { mapInputModelToSubmission, summarizeSurveyStatistic } from "../util/statistic";
+import { SurveyStatisticSummary } from "../models/survey";
 
 const blobInput = input.storageBlob({
     path: 'statistic/{surveyId}.json', // {surveyId} is a key of the json from the parameter queueItem
@@ -55,13 +56,13 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
         }
 
         // Summarize the submission
-        const aggregatedSubmission = summarizeSurveyStatistic(parsedSubmission.data);
+        const surveyStatisticSummary = summarizeSurveyStatistic(parsedSubmission.data);
 
         // Map the input model to the aggregated submission
-        const mapInputModel = mapInputModelToSubmission(models, aggregatedSubmission);
+        const mapInputModel = mapInputModelToSubmission(models, surveyStatisticSummary);
 
         // Merge the survey statistic data with the aggregated submission and input data
-        const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...aggregatedSubmission, ...mapInputModel } };
+        const mergedStatistic = { ...parsedSurveyStatistic.data, submission: { ...surveyStatisticSummary, ...mapInputModel } };
 
         // Validate the summarized statistic data
         const statistic = SurveyStatisticResponseSchema.safeParse(mergedStatistic);
