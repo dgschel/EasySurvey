@@ -1,6 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { SurveyModelSchema } from "../schemas/survey";
-import { SurveyStatistic } from "../models/statistic";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -47,20 +46,9 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             models: parsedSurvey.data
         });
 
-        // Initial statistic
-        const initialStatistic: SurveyStatistic = {
-            submissionTotalCount: 0,
-            submissionSuccessCount: 0,
-            submissionFailureCount: 0,
-            submissionSuccessRate: 0,
-            submissionFailureRate: 0,
-            submissionAverageDurationInMS: 0,
-            submission: {}
-        }
-
         // Send a message to a storage queue to create a statistic file
         context.log(`Sending survey creation statistic message to the queue with survey ID: ${context.invocationId}`);
-        context.extraOutputs.set(storageQueueOutput, { surveyId: context.invocationId, statistic: initialStatistic });
+        context.extraOutputs.set(storageQueueOutput, { surveyId: context.invocationId });
 
         return {
             jsonBody: {
