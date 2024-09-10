@@ -65,7 +65,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
         return {
             jsonBody: {
                 message: "Survey saved successfully",
-                data: { id: context.invocationId }
+                data: { surveyId: context.invocationId }
             },
             status: 201
         };
