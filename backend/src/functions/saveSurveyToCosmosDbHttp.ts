@@ -12,8 +12,8 @@ const cosmosOutput = output.cosmosDB({
     partitionKey: '/id',
 });
 
-const blobOutput = output.storageBlob({
-    path: `statistic/${id}.json`,
+const storageQueueOutput = output.storageQueue({
+    queueName: 'survey-statistic-message-001',
     connection: 'storageConnection',
 })
 
@@ -50,7 +50,7 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             models: parsedSurvey.data
         });
 
-        // Create blob and save initial statistic
+        // Initial statistic
         const initialStatistic: SurveyStatistic = {
             submissionTotalCount: 0,
             submissionSuccessCount: 0,
@@ -61,7 +61,9 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             submission: {}
         }
 
-        context.extraOutputs.set(blobOutput, initialStatistic)
+        // Send a message to a storage queue to create a statistic file
+        context.log(`Sending survey creation statistic message to the queue with survey ID: ${id}`);
+        context.extraOutputs.set(storageQueueOutput, { id });
 
         return {
             jsonBody: {
@@ -86,6 +88,6 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
 app.http('saveSurveyToCosmosDbHttp', {
     methods: ['POST'],
     authLevel: 'function',
-    extraOutputs: [cosmosOutput, blobOutput],
+    extraOutputs: [cosmosOutput, storageQueueOutput],
     handler: saveSurveyToCosmosDbHttp
 });
