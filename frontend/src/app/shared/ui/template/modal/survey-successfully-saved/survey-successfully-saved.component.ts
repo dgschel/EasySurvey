@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Input } from '@angular/core';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 
 @Component({
@@ -9,6 +9,7 @@ import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
   styleUrl: './survey-successfully-saved.component.scss'
 })
 export class SurveySuccessfullySavedComponent implements OnInit, OnDestroy {
+  @Input('surveyId') surveyId: string = '';
   private iconReg = inject(SvgIconRegistryService);
 
   ngOnInit(): void {

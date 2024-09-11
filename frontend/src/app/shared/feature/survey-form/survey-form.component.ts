@@ -1,10 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, EnvironmentInjector, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef, createComponent } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
 import { HttpService } from '../../../core/service/http.service';
 import { environment } from '../../../../environments/environment.development';
+import { ModalService } from '../../../core/service/modal.service';
+import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey-successfully-saved/survey-successfully-saved.component';
 
 @Component({
   selector: 'app-survey-form',
@@ -16,6 +18,9 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class SurveyFormComponent implements AfterViewInit {
   private httpService = inject(HttpService)
+  private modalService = inject(ModalService)
+  private environmentInjector = inject(EnvironmentInjector);
+
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
   @Input() models: SurveyModel[] = [];
 
@@ -66,7 +71,18 @@ export class SurveyFormComponent implements AfterViewInit {
     const radioModels = surveyModels.filter((model) => model.type === 'radio') as SurveyRadioModel[];
     this.generateRadioNames(radioModels);
 
-    this.httpService.post<SurveyModel[]>(environment.endpoints.saveSurvey, surveyModels).subscribe(data => console.log("Data saved", data));
+    const surveyId$ = this.httpService.post<{ surveyId: string }>(environment.endpoints.saveSurvey, surveyModels);
+
+
+    surveyId$.subscribe(({ data }) => {
+      const cmp = createComponent(SurveySuccessfullySavedComponent, {
+        environmentInjector: this.environmentInjector,
+      });
+
+      cmp.setInput('surveyId', data.surveyId);
+
+      this.modalService.open(cmp);
+    });
   }
 
   generateRadioNames(models: SurveyRadioModel[]) {
