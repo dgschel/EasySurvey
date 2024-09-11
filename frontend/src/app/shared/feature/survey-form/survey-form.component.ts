@@ -81,7 +81,8 @@ export class SurveyFormComponent implements AfterViewInit {
 
       cmp.setInput('surveyId', data.surveyId);
 
-      this.modalService.open(cmp);
+      const modal = this.modalService.open(cmp);
+      modal.setInput('isBackdropClosable', false);
     });
   }
 
