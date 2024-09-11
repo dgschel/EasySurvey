@@ -1,12 +1,13 @@
 <dialog #modal class="modal">
-  <div class="modal-box">
+  <div class="modal-box sm:w-full sm:max-w-lg">
     <form method="dialog">
-      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-5 z-10">✕</button>
     </form>
-    <h3 class="text-lg font-bold mb-4">Formularvorschau</h3>
     <ng-template #modalContent></ng-template>
   </div>
+  @if (isBackdropClosable) {
   <form method="dialog" class="modal-backdrop">
     <button>Schließen</button>
   </form>
+  }
 </dialog>

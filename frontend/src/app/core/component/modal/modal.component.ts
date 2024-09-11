@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, ViewChild, ViewContainerRef, Input } from '@angular/core';
 import { fromEvent } from 'rxjs';
 
 @Component({
@@ -9,6 +9,7 @@ import { fromEvent } from 'rxjs';
   styleUrl: './modal.component.scss'
 })
 export class ModalComponent implements AfterViewInit {
+  @Input("isBackdropClosable") isBackdropClosable = true;
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
   @ViewChild('modalContent', { read: ViewContainerRef, static: true }) modalContent!: ViewContainerRef;
 
