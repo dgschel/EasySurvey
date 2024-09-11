@@ -5,7 +5,9 @@
     </form>
     <ng-template #modalContent></ng-template>
   </div>
+  @if (isBackdropClosable) {
   <form method="dialog" class="modal-backdrop">
     <button>Schließen</button>
   </form>
+  }
 </dialog>
