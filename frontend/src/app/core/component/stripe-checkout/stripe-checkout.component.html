@@ -1,1 +1,7 @@
-<p>stripe-checkout works!</p>
+<div class="container max-w-md mx-auto">
+  <!-- Start the checkout session by using async pipe -->
+  <ng-container *ngIf="checkout$ | async"></ng-container>
+
+  <!-- Placeholder by stripe to insert embedded checkout form -->
+  <div #checkout></div>
+</div>
