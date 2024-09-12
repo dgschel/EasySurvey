@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+
+import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 
 @Component({
   selector: 'app-stripe-checkout',
@@ -7,6 +9,10 @@ import { Component } from '@angular/core';
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
-export class StripeCheckoutComponent {
+export class StripeCheckoutComponent implements OnInit {
+  private stripeService = inject(StripeCheckoutService);
 
+  ngOnInit() {
+    const stripe = this.stripeService.getStripeInstance();
+  }
 }
