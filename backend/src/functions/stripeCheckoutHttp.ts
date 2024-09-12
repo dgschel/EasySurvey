@@ -9,7 +9,7 @@ export async function stripeCheckoutHttp(request: HttpRequest, context: Invocati
         const session = await stripe.checkout.sessions.create({
             line_items: [{
                 price: process.env.STRIPE_PRICE_ID,
-                quantity: 1,
+                quantity: 1
             }],
             mode: 'payment',
             ui_mode: 'embedded',
@@ -20,7 +20,8 @@ export async function stripeCheckoutHttp(request: HttpRequest, context: Invocati
             jsonBody: {
                 message: `Stripe Checkout session created successfully`,
                 data: {
-                    clientSecret: session.client_secret
+                    clientSecret: session.client_secret,
+                    sessionId: session.id
                 }
             }
         }
