@@ -6,9 +6,19 @@ import { environment } from '../../../environments/environment.development';
   providedIn: 'root'
 })
 export class StripeCheckoutService {
-  stripe: Stripe | null = null;
+  private stripe: Stripe | null = null;
 
-  async initialize() {
-    this.stripe = await loadStripe(environment.stripe.publicKey);
+  constructor() {
+    this.initialize().then((stripe) => {
+      this.stripe = stripe;
+    });
+  }
+
+  private async initialize() {
+    return await loadStripe(environment.stripe.publicKey);
+  }
+
+  getStripeInstance(): Stripe | null {
+    return this.stripe
   }
 }
