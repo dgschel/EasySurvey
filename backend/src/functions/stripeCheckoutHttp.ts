@@ -1,10 +1,22 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from 'stripe';
 
+import { SurveyCosmosDbSchema } from "../schemas/survey";
+
 export async function createStripeCheckoutSessionHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
+        const payload = await request.json();
+
+        // Validate the payload
+        const parsedPayload = SurveyCosmosDbSchema.pick({ id: true }).safeParse(payload);
+
+        if (!parsedPayload.success) {
+            context.log("Validation Error", parsedPayload.error.errors);
+            throw new Error("Payload is invalid");
+        }
+
         const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY);
         const session = await stripe.checkout.sessions.create({
             line_items: [{
