@@ -16,8 +16,8 @@ export async function createQRCodeHttp(request: HttpRequest, context: Invocation
             throw new Error("Payload is invalid");
         }
 
-        const svg = await QRCode.toString(parsedPayload.data.link, { type: 'svg', color: { light: '#0000' } }); // Transparent background
-        context.log(`QR Code created`);
+        const svg = await QRCode.toString(`${request.headers.get("origin")}/${parsedPayload.data.path}`, { type: 'svg', color: { light: '#0000' } }); // Transparent background
+        context.log(`QR Code created for path "${parsedPayload.data.path}"`);
 
         return {
             jsonBody: {
