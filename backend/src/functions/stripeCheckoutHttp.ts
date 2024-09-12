@@ -1,7 +1,7 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import Stripe from 'stripe';
 
-export async function stripeCheckoutHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function createStripeCheckoutSessionHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
@@ -37,8 +37,8 @@ export async function stripeCheckoutHttp(request: HttpRequest, context: Invocati
     }
 };
 
-app.http('stripeCheckoutHttp', {
-    methods: ['GET'],
+app.http('createStripeCheckoutSessionHttp', {
+    methods: ['POST'],
     authLevel: 'function',
-    handler: stripeCheckoutHttp
+    handler: createStripeCheckoutSessionHttp
 });
