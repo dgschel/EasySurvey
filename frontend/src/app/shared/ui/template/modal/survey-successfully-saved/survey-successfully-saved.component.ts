@@ -1,10 +1,11 @@
 import { Component, inject, OnDestroy, OnInit, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-survey-successfully-saved',
   standalone: true,
-  imports: [SvgIconComponent],
+  imports: [SvgIconComponent, RouterLink],
   templateUrl: './survey-successfully-saved.component.html',
   styleUrl: './survey-successfully-saved.component.scss'
 })

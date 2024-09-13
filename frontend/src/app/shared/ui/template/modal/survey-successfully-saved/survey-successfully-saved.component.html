@@ -16,7 +16,9 @@
         Rückfragen oder Supportanfragen
       </p>
 
-      <button class="btn btn-primary mt-6">Zur Zahlung fortfahren</button>
+      <button [routerLink]="['survey', surveyId, 'checkout']" class="btn btn-primary mt-6">
+        Zur Zahlung fortfahren
+      </button>
     </div>
   </div>
 </div>
