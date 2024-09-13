@@ -36,7 +36,6 @@ export async function createStripeCheckoutSessionHttp(request: HttpRequest, cont
                 message: `Stripe Checkout session created successfully`,
                 data: {
                     clientSecret: session.client_secret,
-                    sessionId: session.id
                 }
             }
         }
