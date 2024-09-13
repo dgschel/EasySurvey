@@ -121,5 +121,7 @@ export class SurveyFormComponent implements AfterViewInit {
   ngOnDestroy() {
     this.cmpRefs.forEach((comp) => comp.destroy());
     this.cmpRefs = [];
+    
+    this.modalService.close();
   }
 }
