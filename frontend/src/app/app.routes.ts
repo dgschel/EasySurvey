@@ -4,6 +4,7 @@ import { ViewSurveyFormComponent } from './view-survey-form/view-survey-form.com
 import { StoreFormComponent } from './store-form/store-form.component';
 import { StatisticComponent } from './statistic/statistic.component';
 import { StripeCheckoutComponent } from './core/component/stripe-checkout/stripe-checkout.component';
+import { StripeCheckoutSessionComponent } from './core/component/stripe-checkout-session/stripe-checkout-session.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'survey/:id/statistic', component: StatisticComponent },
   { path: 'survey/:id/viewform', component: ViewSurveyFormComponent },
   { path: 'survey/:id/checkout', component: StripeCheckoutComponent },
+  { path: 'checkout/return', component: StripeCheckoutSessionComponent },
   { path: '**', redirectTo: '/home' }
 ];
