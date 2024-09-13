@@ -25,7 +25,7 @@ export async function createStripeCheckoutSessionHttp(request: HttpRequest, cont
             }],
             mode: 'payment',
             ui_mode: 'embedded',
-            return_url: `${request.headers.get('origin')}/checkout/return?session_id={CHECKOUT_SESSION_ID}'`,
+            return_url: `${request.headers.get('origin')}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
             metadata: {
                 surveyId: parsedPayload.data.id
             }
