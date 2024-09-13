@@ -9,7 +9,8 @@ export const environment = {
     readSurvey: 'readSurveyFromCosmosDbHttp',
     getSurveyStatistic: 'survey/{surveyId}/statistic',
     createQRCode: 'createQRCodeHttp',
-    stripeCheckout: 'createStripeCheckoutSessionHttp'
+    stripeCheckout: 'createStripeCheckoutSessionHttp',
+    stripeCheckoutSessionStatus: 'stripeCheckoutSessionStatusHttp'
   },
   stripe: {
     publicKey: 'pk_test_51H2cteFqohewLde01E4dKVd9Vtv3r7Cqcwo3OBF2j1gICzkOiGdSwn893njCErZtd8cwUwEonqyVHCfWGEENoUTx00rjpT4g2T'
