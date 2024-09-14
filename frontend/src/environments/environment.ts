@@ -9,6 +9,7 @@ export const environment = {
     readSurvey: 'readSurveyFromCosmosDbHttp',
     getSurveyStatistic: 'survey/{surveyId}/statistic',
     createQRCode: 'createQRCodeHttp',
+    surveyPaymentStatus: 'getSurveyPaymentStatusHttp',
     stripeCheckout: 'createStripeCheckoutSessionHttp',
     stripeCheckoutSessionStatus: 'stripeCheckoutSessionStatusHttp'
   },
