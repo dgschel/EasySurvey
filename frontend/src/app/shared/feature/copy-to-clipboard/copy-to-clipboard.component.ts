@@ -1,6 +1,5 @@
 import { Component, computed, inject, Input, OnInit, signal } from '@angular/core';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-copy-to-clipboard',
@@ -12,10 +11,9 @@ import { Clipboard } from '@angular/cdk/clipboard';
 export class CopyToClipboardComponent implements OnInit {
   @Input({ required: true }) textToCopy: string = '';
   private iconReg = inject(SvgIconRegistryService);
-  private clipboard = inject(Clipboard);
   private isCopySuccess = signal<boolean>(false);
 
-  tooltipText = computed(() => this.isCopySuccess() ? 'Kopiert!' : 'In die Zwischenablage kopieren');
+  tooltipText = computed(() => this.isCopySuccess() ? 'Kopiert!' : 'Kopieren');
 
   ngOnInit(): void {
     this.iconReg.loadSvg('/svg/clipboard.svg', 'clipboard')?.subscribe();
@@ -26,7 +24,20 @@ export class CopyToClipboardComponent implements OnInit {
   }
 
   copyToClipboard(): void {
-    this.isCopySuccess.set(this.clipboard.copy(this.textToCopy));
-    setTimeout(() => this.isCopySuccess.set(false), 2000);
+    this.isCopySuccess.set(true);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(this.textToCopy).then(() => {
+        setTimeout(() => this.isCopySuccess.set(false), 2000);
+      });
+    } else {
+      // Clipboard API not available, fallback to document.execCommand('copy')
+      const input = document.createElement('input');
+      input.value = this.textToCopy;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setTimeout(() => this.isCopySuccess.set(false), 2000);
+    }
   }
 }
