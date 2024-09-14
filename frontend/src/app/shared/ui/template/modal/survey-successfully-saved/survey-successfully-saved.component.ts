@@ -1,11 +1,14 @@
 import { Component, inject, OnDestroy, OnInit, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+
+import { CopyToClipboardComponent } from '../../../../feature/copy-to-clipboard/copy-to-clipboard.component';
 
 @Component({
   selector: 'app-survey-successfully-saved',
   standalone: true,
-  imports: [SvgIconComponent, RouterLink],
+  imports: [SvgIconComponent, CopyToClipboardComponent, RouterLink],
   templateUrl: './survey-successfully-saved.component.html',
   styleUrl: './survey-successfully-saved.component.scss'
 })
