@@ -1,15 +1,33 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
+import { SurveyCosmosDbSchema } from "../schemas/survey";
 
 export async function getSurveyPaymentStatusHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const name = request.query.get('name') || await request.text() || 'world';
+    try {
+        const payload = await request.json();
 
-    return { body: `Hello, ${name}!` };
+        // Validate the payload
+        const parsedPayload = SurveyCosmosDbSchema.pick({ id: true }).safeParse(payload);
+
+        if (!parsedPayload.success) {
+            context.log("Validation Error", parsedPayload.error.errors);
+            throw new Error("Payload is invalid");
+        }
+
+    } catch (error) {
+        return {
+            jsonBody: {
+                message: `Failed to fetch Survey payment status`,
+                error: error.message || "An unexpected error occurred"
+            },
+            status: 500
+        };
+    }
 };
 
 app.http('getSurveyPaymentStatusHttp', {
-    methods: ['GET', 'POST'],
-    authLevel: 'anonymous',
+    methods: ['GET'],
+    authLevel: 'function',
     handler: getSurveyPaymentStatusHttp
 });
