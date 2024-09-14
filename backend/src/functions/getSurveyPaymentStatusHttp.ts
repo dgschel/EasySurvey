@@ -12,20 +12,12 @@ export async function getSurveyPaymentStatusHttp(request: HttpRequest, context: 
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-        const surveyId = request.query.get('surveyId');
-
-        // Check if there is a survey id
-        if (!surveyId || surveyId === "") {
-            context.log("Survey id is required");
-            throw new Error("Survey id is required");
-        }
-
         const surveys = context.extraInputs.get(surveyInput);
 
         // Check if there is a survey
         if (Array.isArray(surveys) && surveys.length === 0) {
-            context.log(`Survey not found for id ${request.query.get('surveyId')}`);
-            throw new Error(`Survey not found for id ${request.query.get('surveyId')}`);
+            context.log(`Survey not found for id ${request.params.surveyId}`);
+            throw new Error(`Survey not found for id ${request.params.surveyId}`);
         }
 
         // Validate the survey data using zod schema definition
@@ -59,6 +51,7 @@ export async function getSurveyPaymentStatusHttp(request: HttpRequest, context: 
 
 app.http('getSurveyPaymentStatusHttp', {
     methods: ['GET'],
+    route: 'survey/{surveyId}/payment-status',
     authLevel: 'function',
     extraInputs: [surveyInput],
     handler: getSurveyPaymentStatusHttp
