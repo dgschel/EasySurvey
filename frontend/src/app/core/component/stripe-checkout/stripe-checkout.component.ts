@@ -21,6 +21,9 @@ export class StripeCheckoutComponent implements OnInit {
   checkout$: Observable<void> = EMPTY;
 
   ngOnInit() {
+    // Fetch the client secret from the server and initialize the Stripe Checkout with a session
+    // Pass the survey id as a parameter to the route
+    // The checkout$ observable is used to render the Stripe Checkout
     this.checkout$ = this.route.paramMap.pipe(
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
