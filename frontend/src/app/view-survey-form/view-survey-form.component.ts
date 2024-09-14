@@ -6,7 +6,7 @@ import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-su
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel } from '../util/type/survey-type';
 import { Submission } from '../util/type/submission';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 

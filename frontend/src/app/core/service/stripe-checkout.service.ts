@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { loadStripe, Stripe, StripeEmbeddedCheckout } from '@stripe/stripe-js';
 
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { HttpService } from './http.service';
 import { HttpWrapper } from '../../util/type/http';
 

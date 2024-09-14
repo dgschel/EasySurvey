@@ -4,7 +4,7 @@ import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-dro
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
 import { HttpService } from '../../../core/service/http.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { ModalService } from '../../../core/service/modal.service';
 import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey-successfully-saved/survey-successfully-saved.component';
 
