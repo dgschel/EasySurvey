@@ -1,5 +1,12 @@
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, input, InvocationContext } from "@azure/functions";
 import { SurveyCosmosDbSchema } from "../schemas/survey";
+
+const surveyInput = input.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Survey',
+    connection: 'cosmosDbConnection',
+    partitionKey: '{surveyId}',
+});
 
 export async function getSurveyPaymentStatusHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
@@ -29,5 +36,6 @@ export async function getSurveyPaymentStatusHttp(request: HttpRequest, context: 
 app.http('getSurveyPaymentStatusHttp', {
     methods: ['GET'],
     authLevel: 'function',
+    extraInputs: [surveyInput],
     handler: getSurveyPaymentStatusHttp
 });
