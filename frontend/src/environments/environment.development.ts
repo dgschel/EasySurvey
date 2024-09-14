@@ -7,7 +7,7 @@ export const environment = {
     readSurvey: 'readSurveyFromCosmosDbHttp',
     getSurveyStatistic: 'survey/{surveyId}/statistic',
     createQRCode: 'createQRCodeHttp',
-    surveyPaymentStatus: 'getSurveyPaymentStatusHttp',
+    surveyPaymentStatus: 'survey/{surveyId}/payment-status',
     stripeCheckout: 'createStripeCheckoutSessionHttp',
     stripeCheckoutSessionStatus: 'stripeCheckoutSessionStatusHttp'
   },
