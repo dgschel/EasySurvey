@@ -83,6 +83,7 @@ export class SurveyFormComponent implements AfterViewInit {
 
       const modal = this.modalService.open(cmp);
       modal.setInput('isBackdropClosable', false);
+      modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
     });
   }
 
@@ -121,7 +122,7 @@ export class SurveyFormComponent implements AfterViewInit {
   ngOnDestroy() {
     this.cmpRefs.forEach((comp) => comp.destroy());
     this.cmpRefs = [];
-    
+
     this.modalService.close();
   }
 }
