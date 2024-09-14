@@ -1,9 +1,12 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { EMPTY, filter, from, switchMap, map, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
+import { EMPTY, from, switchMap, map, Observable, catchError, withLatestFrom, of, filter } from 'rxjs';
+
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
+import { HttpService } from '../../service/http.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-stripe-checkout',
@@ -13,6 +16,7 @@ import { StripeCheckoutService } from '../../service/stripe-checkout.service';
   styleUrl: './stripe-checkout.component.scss'
 })
 export class StripeCheckoutComponent implements OnInit {
+  private httpService = inject(HttpService);
   private stripeService = inject(StripeCheckoutService);
   private route = inject(ActivatedRoute);
 
