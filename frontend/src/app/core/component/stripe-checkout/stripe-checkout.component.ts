@@ -37,15 +37,17 @@ export class StripeCheckoutComponent implements OnInit {
 
     // Fetch the payment status of the survey
     const surveyPaymentStatus$ = surveyId$.pipe(
-      switchMap(surveyId =>
-        this.httpService.get<{ status: string }>(environment.endpoints.surveyPaymentStatus, { params: { surveyId } }).pipe(
-          map(response => response?.data?.status || 'unknown'), // Ensure we have a valid status
-          catchError(error => {
-            console.error("Error fetching payment status:", error);
-            return of('Error fetching payment status'); // Return a fallback value
-          })
-        )
-      )
+      switchMap(surveyId => {
+        const url = environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId);
+        return this.httpService.get<{ status: string }>(url)
+          .pipe(
+            map(response => response?.data?.status || 'unknown'), // Ensure we have a valid status
+            catchError(error => {
+              console.error("Error fetching payment status:", error);
+              return of('Error fetching payment status'); // Return a fallback value
+            })
+          )
+      })
     );
 
     // Filter to proceed only if the payment status is 'not paid'
