@@ -42,11 +42,13 @@ export class SurveyCheckoutComponent implements OnInit {
         const url = environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId)
         return this.httpService.get<SurveyPaymentStatus>(url)
           .pipe(
-            map(response => response?.data?.status || 'unknown'), // Ensure we have a valid status
+            map(({ data }) => data.status),
             catchError(error => {
               this.errorMessage = "Survey not found or has been archived";
               console.error("Survey not found or has been archived:", error);
-              return of('Survey not found or has been archived'); // Return a fallback value
+              
+              const surveyPaymentStatus: SurveyPaymentStatus = { status: 'unknown' };
+              return of(surveyPaymentStatus.status); // Return a fallback value
             })
           )
       })
