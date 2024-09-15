@@ -61,7 +61,7 @@ export class SurveyCheckoutComponent implements OnInit {
           // Handle redirect or display additional message, return EMPTY to stop further processing
           return EMPTY;
         } else {
-          this.errorMessage = "Unexpected survey payment status.";
+          this.errorMessage = "Survey not found or has been archived";
           return EMPTY; // Stop further processing for any unexpected status
         }
       })
