@@ -1,16 +1,8 @@
-<div class="container max-w-screen-lg mx-auto">
-  <h1 class="text-2xl font-bold text-center">Stripe Checkout</h1>
+<!-- Start the stripe checkout session by using async pipe -->
+<ng-container *ngIf="checkout$ | async"></ng-container>
 
-  @if (errorMessage) {
-  <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
-  }
+<!-- Placeholder by stripe to insert embedded checkout form -->
+<div #checkout></div>
 
-  <div *ngIf="!(errorMessage)">
-    <!-- Start the checkout session by using async pipe -->
-    <ng-container *ngIf="checkout$ | async"></ng-container>
-
-    <!-- Placeholder by stripe to insert embedded checkout form -->
-    <div #checkout></div>
-  </div>
-
-</div>
+<!-- Display error message if there is any -->
+<app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage"></app-display-error-message>
