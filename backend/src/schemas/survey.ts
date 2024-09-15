@@ -44,7 +44,7 @@ export const SurveyModelSchema = z.union([SurveyInputModelSchema, SurveySelectMo
 
 export const SurveyCosmosDbSchema = z.object({
   id: z.string().uuid(),
-  status: z.string(),
+  status: z.union([z.literal('not paid'), z.literal('paid')]),
   models: z.array(SurveyModelSchema)
 });
 
