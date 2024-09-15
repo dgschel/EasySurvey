@@ -8,16 +8,18 @@ import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { HttpService } from '../../service/http.service';
 import { environment } from '../../../../environments/environment';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
+import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-stripe-checkout',
   standalone: true,
-  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe],
+  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
 export class StripeCheckoutComponent implements OnInit {
   @Input('surveyId') surveyId: string = '';
+
   private stripeService = inject(StripeCheckoutService);
   @ViewChild('checkout') stripeCheckoutElement!: ElementRef<HTMLDivElement>;
 

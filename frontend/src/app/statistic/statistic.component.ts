@@ -14,11 +14,12 @@ import { TableStatisticComponent } from "./component/table-statistic/table-stati
 import { ChartListComponent } from './component/chart-list/chart-list.component';
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
 import { HttpService } from '../core/service/http.service';
+import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent, LoadingComponent],
+  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent, LoadingComponent, DisplayErrorMessageComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
