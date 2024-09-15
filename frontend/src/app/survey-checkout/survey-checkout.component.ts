@@ -7,6 +7,7 @@ import { catchError, EMPTY, filter, map, Observable, of, switchMap, withLatestFr
 import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
 import { HttpService } from '../core/service/http.service';
 import { environment } from '../../environments/environment';
+import { SurveyPaymentStatus } from '../util/type/survey-type';
 
 @Component({
   selector: 'app-survey-checkout',
@@ -38,8 +39,8 @@ export class SurveyCheckoutComponent implements OnInit {
     // Fetch the payment status of the survey
     const surveyPaymentStatus$ = surveyId$.pipe(
       switchMap(surveyId => {
-        const url = environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId);
-        return this.httpService.get<{ status: string }>(url)
+        const url = environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId)
+        return this.httpService.get<SurveyPaymentStatus>(url)
           .pipe(
             map(response => response?.data?.status || 'unknown'), // Ensure we have a valid status
             catchError(error => {
