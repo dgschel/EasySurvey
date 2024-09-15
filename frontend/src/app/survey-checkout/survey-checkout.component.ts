@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, EMPTY, filter, map, Observable, of, switchMap, withLatestFrom } from 'rxjs';
 
 import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
 import { HttpService } from '../core/service/http.service';
@@ -19,7 +19,7 @@ export class SurveyCheckoutComponent implements OnInit {
   private httpService = inject(HttpService);
   private route = inject(ActivatedRoute);
 
-  surveyStatusHandling$: Observable<string> = EMPTY;
+  surveyStatusHandling$: Observable<{ surveyId: string }> = EMPTY;
 
   errorMessage: string = '';
 
@@ -53,9 +53,10 @@ export class SurveyCheckoutComponent implements OnInit {
 
     // Branch logic based on payment status
     this.surveyStatusHandling$ = surveyPaymentStatus$.pipe(
-      switchMap(status => {
+      withLatestFrom(surveyId$),
+      switchMap(([status, surveyId]) => {
         if (status === 'not paid') {
-          return of(status); // Proceed with Stripe checkout flow
+          return of({ surveyId }); // Proceed with Stripe checkout flow
         } else if (status === 'paid') {
           this.errorMessage = "This survey has already been paid. Redirecting...";
           // Handle redirect or display additional message, return EMPTY to stop further processing
