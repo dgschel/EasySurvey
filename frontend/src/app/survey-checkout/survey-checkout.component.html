@@ -3,12 +3,13 @@
 
   <!-- Fetch the survey payment status by using async pipe -->
   <ng-container *ngIf="surveyStatusHandling$ | async as survey">
-    <div *ngIf="errorMessage" class="text-warning">{{ errorMessage }}</div>
 
-    <div *ngIf="!(errorMessage)">
-      <!-- Start the stripe checkout session if survey was found and not paid -->
-      <app-stripe-checkout [surveyId]="survey.surveyId"></app-stripe-checkout>
-    </div>
+    <!-- Start the stripe checkout session if survey was found and not paid -->
+    <app-stripe-checkout *ngIf="!(errorMessage)" [surveyId]="survey.surveyId" />
+
   </ng-container>
+
+  <!-- Display error message if there is any -->
+  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
 
 </div>

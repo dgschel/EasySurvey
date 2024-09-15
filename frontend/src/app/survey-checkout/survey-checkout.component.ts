@@ -8,11 +8,12 @@ import { StripeCheckoutComponent } from '../core/component/stripe-checkout/strip
 import { HttpService } from '../core/service/http.service';
 import { environment } from '../../environments/environment';
 import { SurveyPaymentStatus } from '../util/type/survey-type';
+import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-survey-checkout',
   standalone: true,
-  imports: [StripeCheckoutComponent, NgIf, AsyncPipe],
+  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, NgIf, AsyncPipe],
   templateUrl: './survey-checkout.component.html',
   styleUrl: './survey-checkout.component.scss'
 })
