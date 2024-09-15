@@ -1,12 +1,9 @@
 import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
-import { EMPTY, from, switchMap, map, Observable, catchError, withLatestFrom, of, filter } from 'rxjs';
+import { EMPTY, from, switchMap, map, Observable, catchError, of } from 'rxjs';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
-import { HttpService } from '../../service/http.service';
-import { environment } from '../../../../environments/environment';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
 import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 
