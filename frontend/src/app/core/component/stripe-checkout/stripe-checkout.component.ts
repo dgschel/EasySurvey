@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 import { EMPTY, from, switchMap, map, Observable, catchError, of } from 'rxjs';
@@ -8,6 +8,7 @@ import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
 import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 import { BasicCardComponent } from "../../../shared/ui/basic-card/basic-card.component";
+import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-stripe-checkout',
@@ -23,6 +24,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
   private stripeService = inject(StripeCheckoutService);
 
   checkout$: Observable<void> = EMPTY;
+  stripeEmbeddedCheckout: StripeEmbeddedCheckout | null = null;
   errorMessage: string = '';
 
   ngOnInit() {
@@ -63,6 +65,10 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
           console.error("Error: Stripe checkout could not be initialized");
           return;
         }
+        
+        // Store the Stripe Checkout instance for cleanup
+        this.stripeEmbeddedCheckout = checkout;
+
         return checkout.mount('#checkout'); // Mount Stripe checkout form if all is well
       }),
       catchError(error => {
@@ -75,5 +81,9 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.iconReg.unloadSvg('stripe_wordmark');
+
+    // Unmount and destroy Stripe Checkout embedded form
+    this.stripeEmbeddedCheckout?.unmount();
+    this.stripeEmbeddedCheckout?.destroy();
   }
 }
