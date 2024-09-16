@@ -1,22 +1,25 @@
 <div class="container mx-auto max-w-screen-lg grid gap-4">
 
   <!-- Fetch the survey payment status by using async pipe -->
-  <ng-container *ngIf="surveyStatusHandling$ | async as survey">
+  @if (surveyStatusHandling$ | async; as survey) {
 
-    <!-- Display user-friendly message with a qr-code to view the survey -->
-    <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
+  <!-- Display user-friendly message with a qr-code to view the survey -->
+  <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
 
-    <!-- Start the stripe checkout session if survey was found and not paid -->
-    <app-stripe-checkout *ngIf="survey.status === 'not paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
+  <!-- Start the stripe checkout session if survey was found and not paid -->
+  <app-stripe-checkout *ngIf="survey.status === 'not paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
 
-  </ng-container>
+  } @else if (errorMessage) {
 
-  <ng-container *ngIf="errorMessage">
-    <!-- Display error message if any -->
-    <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
-    <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
-      Zurück zur Startseite
-    </a>
-  </ng-container>
+  <!-- Display error message if any -->
+  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+  <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
+    Zurück zur Startseite
+  </a>
+
+  } @else {
+  <!-- Display loading spinner -->
+  <app-loading />
+  }
 
 </div>

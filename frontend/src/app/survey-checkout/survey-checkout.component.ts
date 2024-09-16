@@ -10,11 +10,12 @@ import { environment } from '../../environments/environment';
 import { SurveyPaymentStatus } from '../util/type/survey-type';
 import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
 import { DisplayAlreadyPaidComponent } from '../shared/ui/display-already-paid/display-already-paid.component';
+import { LoadingComponent } from '../shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-survey-checkout',
   standalone: true,
-  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, DisplayAlreadyPaidComponent, NgIf, AsyncPipe, RouterLink],
+  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, DisplayAlreadyPaidComponent, NgIf, AsyncPipe, RouterLink, LoadingComponent],
   templateUrl: './survey-checkout.component.html',
   styleUrl: './survey-checkout.component.scss'
 })
