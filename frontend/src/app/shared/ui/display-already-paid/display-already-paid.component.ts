@@ -31,7 +31,7 @@ export class DisplayAlreadyPaidComponent implements OnInit {
     this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
       map(({ data }) => data.svg),
       catchError(error => {
-        this.errorMessage = "Es ist ein fehler beim Abrufen des QR-Codes für die Umfrage aufgetreten";
+        this.errorMessage = "Es ist ein fehler beim Abrufen des QR-Codes für die Umfrage aufgetreten, Bitte versuchen Sie es später erneut";
         console.error("Error fetching QR-Code for survey:", error);
         return EMPTY;
       })
