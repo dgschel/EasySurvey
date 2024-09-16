@@ -1,14 +1,17 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+
+import { catchError, EMPTY, map, Observable } from 'rxjs';
+
+import { environment } from '../../../../environments/environment';
 import { HttpService } from '../../../core/service/http.service';
 import { DisplayQrCodeComponent } from '../display-qr-code/display-qr-code.component';
-import { environment } from '../../../../environments/environment';
-import { EMPTY, map, Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-display-already-paid',
   standalone: true,
-  imports: [DisplayQrCodeComponent, AsyncPipe],
+  imports: [DisplayQrCodeComponent, DisplayErrorMessageComponent, AsyncPipe, NgIf],
   templateUrl: './display-already-paid.component.html',
   styleUrl: './display-already-paid.component.scss'
 })
@@ -17,13 +20,18 @@ export class DisplayAlreadyPaidComponent implements OnInit {
 
   private httpService = inject(HttpService);
   qrCodeResponse$: Observable<string> = EMPTY;
+  errorMessage: string = '';
 
   ngOnInit(): void {
-    // Display message with QR-Code indicating that the survey has already been paid
-    console.log(`Survey with id ${this.surveyId} has already been paid`);
-
     // Fetch the QR-Code for the survey
     const path = `survey/${this.surveyId}/viewform`;
-    this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(map(({ data }) => data.svg));
+    this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
+      map(({ data }) => data.svg),
+      catchError(error => {
+        this.errorMessage = "Es ist ein fehler beim Abrufen des QR-Codes für die Umfrage aufgetreten";
+        console.error("Error fetching QR-Code for survey:", error);
+        return EMPTY;
+      })
+    );
   }
 }
