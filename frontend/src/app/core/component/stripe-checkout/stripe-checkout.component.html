@@ -13,8 +13,12 @@
   <!-- Start the stripe checkout session by using async pipe -->
   <ng-container *ngIf="checkout$ | async"></ng-container>
 
-  <!-- Placeholder by stripe to insert embedded checkout form -->
-  <div class="skeleton" #checkout></div>
+  <app-basic-card>
+    <div class="card-body">
+      <!-- Placeholder by stripe to insert embedded checkout form -->
+      <div class="skeleton" id="checkout"></div>
+    </div>
+  </app-basic-card>
 
   <!-- Display error message if there is any -->
   <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage"></app-display-error-message>

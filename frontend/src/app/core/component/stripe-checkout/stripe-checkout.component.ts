@@ -7,11 +7,12 @@ import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
 import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
+import { BasicCardComponent } from "../../../shared/ui/basic-card/basic-card.component";
 
 @Component({
   selector: 'app-stripe-checkout',
   standalone: true,
-  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent],
+  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent, BasicCardComponent],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
@@ -20,7 +21,6 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
 
   private iconReg = inject(SvgIconRegistryService);
   private stripeService = inject(StripeCheckoutService);
-  @ViewChild('checkout') stripeCheckoutElement!: ElementRef<HTMLDivElement>;
 
   checkout$: Observable<void> = EMPTY;
   errorMessage: string = '';
@@ -63,7 +63,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
           console.error("Error: Stripe checkout could not be initialized");
           return;
         }
-        return checkout.mount(this.stripeCheckoutElement.nativeElement); // Mount Stripe checkout form if all is well
+        return checkout.mount('#checkout'); // Mount Stripe checkout form if all is well
       }),
       catchError(error => {
         this.errorMessage = "Error in the checkout process";
