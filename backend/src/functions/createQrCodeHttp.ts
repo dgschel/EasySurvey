@@ -39,6 +39,6 @@ export async function createQRCodeHttp(request: HttpRequest, context: Invocation
 
 app.http('createQRCodeHttp', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    authLevel: 'function',
     handler: createQRCodeHttp
 });
