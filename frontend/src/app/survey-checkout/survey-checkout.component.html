@@ -1,5 +1,4 @@
-<div class="container max-w-screen-lg mx-auto">
-  <h1 class="text-2xl font-bold text-center">Stripe Checkout</h1>
+<div class="container mx-auto max-w-screen-lg grid gap-4">
 
   <!-- Fetch the survey payment status by using async pipe -->
   <ng-container *ngIf="surveyStatusHandling$ | async as survey">
@@ -12,7 +11,12 @@
 
   </ng-container>
 
-  <!-- Display error message if there is any -->
-  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+  <ng-container *ngIf="errorMessage">
+    <!-- Display error message if any -->
+    <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+    <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
+      Zurück zur Startseite
+    </a>
+  </ng-container>
 
 </div>
