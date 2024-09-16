@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 import { catchError, EMPTY, map, Observable } from 'rxjs';
@@ -7,11 +8,12 @@ import { environment } from '../../../../environments/environment';
 import { HttpService } from '../../../core/service/http.service';
 import { DisplayQrCodeComponent } from '../display-qr-code/display-qr-code.component';
 import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
+import { BasicCardComponent } from '../basic-card/basic-card.component';
 
 @Component({
   selector: 'app-display-already-paid',
   standalone: true,
-  imports: [DisplayQrCodeComponent, DisplayErrorMessageComponent, AsyncPipe, NgIf],
+  imports: [DisplayQrCodeComponent, DisplayErrorMessageComponent, AsyncPipe, NgIf, BasicCardComponent, RouterLink],
   templateUrl: './display-already-paid.component.html',
   styleUrl: './display-already-paid.component.scss'
 })
