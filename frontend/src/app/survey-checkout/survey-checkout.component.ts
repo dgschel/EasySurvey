@@ -9,11 +9,12 @@ import { HttpService } from '../core/service/http.service';
 import { environment } from '../../environments/environment';
 import { SurveyPaymentStatus } from '../util/type/survey-type';
 import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
+import { DisplayAlreadyPaidComponent } from '../shared/ui/display-already-paid/display-already-paid.component';
 
 @Component({
   selector: 'app-survey-checkout',
   standalone: true,
-  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, NgIf, AsyncPipe],
+  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, DisplayAlreadyPaidComponent, NgIf, AsyncPipe],
   templateUrl: './survey-checkout.component.html',
   styleUrl: './survey-checkout.component.scss'
 })
@@ -21,7 +22,7 @@ export class SurveyCheckoutComponent implements OnInit {
   private httpService = inject(HttpService);
   private route = inject(ActivatedRoute);
 
-  surveyStatusHandling$: Observable<{ surveyId: string }> = EMPTY;
+  surveyStatusHandling$: Observable<{ status: SurveyPaymentStatus['status'], surveyId: string }> = EMPTY;
 
   errorMessage: string = '';
 
@@ -60,17 +61,18 @@ export class SurveyCheckoutComponent implements OnInit {
     const notPaid$ = surveyPaymentStatus$.pipe(
       withLatestFrom(surveyId$),
       filter(([status]) => status === 'not paid'),
-      map(([_, surveyId]) => ({ surveyId }))
+      map(([status, surveyId]) => ({ status, surveyId }))
     );
 
     // Handle case where survey has already been paid
     const paid$ = surveyPaymentStatus$.pipe(
-      filter(status => status === 'paid'),
-      tap(() => {
-        this.errorMessage = "This survey has already been paid. Redirecting...";
-        // Handle redirect or display additional message
-      }),
-      ignoreElements()
+      withLatestFrom(surveyId$),
+      filter(([status]) => status === 'paid'),
+      // tap(() => {
+      //   this.errorMessage = "This survey has already been paid. Redirecting...";
+      //   // Handle redirect or display additional message
+      // }),
+      map(([status, surveyId]) => ({ status, surveyId })),
     );
 
     // Handle unexpected payment status
