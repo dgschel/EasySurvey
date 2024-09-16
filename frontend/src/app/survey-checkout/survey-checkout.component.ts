@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
-import { catchError, EMPTY, filter, ignoreElements, map, merge, Observable, of, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, EMPTY, filter, map, merge, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
 
 import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
 import { HttpService } from '../core/service/http.service';
@@ -14,7 +14,7 @@ import { DisplayAlreadyPaidComponent } from '../shared/ui/display-already-paid/d
 @Component({
   selector: 'app-survey-checkout',
   standalone: true,
-  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, DisplayAlreadyPaidComponent, NgIf, AsyncPipe],
+  imports: [StripeCheckoutComponent, DisplayErrorMessageComponent, DisplayAlreadyPaidComponent, NgIf, AsyncPipe, RouterLink],
   templateUrl: './survey-checkout.component.html',
   styleUrl: './survey-checkout.component.scss'
 })
@@ -46,11 +46,9 @@ export class SurveyCheckoutComponent implements OnInit {
           .pipe(
             map(({ data }) => data.status),
             catchError(error => {
-              this.errorMessage = "Survey not found or has been archived";
-              console.error("Survey not found or has been archived:", error);
-
-              const surveyPaymentStatus: SurveyPaymentStatus = { status: 'unknown' };
-              return of(surveyPaymentStatus.status); // Return a fallback value
+              this.errorMessage = "Umfrage nicht gefunden oder wurde archiviert";
+              console.error("Survey not found or has been archived", error);
+              return EMPTY; // Stop further processing if survey is not found, corrupted or has been archived
             })
           )
       }),
@@ -72,15 +70,6 @@ export class SurveyCheckoutComponent implements OnInit {
       map(([status, surveyId]) => ({ status, surveyId })),
     );
 
-    // Handle unexpected payment status
-    const unexpectedStatus$ = surveyPaymentStatus$.pipe(
-      filter(status => status !== 'not paid' && status !== 'paid'),
-      tap(() => {
-        this.errorMessage = "Survey not found or has been archived";
-      }),
-      ignoreElements()
-    );
-
-    this.surveyStatusHandling$ = merge(notPaid$, paid$, unexpectedStatus$);
+    this.surveyStatusHandling$ = merge(notPaid$, paid$);
   }
 }
