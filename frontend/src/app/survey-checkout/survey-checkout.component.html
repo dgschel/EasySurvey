@@ -4,7 +4,7 @@
   <!-- Fetch the survey payment status by using async pipe -->
   <ng-container *ngIf="surveyStatusHandling$ | async as survey">
 
-    <!-- Start the stripe checkout session if survey was found and not paid -->
+    <!-- Display user-friendly message with a qr-code to view the survey -->
     <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
 
     <!-- Start the stripe checkout session if survey was found and not paid -->
