@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
-import { catchError, EMPTY, filter, ignoreElements, map, merge, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, EMPTY, filter, ignoreElements, map, merge, Observable, of, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
 import { HttpService } from '../core/service/http.service';
@@ -53,7 +53,8 @@ export class SurveyCheckoutComponent implements OnInit {
               return of(surveyPaymentStatus.status); // Return a fallback value
             })
           )
-      })
+      }),
+      shareReplay(1) // Ensure that the payment request is shared across multiple subscribers
     );
 
     // Handle case where survey has not been paid
@@ -68,10 +69,6 @@ export class SurveyCheckoutComponent implements OnInit {
     const paid$ = surveyPaymentStatus$.pipe(
       withLatestFrom(surveyId$),
       filter(([status]) => status === 'paid'),
-      // tap(() => {
-      //   this.errorMessage = "This survey has already been paid. Redirecting...";
-      //   // Handle redirect or display additional message
-      // }),
       map(([status, surveyId]) => ({ status, surveyId })),
     );
 
