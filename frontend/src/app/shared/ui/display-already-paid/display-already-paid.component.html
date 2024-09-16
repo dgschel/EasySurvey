@@ -1,1 +1,7 @@
 <p>display-already-paid works!</p>
+
+@if (qrCodeResponse$ | async; as svg) {
+<app-display-qr-code [qrCode]="svg" />
+}
+
+<app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
