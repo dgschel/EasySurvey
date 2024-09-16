@@ -21,6 +21,8 @@
 
   </app-basic-card>
 </div>
+} @else {
+<app-loading />
 }
 
 <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />

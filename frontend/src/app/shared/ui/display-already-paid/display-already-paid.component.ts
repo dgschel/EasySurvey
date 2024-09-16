@@ -9,11 +9,12 @@ import { HttpService } from '../../../core/service/http.service';
 import { DisplayQrCodeComponent } from '../display-qr-code/display-qr-code.component';
 import { DisplayErrorMessageComponent } from '../display-error-message/display-error-message.component';
 import { BasicCardComponent } from '../basic-card/basic-card.component';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-display-already-paid',
   standalone: true,
-  imports: [DisplayQrCodeComponent, DisplayErrorMessageComponent, AsyncPipe, NgIf, BasicCardComponent, RouterLink],
+  imports: [DisplayQrCodeComponent, DisplayErrorMessageComponent, AsyncPipe, NgIf, BasicCardComponent, RouterLink, LoadingComponent],
   templateUrl: './display-already-paid.component.html',
   styleUrl: './display-already-paid.component.scss'
 })
