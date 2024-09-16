@@ -5,7 +5,7 @@
   <ng-container *ngIf="surveyStatusHandling$ | async as survey">
 
     <!-- Start the stripe checkout session if survey was found and not paid -->
-    <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" />
+    <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
 
     <!-- Start the stripe checkout session if survey was found and not paid -->
     <app-stripe-checkout *ngIf="survey.status === 'not paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
