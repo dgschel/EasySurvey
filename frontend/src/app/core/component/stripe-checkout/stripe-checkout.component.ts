@@ -1,7 +1,8 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 import { EMPTY, from, switchMap, map, Observable, catchError, of } from 'rxjs';
+import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
@@ -10,13 +11,14 @@ import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-m
 @Component({
   selector: 'app-stripe-checkout',
   standalone: true,
-  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent],
+  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
-export class StripeCheckoutComponent implements OnInit {
+export class StripeCheckoutComponent implements OnInit, OnDestroy {
   @Input('surveyId') surveyId: string = '';
 
+  private iconReg = inject(SvgIconRegistryService);
   private stripeService = inject(StripeCheckoutService);
   @ViewChild('checkout') stripeCheckoutElement!: ElementRef<HTMLDivElement>;
 
@@ -24,6 +26,8 @@ export class StripeCheckoutComponent implements OnInit {
   errorMessage: string = '';
 
   ngOnInit() {
+    this.iconReg.loadSvg('/svg/stripe_wordmark.svg', 'stripe_wordmark')?.subscribe();
+
     // Fetch client secret for Stripe Checkout
     const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
       catchError(error => {
@@ -67,5 +71,9 @@ export class StripeCheckoutComponent implements OnInit {
         return of(error); // Handle any other unexpected errors
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.iconReg.unloadSvg('stripe_wordmark');
   }
 }
