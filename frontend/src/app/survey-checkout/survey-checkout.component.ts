@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, Observable, of, switchMap, withLatestFrom } from 'rxjs';
+import { catchError, EMPTY, filter, ignoreElements, map, merge, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
 import { HttpService } from '../core/service/http.service';
@@ -47,7 +47,7 @@ export class SurveyCheckoutComponent implements OnInit {
             catchError(error => {
               this.errorMessage = "Survey not found or has been archived";
               console.error("Survey not found or has been archived:", error);
-              
+
               const surveyPaymentStatus: SurveyPaymentStatus = { status: 'unknown' };
               return of(surveyPaymentStatus.status); // Return a fallback value
             })
@@ -55,21 +55,33 @@ export class SurveyCheckoutComponent implements OnInit {
       })
     );
 
-    // Branch logic based on payment status
-    this.surveyStatusHandling$ = surveyPaymentStatus$.pipe(
+    // Handle case where survey has not been paid
+    // Proceed to Stripe Checkout
+    const notPaid$ = surveyPaymentStatus$.pipe(
       withLatestFrom(surveyId$),
-      switchMap(([status, surveyId]) => {
-        if (status === 'not paid') {
-          return of({ surveyId }); // Proceed with Stripe checkout flow
-        } else if (status === 'paid') {
-          this.errorMessage = "This survey has already been paid. Redirecting...";
-          // Handle redirect or display additional message, return EMPTY to stop further processing
-          return EMPTY;
-        } else {
-          this.errorMessage = "Survey not found or has been archived";
-          return EMPTY; // Stop further processing for any unexpected status
-        }
-      })
+      filter(([status]) => status === 'not paid'),
+      map(([_, surveyId]) => ({ surveyId }))
     );
+
+    // Handle case where survey has already been paid
+    const paid$ = surveyPaymentStatus$.pipe(
+      filter(status => status === 'paid'),
+      tap(() => {
+        this.errorMessage = "This survey has already been paid. Redirecting...";
+        // Handle redirect or display additional message
+      }),
+      ignoreElements()
+    );
+
+    // Handle unexpected payment status
+    const unexpectedStatus$ = surveyPaymentStatus$.pipe(
+      filter(status => status !== 'not paid' && status !== 'paid'),
+      tap(() => {
+        this.errorMessage = "Survey not found or has been archived";
+      }),
+      ignoreElements()
+    );
+
+    this.surveyStatusHandling$ = merge(notPaid$, paid$, unexpectedStatus$);
   }
 }
