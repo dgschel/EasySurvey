@@ -1,4 +1,4 @@
-<canvas #canvas class="fixed z-50"></canvas>
+<canvas #canvas class="fixed z-10"></canvas>
 <div class="grid gap-2 max-w-screen-sm mx-auto mt-10 text-center">
   <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex justify-center text-success"></svg-icon>
   <span class="text-sm text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
@@ -23,7 +23,7 @@
         <div class="divider mt-0">oder</div>
 
         <!-- Continue to view survey -->
-        <button type="button" class="btn btn-success w-full mx-auto"
+        <button type="button" class="btn btn-success w-full mx-auto z-20"
           [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'viewform']">
           Weiter zum Formular
         </button>
