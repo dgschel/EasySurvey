@@ -1,3 +1,39 @@
-<div class="max-w-screen-md mx-auto">
-  <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex text-success"></svg-icon>
+<div class="grid gap-2 max-w-screen-md mx-auto text-center">
+  <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex justify-center text-success"></svg-icon>
+  <span class="text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
+  <h2 class="text-xl font-bold my-2">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
+  <div class="text-sm">
+    <span class="text-gray-500">Formular-ID: </span>
+    <span class="font-medium">{{ stripeCheckoutSession.surveyId }}</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <app-basic-card>
+    <div class="card-body text-center">
+      @if (qrCodeResponse$ | async; as svg) {
+      <div class="text-lg font-medium">QR-Code scannen</div>
+      <p class="max-w-40">Scannen oder teilen Sie den folgenden QR-Code </p>
+      <div class="w-60 mx-auto">
+        <app-display-qr-code [qrCode]="svg" />
+      </div>
+      <button type="button" class="btn btn-success"
+        [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'viewform']">
+        Weiter zum Formular
+      </button>
+      } @else {
+      <div class="skeleton h-40 w-40 mx-auto"></div>
+      }
+    </div>
+  </app-basic-card>
+
+  <!-- Nächste Schritte -->
+  <div>
+    <p><strong>Nächste Schritte:</strong></p>
+    <ul>
+      <li>Überprüfen Sie Ihr Formular, indem Sie den QR-Code scannen</li>
+      <li>Teilen Sie den QR-Code mit anderen, um das Formular zugänglich zu machen</li>
+      <li>Falls Sie Rückfragen haben, wenden Sie sich an unseren Support mit Ihrer Formular-ID.</li>
+    </ul>
+  </div>
 </div>
