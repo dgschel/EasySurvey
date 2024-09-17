@@ -1,15 +1,13 @@
-<div class="grid gap-2 max-w-screen-md mx-auto mt-10 text-center">
+<div class="grid gap-2 max-w-screen-sm mx-auto mt-10 text-center">
   <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex justify-center text-success"></svg-icon>
-  <span class="text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
+  <span class="text-sm text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
   <h2 class="text-xl font-bold mb-2">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
   <div class="text-xs">
     <span class="text-gray-500 uppercase">Formular-ID: </span>
     <span class="font-medium">{{ stripeCheckoutSession.surveyId }}</span>
   </div>
 
-  <div class="divider"></div>
-
-  <div class="w-full max-w-sm mx-auto">
+  <div class="mt-4 w-full max-w-sm mx-auto">
     <app-basic-card>
       <div class="card-body text-center">
         @if (qrCodeResponse$ | async; as svg) {
