@@ -51,8 +51,12 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
     this.canvas.nativeElement.height = window.innerHeight;
 
     setTimeout(() => {
-      this.confettiService.celebrate(this.canvas.nativeElement)
-    }, 750);
+      this.confettiService.celebrate(this.canvas.nativeElement, {
+        particleCount: 100,
+        disableForReducedMotion: true,
+        spread: 60,
+      })
+    }, 250);
   }
 
   ngOnDestroy(): void {
