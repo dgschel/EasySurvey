@@ -1,5 +1,5 @@
 export type StripeCheckoutSessionStatus = {
-  status: string;
+  status: "complete" | "expired" | "open"; // The status of the Stripe Checkout session
   customerEmail: string;
   surveyId: string;
 };
