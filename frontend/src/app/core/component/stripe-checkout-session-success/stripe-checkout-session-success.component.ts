@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.com
 import { DisplayQrCodeComponent } from '../../../shared/ui/display-qr-code/display-qr-code.component';
 import { HttpService } from '../../service/http.service';
 import { environment } from '../../../../environments/environment';
+import { ConfettiService } from '../../service/confetti.service';
 
 @Component({
   selector: 'app-stripe-checkout-session-success',
@@ -20,6 +21,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class StripeCheckoutSessionSuccessComponent implements OnInit {
   @Input({ required: true }) stripeCheckoutSession!: StripeCheckoutSessionStatus;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
+
+  private confettiService = inject(ConfettiService);
   private iconReg = inject(SvgIconRegistryService);
   private httpService = inject(HttpService);
   qrCodeResponse$: Observable<string> = EMPTY;
@@ -39,6 +43,16 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
         return EMPTY;
       })
     )
+  }
+
+  ngAfterViewInit(): void {
+    // Display the confetti animation. The canvas is resized to fit the window size and minus 32px padding
+    this.canvas.nativeElement.width = window.innerWidth - 32;
+    this.canvas.nativeElement.height = window.innerHeight;
+
+    setTimeout(() => {
+      this.confettiService.celebrate(this.canvas.nativeElement)
+    }, 750);
   }
 
   ngOnDestroy(): void {
