@@ -55,6 +55,7 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
         particleCount: 100,
         disableForReducedMotion: true,
         spread: 60,
+        origin: { y: 0.6 }
       })
     }, 250);
   }
