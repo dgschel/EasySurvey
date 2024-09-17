@@ -13,14 +13,21 @@
     <div class="card-body text-center">
       @if (qrCodeResponse$ | async; as svg) {
       <div class="text-lg font-medium">QR-Code scannen</div>
-      <p class="max-w-40">Scannen oder teilen Sie den folgenden QR-Code </p>
+      <p class="max-w-40 mx-auto">Scannen oder teilen Sie den folgenden QR-Code </p>
+
+      <!-- Display QR-Code  -->
       <div class="w-60 mx-auto">
         <app-display-qr-code [qrCode]="svg" />
       </div>
+
+      <div class="divider mt-0">oder</div>
+
+      <!-- Continue to view survey -->
       <button type="button" class="btn btn-success"
         [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'viewform']">
         Weiter zum Formular
       </button>
+
       } @else {
       <div class="skeleton h-40 w-40 mx-auto"></div>
       }
@@ -28,12 +35,10 @@
   </app-basic-card>
 
   <!-- Nächste Schritte -->
-  <div>
-    <p><strong>Nächste Schritte:</strong></p>
-    <ul>
-      <li>Überprüfen Sie Ihr Formular, indem Sie den QR-Code scannen</li>
-      <li>Teilen Sie den QR-Code mit anderen, um das Formular zugänglich zu machen</li>
-      <li>Falls Sie Rückfragen haben, wenden Sie sich an unseren Support mit Ihrer Formular-ID.</li>
-    </ul>
-  </div>
+  <h3 class="mt-20 text-left text-lg font-semibold">Nächste Schritte:</h3>
+  <ul class="text-left list-disc list-inside space-y-1">
+    <li>Überprüfen Sie Ihr Formular, indem Sie den QR-Code scannen</li>
+    <li>Teilen Sie den QR-Code mit anderen, um das Formular zugänglich zu machen</li>
+    <li>Falls Sie Rückfragen haben, wenden Sie sich an unseren Support mit Ihrer Formular-ID</li>
+  </ul>
 </div>
