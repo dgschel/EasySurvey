@@ -1,1 +1,18 @@
-<p>stripe-checkout-session works!</p>
+@if (stripeCheckoutSession$ | async; as stripeCheckoutSession) {
+
+  @switch (stripeCheckoutSession.status) {
+    @case ('complete') {
+    <app-stripe-checkout-session-success [stripeCheckoutSession]="stripeCheckoutSession" />
+    }
+    @case ('open') {
+      <app-stripe-checkout-session-failure />
+    }
+    @default {
+      error
+      <!-- <app-display-error-message [errorMessage]="stripeCheckoutSession.errorMessage" /> -->
+    }
+  }
+  
+} @else {
+  <app-loading></app-loading>
+}
