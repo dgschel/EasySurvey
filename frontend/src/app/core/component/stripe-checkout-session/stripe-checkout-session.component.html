@@ -5,7 +5,7 @@
     <app-stripe-checkout-session-success [stripeCheckoutSession]="stripeCheckoutSession" />
     }
     @case ('open') {
-      <app-stripe-checkout-session-failure />
+      <app-stripe-checkout-session-failure [surveyId]="stripeCheckoutSession.surveyId" />
     }
     @default {
       error
