@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { SurveyModel, SurveyName } from '../../../../util/type/survey-type';
-import { ViewSurveyGroupComponent } from '../../view-survey-group/view-survey-group.component';
-import { SurveyTemplateManager } from '../../../../core/model/survey-template-manager';
+import { SurveyModel, SurveyName } from '../../../../../util/type/survey-type';
+import { ViewSurveyGroupComponent } from '../../../view-survey-group/view-survey-group.component';
+import { SurveyTemplateManager } from '../../../../../core/model/survey-template-manager';
 
 @Component({
   selector: 'app-preview-survey',
