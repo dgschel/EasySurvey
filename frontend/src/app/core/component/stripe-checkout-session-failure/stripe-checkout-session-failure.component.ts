@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-stripe-checkout-session-failure',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DisplayErrorMessageComponent],
   templateUrl: './stripe-checkout-session-failure.component.html',
   styleUrl: './stripe-checkout-session-failure.component.scss'
 })
