@@ -21,6 +21,7 @@ const surveyInput = input.cosmosDB({
     databaseName: 'SurveyDB',
     containerName: 'Survey',
     connection: 'cosmosDbConnection',
+    id: '{surveyId}', // Use both parameter to fetch a single survey as per documentation
     partitionKey: '{surveyId}',
 });
 
@@ -28,27 +29,34 @@ export async function getSurveyStatisticHttp(request: HttpRequest, context: Invo
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-        const surveys = context.extraInputs.get(surveyInput);
+        // Get the survey with the surveyId
+        const survey = context.extraInputs.get(surveyInput);
 
-        if (Array.isArray(surveys) && surveys.length === 0) {
+        // Check if there is a survey
+        if (survey === undefined || survey === null || typeof survey !== 'object') {
             context.log(`Survey not found for id ${request.params.surveyId}`);
             throw new Error(`Survey not found for id ${request.params.surveyId}`);
         }
 
-        const parsedSurvey = SurveyCosmosDbSchema.array().parse(surveys).at(0); // There should only be one survey since we are querying by id
+        // Try to parse the survey data
+        const parsedSurvey = SurveyCosmosDbSchema.parse(survey);
         const models = SurveyModelSchema.array().parse(parsedSurvey.models); // Parse the survey models submission types ['radio', 'checkbox', ...]
 
+        // Get the survey statistic and submissions
         const surveyStatistic = context.extraInputs.get(blobInput);
         const submissions = context.extraInputs.get(submissionInput);
 
+        // Validate the survey statistic and submission data
         const parsedSurveyStatistic = SurveyStatisticSchema.safeParse(surveyStatistic);
         const parsedSubmission = SubmissionSchema.pick({ submission: true }).array().safeParse(submissions);
 
+        // Check if the data is valid
         if (!parsedSurveyStatistic.success) {
             context.log(`Validation errors:`, parsedSurveyStatistic.error.errors);
             throw new Error("Survey statistic data is invalid");
         }
 
+        // Check if the data is valid
         if (!parsedSubmission.success) {
             context.log(`Validation errors:`, parsedSubmission.error.errors);
             throw new Error("Submission data is invalid");
