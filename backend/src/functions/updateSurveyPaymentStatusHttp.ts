@@ -18,9 +18,44 @@ const surveyOutput = output.cosmosDB({
 export async function updateSurveyPaymentStatusHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
 
-    const name = request.query.get('name') || await request.text() || 'world';
+    try {
+        // Get the survey with the surveyId
+        const survey = context.extraInputs.get(surveyInput);
 
-    return { body: `Hello, ${name}!` };
+        // Check if there is a survey
+        if (survey === undefined || survey === null || typeof survey !== 'object') {
+            context.log(`Survey not found for id ${request.params.surveyId}`);
+            throw new Error(`Survey not found for id ${request.params.surveyId}`);
+        }
+
+        // Try to parse the survey data
+        const parsedSurvey = SurveyCosmosDbSchema.safeParse(survey);
+
+        // Validate the survey data using zod schema definition
+        if (!parsedSurvey.success) {
+            context.log(`Validation errors:`, parsedSurvey.error.errors);
+            throw new Error("Survey data is invalid");
+        }
+
+        // Update the survey status
+        context.extraOutputs.set(surveyOutput, { ...parsedSurvey.data, status: 'paid' });
+
+        return {
+            jsonBody: {
+                message: `Survey payment status updated successfully`,
+            },
+            status: 200 // Return 200 status code for updated ressource
+        }
+
+    } catch (error) {
+        return {
+            jsonBody: {
+                message: `Failed to update Survey payment status`,
+                error: error.message || "An unexpected error occurred"
+            },
+            status: 500
+        };
+    }
 };
 
 app.http('updateSurveyPaymentStatusHttp', {
