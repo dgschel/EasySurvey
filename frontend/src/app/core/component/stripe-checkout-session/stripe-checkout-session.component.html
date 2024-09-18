@@ -8,11 +8,23 @@
       <app-stripe-checkout-session-failure [surveyId]="stripeCheckoutSession.surveyId" />
     }
     @default {
-      error
-      <!-- <app-display-error-message [errorMessage]="stripeCheckoutSession.errorMessage" /> -->
+      <!-- 
+        Unexpected stripe payment status. This should never happen since stripe payment status is either 'complete' or 'open'
+      -->
+      <div class="grid gap-4 container max-w-screen-sm mx-auto">
+        <app-display-error-message errorMessage="Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren" />
+        <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+      </div>
     }
   }
   
-} @else {
+} @else if (errorMessage) {
+  <div class="grid gap-4 container max-w-screen-sm mx-auto">
+    <app-display-error-message [errorMessage]="errorMessage" />
+    <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+  </div>
+}
+
+@else {
   <app-loading></app-loading>
 }

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
@@ -10,11 +10,12 @@ import { LoadingComponent } from '../../../shared/ui/loading/loading.component';
 import { StripeCheckoutSessionStatus } from '../../../util/type/stripe';
 import { StripeCheckoutSessionSuccessComponent } from '../stripe-checkout-session-success/stripe-checkout-session-success.component';
 import { StripeCheckoutSessionFailureComponent } from '../stripe-checkout-session-failure/stripe-checkout-session-failure.component';
+import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 
 @Component({
   selector: 'app-stripe-checkout-session',
   standalone: true,
-  imports: [AsyncPipe, LoadingComponent, StripeCheckoutSessionSuccessComponent, StripeCheckoutSessionFailureComponent],
+  imports: [RouterLink, AsyncPipe, LoadingComponent, DisplayErrorMessageComponent, StripeCheckoutSessionSuccessComponent, StripeCheckoutSessionFailureComponent],
   templateUrl: './stripe-checkout-session.component.html',
   styleUrl: './stripe-checkout-session.component.scss'
 })
