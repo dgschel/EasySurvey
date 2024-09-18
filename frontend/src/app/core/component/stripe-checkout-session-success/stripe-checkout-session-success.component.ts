@@ -54,9 +54,14 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
       this.confettiService.celebrate(this.canvas.nativeElement, {
         particleCount: 100,
         disableForReducedMotion: true,
+        ticks: 100,
         spread: 60,
         origin: { y: 0.6 }
-      })
+      })?.finally(() => {
+        // Reset the canvas z-index to -10 to prevent it from blocking the UI
+        this.canvas.nativeElement.style.zIndex = '-10';
+      });
+
     }, 250);
   }
 
