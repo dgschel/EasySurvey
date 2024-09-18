@@ -1,8 +1,8 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, createComponent, ElementRef, EnvironmentInjector, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { catchError, EMPTY, map, Observable } from 'rxjs';
+import { catchError, delay, EMPTY, map, Observable, take } from 'rxjs';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 
 import { StripeCheckoutSessionStatus } from '../../../util/type/stripe';
@@ -11,6 +11,8 @@ import { DisplayQrCodeComponent } from '../../../shared/ui/display-qr-code/displ
 import { HttpService } from '../../service/http.service';
 import { environment } from '../../../../environments/environment';
 import { ConfettiService } from '../../service/confetti.service';
+import { SurveyUpdatePaymentStatusFailedComponent } from '../../../shared/ui/template/modal/survey-update-payment-status-failed/survey-update-payment-status-failed.component';
+import { ModalService } from '../../service/modal.service';
 
 @Component({
   selector: 'app-stripe-checkout-session-success',
@@ -26,13 +28,13 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
   private confettiService = inject(ConfettiService);
   private iconReg = inject(SvgIconRegistryService);
   private httpService = inject(HttpService);
+  private modalService = inject(ModalService);
+  private environmentInjector = inject(EnvironmentInjector);
+
   qrCodeResponse$: Observable<string> = EMPTY;
 
   ngOnInit(): void {
     this.iconReg.loadSvg('/svg/rosette-discount-check.svg', 'rosette-discount-check')?.subscribe();
-
-    // Display the Stripe Checkout session status
-    console.log('Stripe Checkout session status:', this.stripeCheckoutSession);
 
     // Fetch the QR-Code for the survey
     const path = `survey/${this.stripeCheckoutSession.surveyId}/viewform`;
@@ -43,7 +45,28 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
         return EMPTY;
       })
     )
+
+    // Update the survey payment status
+    const updateSurveyUrl = environment.endpoints.surveyPaymentStatus.replace('{surveyId}', this.stripeCheckoutSession.surveyId);
+    this.httpService.put(updateSurveyUrl).pipe(
+      take(1),
+      delay(1000), // Delay the response to allow the confetti animation to finish
+      catchError((error) => this.handleUpdateSurveyPaymentStatusError(error))
+    ).subscribe();
   }
+
+  private handleUpdateSurveyPaymentStatusError(error: any): Observable<never> {
+    const cmp = createComponent(SurveyUpdatePaymentStatusFailedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('surveyId', this.stripeCheckoutSession.surveyId);
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
+
+    return EMPTY;
+  };
 
   ngAfterViewInit(): void {
     // Display the confetti animation. The canvas is resized to fit the window size and minus 32px padding
