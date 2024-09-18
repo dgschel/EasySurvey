@@ -5,6 +5,8 @@ export async function stripeCheckoutSessionStatusHttp(request: HttpRequest, cont
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
+        // Retrieve the Stripe Checkout session as per documentation
+        // https://docs.stripe.com/checkout/embedded/quickstart
         const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY);
         const session = await stripe.checkout.sessions.retrieve(request.query.get('session_id'));
 
