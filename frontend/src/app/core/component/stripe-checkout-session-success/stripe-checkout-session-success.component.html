@@ -1,10 +1,15 @@
 <canvas #canvas class="fixed z-10"></canvas>
 <div class="grid gap-2 max-w-screen-sm mx-auto mt-10 text-center">
+  <!-- Display success icon -->
   <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex justify-center text-success"></svg-icon>
+
+  <!-- Display success headline message -->
   <span class="text-sm text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
-  <h2 class="text-xl font-medium mb-2">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
-  <div class="text-xs">
-    <span class="text-gray-500 uppercase">Formular-ID: </span>
+  <h2 class="text-xl font-medium">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
+
+  <!-- Display surveyid  -->
+  <div class="text-xs mt-2">
+    <span class="text-gray-500">Formular-ID: </span>
     <span class="font-medium">{{ stripeCheckoutSession.surveyId }}</span>
   </div>
 
@@ -35,9 +40,13 @@
     </app-basic-card>
   </div>
 
+  <!-- Display message to user that an invoice will be sent -->
+  <p class="text-xs mt-1 text-gray-500">Eine Rechnung wird an Ihre angegebene E-Mail gesendet</p>
 
-  <!-- Nächste Schritte -->
-  <h3 class="mt-20 text-left text-lg font-semibold">Nächste Schritte:</h3>
+  <div class="divider my-10"></div>
+
+  <!-- Next steps -->
+  <h3 class="text-left text-lg font-semibold">Nächste Schritte:</h3>
   <ul class="text-left list-disc list-inside space-y-1">
     <li>Überprüfen Sie Ihr Formular, indem Sie den QR-Code scannen</li>
     <li>Teilen Sie den QR-Code mit anderen, um das Formular zugänglich zu machen</li>
