@@ -1,10 +1,18 @@
-import { app, HttpRequest, HttpResponseInit, input, InvocationContext } from "@azure/functions";
+import { app, HttpRequest, HttpResponseInit, input, InvocationContext, output } from "@azure/functions";
+import { SurveyCosmosDbSchema } from "../schemas/survey";
 
 const surveyInput = input.cosmosDB({
     databaseName: 'SurveyDB',
     containerName: 'Survey',
     connection: 'cosmosDbConnection',
+    id: '{surveyId}', // Use both parameter to fetch a single survey as per documentation
     partitionKey: '{surveyId}',
+});
+
+const surveyOutput = output.cosmosDB({
+    databaseName: 'SurveyDB',
+    containerName: 'Survey',
+    connection: 'cosmosDbConnection',
 });
 
 export async function updateSurveyPaymentStatusHttp(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
@@ -20,5 +28,6 @@ app.http('updateSurveyPaymentStatusHttp', {
     route: 'survey/{surveyId}/payment-status',
     authLevel: 'function',
     extraInputs: [surveyInput],
+    extraOutputs: [surveyOutput],
     handler: updateSurveyPaymentStatusHttp
 });
