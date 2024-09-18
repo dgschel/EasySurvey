@@ -33,7 +33,7 @@ export class StripeCheckoutSessionComponent implements OnInit {
       switchMap((session_id: string) => this.httpService.get<StripeCheckoutSessionStatus>(environment.endpoints.stripeCheckoutSessionStatus, { session_id })),
       map(({ data }) => data),
       catchError(error => {
-        this.errorMessage = 'Error fetching Stripe Checkout session status';
+        this.errorMessage = 'Fehler beim Abrufen des Stripe Checkout-Sitzungsstatus';
         console.error('Error fetching Stripe Checkout session status:', error);
         return EMPTY;
       })
