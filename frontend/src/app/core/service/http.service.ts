@@ -22,7 +22,7 @@ export class HttpService {
       )
   }
 
-  post<T>(endpoint: string, body: any): Observable<HttpWrapper<T>> {
+  post<T>(endpoint: string, body?: any): Observable<HttpWrapper<T>> {
     return this.http
       .post<HttpWrapper<T>>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(
@@ -31,7 +31,7 @@ export class HttpService {
       )
   }
 
-  put<T>(endpoint: string, body: any): Observable<HttpWrapper<T>> {
+  put<T>(endpoint: string, body?: any): Observable<HttpWrapper<T>> {
     return this.http
       .put<HttpWrapper<T>>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(
