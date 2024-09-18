@@ -26,8 +26,13 @@ export async function createStripeCheckoutSessionHttp(request: HttpRequest, cont
             mode: 'payment',
             ui_mode: 'embedded',
             return_url: `${request.headers.get('origin')}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-            metadata: {
+            metadata: { // Save surveyId in the session metadata
                 surveyId: parsedPayload.data.id
+            },
+            payment_intent_data: { // Save surveyId in the payment intent metadata. This is useful to quickly search in the stripe dashboard for a payment intent related to a survey
+                metadata: {
+                    surveyId: parsedPayload.data.id
+                }
             }
         });
 
