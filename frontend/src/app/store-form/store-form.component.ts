@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { SurveyTemplateManager } from '../core/model/survey-template-manager';
 import { ModalService } from '../core/service/modal.service';
-import { PreviewSurveyComponent } from '../shared/ui/template/preview-survey/preview-survey.component';
+import { PreviewSurveyComponent } from '../shared/ui/template/modal/preview-survey/preview-survey.component';
 import { SurveyName } from '../util/type/survey-type';
 
 @Component({
