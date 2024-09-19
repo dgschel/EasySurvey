@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { HttpWrapper } from '../../util/type/http';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class HttpService {
       )
   }
 
-  post<T>(endpoint: string, body: any): Observable<HttpWrapper<T>> {
+  post<T>(endpoint: string, body?: any): Observable<HttpWrapper<T>> {
     return this.http
       .post<HttpWrapper<T>>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(
@@ -31,7 +31,7 @@ export class HttpService {
       )
   }
 
-  put<T>(endpoint: string, body: any): Observable<HttpWrapper<T>> {
+  put<T>(endpoint: string, body?: any): Observable<HttpWrapper<T>> {
     return this.http
       .put<HttpWrapper<T>>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(

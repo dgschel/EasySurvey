@@ -1,0 +1,18 @@
+<!-- Container for embedded checkout form -->
+@if (!errorMessage) {
+<app-basic-card>
+  <div class="card-body">
+    <div class="skeleton" id="checkout" #checkout></div>
+  </div>
+</app-basic-card>
+} @else {
+
+<!-- Container for error message -->
+<div class="flex flex-col max-w-screen-sm mx-auto">
+  <app-display-error-message [errorMessage]="errorMessage" />
+  <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
+    Zurück zur Startseite
+  </a>
+</div>
+
+}

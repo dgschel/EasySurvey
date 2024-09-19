@@ -1,0 +1,55 @@
+<canvas #canvas class="fixed z-10"></canvas>
+<div class="grid gap-2 max-w-screen-sm mx-auto mt-10 text-center">
+  <!-- Display success icon -->
+  <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex justify-center text-success"></svg-icon>
+
+  <!-- Display success headline message -->
+  <span class="text-sm text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
+  <h2 class="text-xl font-medium">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
+
+  <!-- Display surveyid  -->
+  <div class="text-xs mt-2">
+    <span class="text-gray-500">Formular-ID: </span>
+    <span class="font-medium">{{ stripeCheckoutSession.surveyId }}</span>
+  </div>
+
+  <div class="mt-10 w-full max-w-sm mx-auto">
+    <app-basic-card>
+      <div class="card-body text-center">
+        @if (qrCodeResponse$ | async; as svg) {
+        <div class="text-lg font-medium">QR-Code scannen</div>
+        <p class="max-w-40 mx-auto">Scannen oder teilen Sie den folgenden QR-Code </p>
+
+        <!-- Display QR-Code  -->
+        <div class="w-60 mx-auto">
+          <app-display-qr-code [qrCode]="svg" />
+        </div>
+
+        <div class="divider mt-0">oder</div>
+
+        <!-- Continue to view survey -->
+        <button type="button" class="btn btn-success w-full mx-auto"
+          [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'viewform']">
+          Weiter zum Formular
+        </button>
+
+        } @else {
+        <div class="skeleton h-40 w-40 mx-auto"></div>
+        }
+      </div>
+    </app-basic-card>
+  </div>
+
+  <!-- Display message to user that an invoice will be sent -->
+  <p class="text-xs mt-1 text-gray-500">Eine Rechnung wird an Ihre angegebene E-Mail gesendet</p>
+
+  <div class="divider my-10"></div>
+
+  <!-- Next steps -->
+  <h3 class="text-left text-lg font-semibold">Nächste Schritte:</h3>
+  <ul class="text-left list-disc list-inside space-y-1">
+    <li>Überprüfen Sie Ihr Formular, indem Sie den QR-Code scannen</li>
+    <li>Teilen Sie den QR-Code mit anderen, um das Formular zugänglich zu machen</li>
+    <li>Falls Sie Rückfragen haben, wenden Sie sich an unseren Support mit Ihrer Formular-ID</li>
+  </ul>
+</div>

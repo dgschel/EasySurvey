@@ -4,7 +4,7 @@ import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-dro
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
 import { HttpService } from '../../../core/service/http.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { ModalService } from '../../../core/service/modal.service';
 import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey-successfully-saved/survey-successfully-saved.component';
 
@@ -83,6 +83,7 @@ export class SurveyFormComponent implements AfterViewInit {
 
       const modal = this.modalService.open(cmp);
       modal.setInput('isBackdropClosable', false);
+      modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
     });
   }
 
@@ -121,5 +122,7 @@ export class SurveyFormComponent implements AfterViewInit {
   ngOnDestroy() {
     this.cmpRefs.forEach((comp) => comp.destroy());
     this.cmpRefs = [];
+
+    this.modalService.close();
   }
 }

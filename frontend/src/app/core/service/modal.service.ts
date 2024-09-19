@@ -1,4 +1,4 @@
-import { ApplicationRef, ComponentRef, createComponent, EnvironmentInjector, Injectable, TemplateRef } from '@angular/core';
+import { ApplicationRef, ComponentRef, createComponent, EnvironmentInjector, Injectable } from '@angular/core';
 import { ModalComponent } from '../component/modal/modal.component';
 
 @Injectable({

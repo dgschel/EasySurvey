@@ -1,0 +1,34 @@
+@if (qrCodeResponse$ | async; as svg) {
+<div class="max-w-sm mx-auto">
+  <app-basic-card>
+    <div class="card-body grid gap-4">
+      <h2 class="card-title justify-center">Formular bereits bezahlt</h2>
+      <p class="text-center">
+        Ihr Formular wurde bereits bezahlt und ist online. Scannen oder teilen Sie den folgenden QR-Code, um Ihr
+        Formular anzuzeigen oder weiterzugeben
+      </p>
+
+      <div class="w-60 mx-auto">
+        <app-display-qr-code [qrCode]="svg" />
+      </div>
+
+      <div class="divider mt-0">oder</div>
+
+      <button type="button" class="btn btn-success" [routerLink]="['/survey', surveyId, 'viewform']">
+        Weiter zum Formular
+      </button>
+    </div>
+
+  </app-basic-card>
+</div>
+} @else if (errorMessage) {
+<div class="max-w-md mx-auto gap">
+  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+  <button type="button" class="btn btn-primary w-full mt-10" routerLink="/home">
+    Zurück zur Startseite
+  </button>
+</div>
+}
+@else {
+<app-loading />
+}

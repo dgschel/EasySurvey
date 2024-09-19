@@ -1,0 +1,16 @@
+<div class="hero">
+  <div class="hero-content p-0 text-center">
+    <div class="max-w-lg">
+      <svg-icon name="rosette-discount-check-off" svgClass="size-16" class="inline-flex text-error"></svg-icon>
+      <h2 class="text-lg font-bold my-2">Zahlung fehlgeschlagen</h2>
+
+      <p class="my-4">
+        Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren
+      </p>
+
+      <a class="btn btn-primary mt-6" [routerLink]="['/survey', surveyId, 'checkout']">Zur Zahlung
+        fortfahren</a>
+    </div>
+
+  </div>
+</div>

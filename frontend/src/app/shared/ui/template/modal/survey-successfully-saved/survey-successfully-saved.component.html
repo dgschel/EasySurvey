@@ -2,21 +2,26 @@
   <div class="hero-content p-0 text-center">
     <div class="max-w-lg">
       <svg-icon name="rosette-discount-check" svgClass="size-16" class="inline-flex text-success"></svg-icon>
-      <h2 class="text-xl font-bold my-2">Formular erfolgreich gespeichert</h2>
+      <h2 class="text-lg font-bold my-2">Formular erfolgreich gespeichert</h2>
 
       <p class="my-4 sm:my-6">
         Ihr Formular wurde erfolgreich gespeichert. Um fortzufahren, schließen Sie bitte die Zahlung ab, um Ihr Formular
         zu aktivieren und Ihren QR-Code zu erhalten
       </p>
 
-      <p class="my-4 sm:my-6">Ihre Formular-ID: <strong>{{ surveyId }}</strong></p>
+      <div class="my-4 sm:my-6">
+        <h3 class="text-sm font-medium text-left ml-3 mb-1">Formular-ID</h3>
+        <app-copy-to-clipboard [textToCopy]="surveyId"></app-copy-to-clipboard>
+      </div>
 
       <p class="my-4 sm:my-6">
         <em>Wichtig:</em> Diese ID wird nur einmal angezeigt. Bitte notieren oder speichern Sie sie für zukünftige
         Rückfragen oder Supportanfragen
       </p>
 
-      <button class="btn btn-primary mt-6">Zur Zahlung fortfahren</button>
+      <button [routerLink]="['survey', surveyId, 'checkout']" class="btn btn-primary mt-6">
+        Zur Zahlung fortfahren
+      </button>
     </div>
   </div>
 </div>

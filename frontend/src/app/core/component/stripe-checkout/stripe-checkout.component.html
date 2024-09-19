@@ -1,0 +1,23 @@
+<div class="container max-w-screen-lg mx-auto grid gap-4 mt-6">
+  <div class="text-center">
+    <h2 class="text-xl font-medium my-2">Fast geschafft!<br class="sm:hidden" /> Schließen Sie Ihre Zahlung sicher ab
+    </h2>
+    <p class="text-base max-w-md mx-auto">Ihr Formular ist bereit zur Veröffentlichung.
+      Nutzen Sie unseren sicheren Zahlungsanbieter <svg-icon name="stripe_wordmark" svgClass="w-12 inline-block" />
+      um die Zahlung schnell und einfach abzuschließen
+    </p>
+  </div>
+
+  <div class="divider my-1"></div>
+
+  <!-- Start the stripe checkout session by using async pipe -->
+  @if (checkout$ | async; as stripeEmbeddedCheckout) {
+  <app-stripe-embedded-checkout-form [stripeEmbeddedCheckout]="stripeEmbeddedCheckout" />
+  } @else if (errorMessage) {
+  <!-- Display error message if there is any -->
+  <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
+  }
+  @else {
+  <app-loading />
+  }
+</div>

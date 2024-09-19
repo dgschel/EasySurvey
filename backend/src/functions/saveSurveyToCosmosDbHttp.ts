@@ -1,5 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext, output } from "@azure/functions";
 import { SurveyModelSchema } from "../schemas/survey";
+import { SurveyCosmosDb } from "../models/survey";
 
 const cosmosOutput = output.cosmosDB({
     databaseName: 'SurveyDB',
@@ -39,10 +40,13 @@ export async function saveSurveyToCosmosDbHttp(request: HttpRequest, context: In
             throw new Error("Survey data is invalid");
         }
 
+        // Explicitly set the status to 'not paid'
+        const status: SurveyCosmosDb['status'] = 'not paid';
+
         // Save the survey data to Cosmos DB
         context.extraOutputs.set(cosmosOutput, {
             id: context.invocationId, // Unique ID for the survey
-            status: 'not paid',
+            status,
             models: parsedSurvey.data
         });
 

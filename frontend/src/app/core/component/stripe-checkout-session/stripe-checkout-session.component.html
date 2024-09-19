@@ -1,0 +1,30 @@
+@if (stripeCheckoutSession$ | async; as stripeCheckoutSession) {
+
+  @switch (stripeCheckoutSession.status) {
+    @case ('complete') {
+    <app-stripe-checkout-session-success [stripeCheckoutSession]="stripeCheckoutSession" />
+    }
+    @case ('open') {
+      <app-stripe-checkout-session-failure [surveyId]="stripeCheckoutSession.surveyId" />
+    }
+    @default {
+      <!-- 
+        Unexpected stripe payment status. This should never happen since stripe payment status is either 'complete' or 'open'
+      -->
+      <div class="grid gap-4 container max-w-screen-sm mx-auto">
+        <app-display-error-message errorMessage="Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren" />
+        <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+      </div>
+    }
+  }
+  
+} @else if (errorMessage) {
+  <div class="grid gap-4 container max-w-screen-sm mx-auto">
+    <app-display-error-message [errorMessage]="errorMessage" />
+    <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+  </div>
+}
+
+@else {
+  <app-loading></app-loading>
+}

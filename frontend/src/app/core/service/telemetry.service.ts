@@ -11,7 +11,7 @@ import {
   ITraceTelemetry,
 } from '@microsoft/applicationinsights-web';
 
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,27 @@
+<div class="container mx-auto max-w-screen-lg grid gap-4">
+
+  <!-- Fetch the survey payment status by using async pipe -->
+  @if (surveyStatusHandling$ | async; as survey) {
+
+  <!-- Display user-friendly message with a qr-code to view the survey -->
+  <app-display-already-paid *ngIf="survey.status === 'paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
+
+  <!-- Start the stripe checkout session if survey was found and not paid -->
+  <app-stripe-checkout *ngIf="survey.status === 'not paid' && !(errorMessage)" [surveyId]="survey.surveyId" />
+
+  } @else if (errorMessage) {
+
+  <!-- Display error message if any -->
+  <div class="flex flex-col max-w-lg mx-auto justify-center">
+    <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+    <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
+      Zurück zur Startseite
+    </a>
+  </div>
+
+  } @else {
+  <!-- Display loading spinner -->
+  <app-loading />
+  }
+
+</div>

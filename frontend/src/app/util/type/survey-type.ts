@@ -96,3 +96,7 @@ export type SurveySelectModel = {
 } & SurveyBaseType
 
 export type SurveyModel = SurveyInputModel | SurveySelectModel | SurveyCheckboxModel | SurveyRadioModel;
+
+export type SurveyPaymentStatus = {
+  status: 'paid' | 'not paid' | 'unknown';
+};
