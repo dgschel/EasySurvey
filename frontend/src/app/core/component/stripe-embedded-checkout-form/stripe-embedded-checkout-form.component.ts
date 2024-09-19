@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -31,7 +31,7 @@ export class StripeEmbeddedCheckoutFormComponent implements AfterViewInit, OnDes
       // Destroy Stripe Checkout embedded form
       // Destroying the form is necessary to initialize a new checkout form instance
       this.stripeEmbeddedCheckout?.destroy();
-      
+
       this.errorMessage = 'Fehler! Der Mount-Vorgang für das Stripe Checkout-Formular ist fehlgeschlagen';
       console.error('Error initializing Stripe Checkout:', error);
     }
