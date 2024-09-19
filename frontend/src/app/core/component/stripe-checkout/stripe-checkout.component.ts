@@ -50,7 +50,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
         }
         return from(this.stripeService.initEmbeddedCheckout(data.clientSecret)).pipe(
           catchError(error => {
-            this.errorMessage = "Fehler beim Initialisieren von Stripe Checkout";
+            this.errorMessage = "Fehler! Beim Initialisieren von Stripe Checkout ist ein Fehler aufgetreten";
             console.error("Error initializing Stripe Checkout:", error);
             return EMPTY; // Stop further processing if Stripe Checkout initialization fails
           })
