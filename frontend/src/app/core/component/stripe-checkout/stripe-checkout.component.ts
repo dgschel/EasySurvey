@@ -33,7 +33,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
     // Fetch client secret for Stripe Checkout
     const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
       catchError(error => {
-        this.errorMessage = "Error fetching client secret";
+        this.errorMessage = "Fehler! Beim Abrufen des Client-Secrets ist ein Fehler aufgetreten";
         console.error("Error fetching client secret:", error);
         return EMPTY; // Stop further processing if client secret cannot be fetched
       })
@@ -43,13 +43,13 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
     const initializedStripeCheckout$ = fetchClientSecretObservable$.pipe(
       switchMap(({ data }) => {
         if (!data || !data.clientSecret) {
-          this.errorMessage = "Invalid client secret for Stripe Checkout";
+          this.errorMessage = "Fehler! Ungültiges Client Secret für Stripe Checkout";
           console.error("Invalid client secret for Stripe Checkout");
           return EMPTY; // Ensure client secret is valid before proceeding
         }
         return from(this.stripeService.initEmbeddedCheckout(data.clientSecret)).pipe(
           catchError(error => {
-            this.errorMessage = "Error initializing Stripe Checkout";
+            this.errorMessage = "Fehler beim Initialisieren von Stripe Checkout";
             console.error("Error initializing Stripe Checkout:", error);
             return EMPTY; // Stop further processing if Stripe Checkout initialization fails
           })
@@ -61,7 +61,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
     this.checkout$ = initializedStripeCheckout$.pipe(
       map(checkout => {
         if (!checkout) {
-          this.errorMessage = "Stripe checkout could not be initialized";
+          this.errorMessage = "Fehler! Stripe Checkout konnte nicht initialisiert werden. Bitte versuchen Sie es später erneut";
           console.error("Error: Stripe checkout could not be initialized");
           return;
         }
@@ -72,7 +72,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
         return checkout.mount('#checkout'); // Mount Stripe checkout form if all is well
       }),
       catchError(error => {
-        this.errorMessage = "Error in the checkout process";
+        this.errorMessage = "Fehler! Beim Checkout-Prozess ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut";
         console.error("Error in the checkout process:", error);
         return of(error); // Handle any other unexpected errors
       })
