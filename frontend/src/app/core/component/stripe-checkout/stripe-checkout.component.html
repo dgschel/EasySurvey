@@ -11,15 +11,13 @@
   <div class="divider my-1"></div>
 
   <!-- Start the stripe checkout session by using async pipe -->
-  <ng-container *ngIf="checkout$ | async"></ng-container>
-
-  <app-basic-card>
-    <div class="card-body">
-      <!-- Placeholder by stripe to insert embedded checkout form -->
-      <div class="skeleton" id="checkout"></div>
-    </div>
-  </app-basic-card>
-
+  @if (checkout$ | async; as stripeEmbeddedCheckout) {
+  <app-stripe-embedded-checkout-form [stripeEmbeddedCheckout]="stripeEmbeddedCheckout" />
+  } @else if (errorMessage) {
   <!-- Display error message if there is any -->
-  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage"></app-display-error-message>
+  <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
+  }
+  @else {
+  <app-loading />
+  }
 </div>

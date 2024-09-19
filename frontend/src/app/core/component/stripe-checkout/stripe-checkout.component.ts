@@ -1,19 +1,21 @@
 import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
-import { EMPTY, from, switchMap, map, Observable, catchError, of } from 'rxjs';
+import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
+import { EMPTY, from, switchMap, Observable, catchError, of } from 'rxjs';
 import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
 import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 import { BasicCardComponent } from "../../../shared/ui/basic-card/basic-card.component";
-import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
+import { StripeEmbeddedCheckoutFormComponent } from "../stripe-embedded-checkout-form/stripe-embedded-checkout-form.component";
+import { LoadingComponent } from "../../../shared/ui/loading/loading.component";
 
 @Component({
   selector: 'app-stripe-checkout',
   standalone: true,
-  imports: [SurveyCheckoutComponent, NgIf, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent, BasicCardComponent],
+  imports: [SurveyCheckoutComponent, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent, BasicCardComponent, StripeEmbeddedCheckoutFormComponent, LoadingComponent],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
@@ -23,8 +25,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
   private iconReg = inject(SvgIconRegistryService);
   private stripeService = inject(StripeCheckoutService);
 
-  checkout$: Observable<void> = EMPTY;
-  stripeEmbeddedCheckout: StripeEmbeddedCheckout | null = null;
+  checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
 
   ngOnInit() {
@@ -57,33 +58,26 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Mount Stripe Checkout form
+    // Subscribe to the initialized Stripe Checkout observable
     this.checkout$ = initializedStripeCheckout$.pipe(
-      map(checkout => {
+      switchMap(checkout => {
         if (!checkout) {
           this.errorMessage = "Fehler! Stripe Checkout konnte nicht initialisiert werden. Bitte versuchen Sie es später erneut";
           console.error("Error: Stripe checkout could not be initialized");
-          return;
+          return EMPTY; // Stop further processing if Stripe Checkout initialization fails
         }
-        
-        // Store the Stripe Checkout instance for cleanup
-        this.stripeEmbeddedCheckout = checkout;
 
-        return checkout.mount('#checkout'); // Mount Stripe checkout form if all is well
+        return of(checkout); // Return void type if everything works fine
       }),
       catchError(error => {
         this.errorMessage = "Fehler! Beim Checkout-Prozess ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut";
         console.error("Error in the checkout process:", error);
-        return of(error); // Handle any other unexpected errors
+        return EMPTY; // Stop further processing if checkout process fails
       })
     );
   }
 
   ngOnDestroy(): void {
     this.iconReg.unloadSvg('stripe_wordmark');
-
-    // Unmount and destroy Stripe Checkout embedded form
-    this.stripeEmbeddedCheckout?.unmount();
-    this.stripeEmbeddedCheckout?.destroy();
   }
 }
