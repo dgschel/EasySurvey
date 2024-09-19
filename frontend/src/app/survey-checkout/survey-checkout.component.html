@@ -12,10 +12,12 @@
   } @else if (errorMessage) {
 
   <!-- Display error message if any -->
-  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
-  <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
-    Zurück zur Startseite
-  </a>
+  <div class="flex flex-col max-w-lg mx-auto justify-center">
+    <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
+    <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/home">
+      Zurück zur Startseite
+    </a>
+  </div>
 
   } @else {
   <!-- Display loading spinner -->
