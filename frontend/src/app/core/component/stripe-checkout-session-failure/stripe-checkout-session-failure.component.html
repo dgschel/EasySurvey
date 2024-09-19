@@ -1,5 +1,16 @@
-<div class="grid gap-2 max-w-screen-sm mx-auto mt-10 text-center">
-  <app-display-error-message
-    errorMessage="Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren" />
-  <a class="btn btn-error max-w-xs mx-auto" [routerLink]="['/survey', surveyId, 'checkout']">Zur Zahlung fortfahren</a>
+<div class="hero">
+  <div class="hero-content p-0 text-center">
+    <div class="max-w-lg">
+      <svg-icon name="rosette-discount-check-off" svgClass="size-16" class="inline-flex text-error"></svg-icon>
+      <h2 class="text-lg font-bold my-2">Zahlung fehlgeschlagen</h2>
+
+      <p class="my-4">
+        Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren
+      </p>
+
+      <a class="btn btn-primary mt-6" [routerLink]="['/survey', surveyId, 'checkout']">Zur Zahlung
+        fortfahren</a>
+    </div>
+
+  </div>
 </div>
