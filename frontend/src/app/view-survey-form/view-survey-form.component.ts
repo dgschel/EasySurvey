@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, 
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { catchError, EMPTY, map, switchMap, take } from 'rxjs';
+import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
@@ -35,21 +35,35 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   startSurveyDate: Date = new Date();
 
   ngOnInit(): void {
-    const a = this.activatedRoute.paramMap.pipe(
-      take(1),
+    const surveyId$ = this.activatedRoute.paramMap.pipe(
       map(params => params.get('id') || ''),
+    )
+
+    const surveyPaymentStatus$ = surveyId$.pipe(
       map(surveyId => environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId)),
       switchMap(url => this.httpService.get<SurveyPaymentStatus>(url)
         .pipe(
           catchError(() => {
-            // Handle error
+            // TODO: Handle error
             console.log("Error fetching survey payment status");
             return EMPTY; // Return an empty observable
           })
         )),
-      map(({ data }) => data.status)).subscribe()
+      map(({ data }) => data.status));
 
-    this.surveyId = surveyId;
+    const paidSurveys$ = surveyPaymentStatus$.pipe(
+      filter(status => status === "paid"),
+      switchMap(() => this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: this.surveyId })
+        .pipe(
+          catchError(() => {
+            // TODO: Handle error
+            console.log("Error fetching survey data");
+            return EMPTY;
+          })
+        )
+      ),
+      map(({ data }) => data)
+    )
 
     this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: surveyId }).subscribe({
       next: (response) => {
