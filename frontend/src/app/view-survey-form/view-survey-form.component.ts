@@ -2,9 +2,11 @@ import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, 
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { catchError, EMPTY, map, switchMap, take } from 'rxjs';
+
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
-import { SurveyModel } from '../util/type/survey-type';
+import { SurveyModel, SurveyPaymentStatus } from '../util/type/survey-type';
 import { Submission } from '../util/type/submission';
 import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
