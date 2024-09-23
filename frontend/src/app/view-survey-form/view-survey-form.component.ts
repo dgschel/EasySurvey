@@ -35,12 +35,19 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   startSurveyDate: Date = new Date();
 
   ngOnInit(): void {
-    const surveyId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    if (!surveyId || surveyId === '') {
-      this.router.navigate(['/home']);
-      return;
-    }
+    const a = this.activatedRoute.paramMap.pipe(
+      take(1),
+      map(params => params.get('id') || ''),
+      map(surveyId => environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId)),
+      switchMap(url => this.httpService.get<SurveyPaymentStatus>(url)
+        .pipe(
+          catchError(() => {
+            // Handle error
+            console.log("Error fetching survey payment status");
+            return EMPTY; // Return an empty observable
+          })
+        )),
+      map(({ data }) => data.status)).subscribe()
 
     this.surveyId = surveyId;
 
