@@ -1,20 +1,30 @@
-@if (surveyHandler$ | async; as models) {
-
+@if (surveyHandler$ | async; as survey) {
+@switch (survey.status) {
+@case ("paid") {
 <form class="grid gap-4" [formGroup]="form">
-  @for (model of models; track $index) {
+  @for (model of survey.models; track $index) {
   <app-view-survey-group [model]="model"></app-view-survey-group>
   }
-  <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
+  <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">
+    Save
+  </button>
 </form>
-
+}
+@case ("not paid") {
+noch nicht bezahlt
+}
+@default {
+Unknown Status
+}
+}
+} @else if (isLoading) {
+<app-loading />
 } @else {
 <app-general-error-message>
-  <ng-container header>
-    Fehler beim Laden des Formulars
-  </ng-container>
+  <ng-container header> Fehler beim Laden des Formulars </ng-container>
   <ng-container message>
-    Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht geladen werden. Kontaktiere den Support
-    oder kehre zur Startseite zurück
+    Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht
+    geladen werden. Kontaktiere den Support oder kehre zur Startseite zurück
   </ng-container>
   <div footer>
     <a class="btn btn-primary" [routerLink]="['/']">
