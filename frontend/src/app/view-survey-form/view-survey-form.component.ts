@@ -13,6 +13,7 @@ import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
 import { GeneralErrorMessageComponent } from "../shared/ui/general-error-message/general-error-message.component";
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
+import { CopyToClipboardComponent } from "../shared/feature/copy-to-clipboard/copy-to-clipboard.component";
 
 @Component({
   selector: 'app-view-survey-form',
@@ -26,6 +27,8 @@ import { LoadingComponent } from '../shared/ui/loading/loading.component';
     GeneralErrorMessageComponent,
     RouterLink,
     LoadingComponent,
+    CopyToClipboardComponent,
+    BasicCardComponent
   ],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
@@ -133,6 +136,8 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   submit(): void {
     const submission = this.createSubmission("success");
 
+    // TODO: Try to use rxJs to handle the submission. Maybe the operator 'exhaustMap' can be useful here and disable button while submitting
+
     // dont allow multiple submissions
     // example scenario: user clicks submit and then leaves the page or destroys the window. then a success and failure submit will be sent
     this.formSubmitted = true;
@@ -146,6 +151,9 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
       },
     })
   }
+
+  // TODO: Only allow a failure submission if the survey has been paid. Perhaps its fixed when we define a new component to only show when survey is paid. Move logic inside this component
+
 
   // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
   @HostListener('window:beforeunload', ['$event'])
