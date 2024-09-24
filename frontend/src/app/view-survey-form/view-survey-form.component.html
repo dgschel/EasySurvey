@@ -9,7 +9,16 @@
       </form>
     }
     @case ("not paid") {
-      noch nicht bezahlt
+      <app-general-error-message>
+        <ng-container header> Ihr Formular ist fast bereit! </ng-container>
+        <ng-container message>
+          Um Ihr Formular zu aktivieren und freizuschalten, ist eine Zahlung erforderlich. Folgen Sie den unten
+          stehenden Button, um den Zahlungsprozess zu abzuschließen
+        </ng-container>
+        <div footer>
+          <a class="btn btn-primary" [routerLink]="['/survey', surveyId, 'checkout']"> Zur Zahlung fortfahren </a>
+        </div>
+      </app-general-error-message>
     }
     @default {
       Unknown Status
