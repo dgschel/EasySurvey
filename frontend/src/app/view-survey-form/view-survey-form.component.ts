@@ -146,7 +146,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
     const surveyFormData = this.createSubmission("failure");
-    // this.sendSubmissionBeacon(surveyFormData);
+    this.sendSubmissionBeacon(surveyFormData);
   }
 
   // This method is called when the component is destroyed
