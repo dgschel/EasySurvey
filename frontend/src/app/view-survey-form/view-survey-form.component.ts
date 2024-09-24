@@ -12,6 +12,7 @@ import { Submission } from '../util/type/submission';
 import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
 import { GeneralErrorMessageComponent } from "../shared/ui/general-error-message/general-error-message.component";
+import { LoadingComponent } from '../shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -23,7 +24,8 @@ import { GeneralErrorMessageComponent } from "../shared/ui/general-error-message
     AsyncPipe,
     JsonPipe,
     GeneralErrorMessageComponent,
-    RouterLink
+    RouterLink,
+    LoadingComponent
   ],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
@@ -35,6 +37,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
 
   surveyHandler$: Observable<SurveyModel[]> = EMPTY;
+  isLoading = true;
 
   // ViewChildren is used to query each ViewSurveyGroupComponent instance
   // This is useful for getting the form values from each survey group
@@ -59,6 +62,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
           catchError(() => {
             // TODO: Handle error
             console.log("Error fetching survey payment status");
+            this.isLoading = false;
             return EMPTY; // Return an empty observable
           })
         )),
@@ -74,6 +78,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
           catchError(() => {
             // TODO: Handle error
             console.log("Error fetching survey data");
+            this.isLoading = false;
             return EMPTY;
           })
         )
@@ -81,6 +86,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
       map(({ data }) => data)
     )
 
+    // Survey has not been paid then display modal with an action button to redirect to payment page
     const notPaidSurvey$ = surveyPaymentStatus$.pipe(
       filter(status => status === "not paid"),
       switchMap(() => of([] as SurveyModel[]))
