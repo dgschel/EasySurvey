@@ -3,7 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, merge, Observable, of, shareReplay, switchMap } from 'rxjs';
+import { catchError, EMPTY, filter, map, merge, Observable, of, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
@@ -49,6 +49,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const surveyId$ = this.activatedRoute.paramMap.pipe(
       map(params => params.get('id') || ''),
+      tap(surveyId => this.surveyId = surveyId), // Store the surveyId
     )
 
     const surveyPaymentStatus$ = surveyId$.pipe(
@@ -67,7 +68,8 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
 
     const paidSurvey$ = surveyPaymentStatus$.pipe(
       filter(status => status === "paid"),
-      switchMap(() => this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: this.surveyId })
+      withLatestFrom(surveyId$),
+      switchMap(([_, id]) => this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id })
         .pipe(
           catchError(() => {
             // TODO: Handle error
