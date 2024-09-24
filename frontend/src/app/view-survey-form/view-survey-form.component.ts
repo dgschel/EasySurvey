@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, merge, Observable, of, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, EMPTY, filter, map, merge, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
@@ -25,7 +25,7 @@ import { LoadingComponent } from '../shared/ui/loading/loading.component';
     JsonPipe,
     GeneralErrorMessageComponent,
     RouterLink,
-    LoadingComponent
+    LoadingComponent,
   ],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
@@ -33,7 +33,6 @@ import { LoadingComponent } from '../shared/ui/loading/loading.component';
 export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private httpService = inject(HttpService);
-  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
   surveyHandler$: Observable<{ status: SurveyPaymentStatus['status'], models: SurveyModel[] }> = EMPTY;
@@ -60,7 +59,6 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
       switchMap(url => this.httpService.get<SurveyPaymentStatus>(url)
         .pipe(
           catchError(() => {
-            // TODO: Handle error
             console.log("Error fetching survey payment status");
             this.isLoading = false;
             return EMPTY; // Return an empty observable
