@@ -36,14 +36,14 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
-  surveyHandler$: Observable<SurveyModel[]> = EMPTY;
+  surveyHandler$: Observable<{ status: SurveyPaymentStatus['status'], models: SurveyModel[] }> = EMPTY;
+
   isLoading = true;
 
   // ViewChildren is used to query each ViewSurveyGroupComponent instance
   // This is useful for getting the form values from each survey group
   @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
 
-  models: SurveyModel[] = [];
   form = new FormGroup({});
   surveyId: string = "";
   formSubmitted: boolean = false;
@@ -71,25 +71,24 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
     )
 
     const paidSurvey$ = surveyPaymentStatus$.pipe(
-      filter(status => status === "paid"),
       withLatestFrom(surveyId$),
+      filter(([status]) => status === "paid"),
       switchMap(([_, id]) => this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id })
         .pipe(
           catchError(() => {
-            // TODO: Handle error
             console.log("Error fetching survey data");
             this.isLoading = false;
             return EMPTY;
           })
         )
       ),
-      map(({ data }) => data)
+      map(({ data }) => ({ status: "paid" as SurveyPaymentStatus['status'], models: data })),
     )
 
     // Survey has not been paid then display modal with an action button to redirect to payment page
     const notPaidSurvey$ = surveyPaymentStatus$.pipe(
       filter(status => status === "not paid"),
-      switchMap(() => of([] as SurveyModel[]))
+      map(() => ({ status: "not paid" as SurveyPaymentStatus['status'], models: [] as SurveyModel[] }))
     )
 
     this.surveyHandler$ = merge(paidSurvey$, notPaidSurvey$);
