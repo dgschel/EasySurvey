@@ -10,7 +10,7 @@
     }
     @case ("not paid") {
       <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
-        <app-general-error-message>
+        <app-general-message>
           <ng-container header> Ihr Formular ist fast bereit! </ng-container>
           <ng-container message>
             Um Ihr Formular zu aktivieren und freizuschalten, ist eine Zahlung erforderlich. Folgen Sie den unten
@@ -19,7 +19,7 @@
           <div footer>
             <a class="btn btn-primary" [routerLink]="['/survey', surveyId, 'checkout']"> Zur Zahlung fortfahren </a>
           </div>
-        </app-general-error-message>
+        </app-general-message>
 
         <app-basic-card>
           <div class="card-body">
@@ -36,7 +36,7 @@
 } @else if (isLoading) {
   <app-loading />
 } @else {
-  <app-general-error-message>
+  <app-general-message>
     <ng-container header> Fehler beim Laden des Formulars </ng-container>
     <ng-container message>
       Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht geladen werden. Kontaktiere den Support
@@ -45,5 +45,5 @@
     <div footer>
       <a class="btn btn-primary" [routerLink]="['/']"> Zurück zur Startseite </a>
     </div>
-  </app-general-error-message>
+  </app-general-message>
 }

@@ -11,9 +11,9 @@ import { SurveyModel, SurveyPaymentStatus } from '../util/type/survey-type';
 import { Submission } from '../util/type/submission';
 import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
-import { GeneralErrorMessageComponent } from "../shared/ui/general-error-message/general-error-message.component";
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
 import { CopyToClipboardComponent } from "../shared/feature/copy-to-clipboard/copy-to-clipboard.component";
+import { GeneralMessageComponent } from '../shared/ui/general-message/general-message.component';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -24,7 +24,7 @@ import { CopyToClipboardComponent } from "../shared/feature/copy-to-clipboard/co
     BasicCardComponent,
     AsyncPipe,
     JsonPipe,
-    GeneralErrorMessageComponent,
+    GeneralMessageComponent,
     RouterLink,
     LoadingComponent,
     CopyToClipboardComponent,
