@@ -1,6 +1,24 @@
+@if (surveyHandler$ | async; as models) {
+
 <form class="grid gap-4" [formGroup]="form">
   @for (model of models; track $index) {
   <app-view-survey-group [model]="model"></app-view-survey-group>
   }
   <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
 </form>
+
+} @else {
+<app-general-error-message>
+  <ng-container header>
+    Fehler beim Laden des Formulars
+  </ng-container>
+  <ng-container message>
+    Das Formular existiert nicht oder wurde bereits archiviert. Kontaktiere den Support oder kehre zur Startseite zurück
+  </ng-container>
+  <div footer>
+    <a class="btn btn-primary" [routerLink]="['/']">
+      Zurück zur Startseite
+    </a>
+  </div>
+</app-general-error-message>
+}
