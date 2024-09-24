@@ -11,6 +11,9 @@
 npm-debug.log
 yarn-error.log
 
+# Prettier
+.prettierrc
+
 # IDEs and editors
 .idea/
 .project
