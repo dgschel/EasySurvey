@@ -11,6 +11,7 @@ import { SurveyModel, SurveyPaymentStatus } from '../util/type/survey-type';
 import { Submission } from '../util/type/submission';
 import { environment } from '../../environments/environment';
 import { HttpService } from '../core/service/http.service';
+import { GeneralErrorMessageComponent } from "../shared/ui/general-error-message/general-error-message.component";
 
 @Component({
   selector: 'app-view-survey-form',
@@ -64,7 +65,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
       shareReplay(1) // Ensure that only one request is made to the server for the payment status when multiple subscribers are present
     )
 
-    const paidSurveys$ = surveyPaymentStatus$.pipe(
+    const paidSurvey$ = surveyPaymentStatus$.pipe(
       filter(status => status === "paid"),
       switchMap(() => this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: this.surveyId })
         .pipe(
@@ -78,15 +79,12 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
       map(({ data }) => data)
     )
 
-    this.httpService.get<SurveyModel[]>(environment.endpoints.readSurvey, { id: surveyId }).subscribe({
-      next: (response) => {
-        this.models = response.data
-        this.cdr.detectChanges();
-      },
-      error(err) {
-        console.log("Error", err);
-      },
-    })
+    const notPaidSurvey$ = surveyPaymentStatus$.pipe(
+      filter(status => status === "not paid"),
+      switchMap(() => of([] as SurveyModel[]))
+    )
+
+    this.surveyHandler$ = merge(paidSurvey$, notPaidSurvey$);
   }
 
   private sendSubmissionBeacon(submission: Submission) {
@@ -148,7 +146,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
     const surveyFormData = this.createSubmission("failure");
-    this.sendSubmissionBeacon(surveyFormData);
+    // this.sendSubmissionBeacon(surveyFormData);
   }
 
   // This method is called when the component is destroyed
