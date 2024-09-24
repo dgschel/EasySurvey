@@ -36,14 +36,23 @@
 } @else if (isLoading) {
   <app-loading />
 } @else {
-  <app-general-message>
-    <ng-container header> Fehler beim Laden des Formulars </ng-container>
-    <ng-container message>
-      Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht geladen werden. Kontaktiere den Support
-      oder kehre zur Startseite zurück
-    </ng-container>
-    <div footer>
-      <a class="btn btn-primary" [routerLink]="['/']"> Zurück zur Startseite </a>
-    </div>
-  </app-general-message>
+  <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
+    <app-general-message>
+      <ng-container header> Fehler beim Laden des Formulars </ng-container>
+      <ng-container message>
+        Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht geladen werden. Kontaktiere den Support
+        oder kehre zur Startseite zurück
+      </ng-container>
+      <div footer>
+        <a class="btn btn-primary" [routerLink]="['/']"> Zurück zur Startseite </a>
+      </div>
+    </app-general-message>
+
+    <app-basic-card>
+      <div class="card-body">
+        <h3 class="text-sm font-medium text-left ml-3 mb-1">Formular-ID</h3>
+        <app-copy-to-clipboard [textToCopy]="surveyId" />
+      </div>
+    </app-basic-card>
+  </div>
 }
