@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, switchMap } from 'rxjs';
+import { catchError, EMPTY, filter, map, merge, Observable, of, shareReplay, switchMap } from 'rxjs';
 
 import { ViewSurveyGroupComponent } from '../shared/ui/view-survey-group/view-survey-group.component';
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
@@ -14,7 +15,15 @@ import { HttpService } from '../core/service/http.service';
 @Component({
   selector: 'app-view-survey-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, BasicCardComponent],
+  imports: [
+    ReactiveFormsModule,
+    ViewSurveyGroupComponent,
+    BasicCardComponent,
+    AsyncPipe,
+    JsonPipe,
+    GeneralErrorMessageComponent,
+    RouterLink
+  ],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
 })
@@ -23,6 +32,8 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private httpService = inject(HttpService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+
+  surveyHandler$: Observable<SurveyModel[]> = EMPTY;
 
   // ViewChildren is used to query each ViewSurveyGroupComponent instance
   // This is useful for getting the form values from each survey group
@@ -49,7 +60,9 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
             return EMPTY; // Return an empty observable
           })
         )),
-      map(({ data }) => data.status));
+      map(({ data }) => data.status),
+      shareReplay(1) // Ensure that only one request is made to the server for the payment status when multiple subscribers are present
+    )
 
     const paidSurveys$ = surveyPaymentStatus$.pipe(
       filter(status => status === "paid"),
