@@ -67,7 +67,7 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
           return EMPTY; // Stop further processing if Stripe Checkout initialization fails
         }
 
-        return of(checkout); // Return void type if everything works fine
+        return of(checkout); // Return the initialized Stripe Checkout
       }),
       catchError(error => {
         this.errorMessage = "Fehler! Beim Checkout-Prozess ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut";
