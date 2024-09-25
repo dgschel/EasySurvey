@@ -1,5 +1,5 @@
 @if (control) {
-<div class="form-control w-full max-w-xs">
+<div class="form-control w-full">
   @for (option of options(); track $index) {
   <label class="label gap-2 justify-normal cursor-pointer">
     <input type="radio" [formControl]="control" [name]="name()" [value]="option" class="radio radio-sm"

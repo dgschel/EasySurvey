@@ -1,8 +1,8 @@
 @if (control) {
-<label class="form-control w-full max-w-xs">
-  <select [formControl]="control" class="select select-bordered select-sm"
+<label class="form-control w-full">
+  <select [formControl]="control" class="select select-bordered select-sm max-w-xs"
     [ngClass]="{'select-error': isFormControlValid}">
-    <option value selected disabled>Auswählen</option>
+    <option value="Auswählen" selected disabled>Auswählen</option>
     @for (option of options(); track $index; let i=$index) {
       <option [value]="option">{{ option }}</option>
     }

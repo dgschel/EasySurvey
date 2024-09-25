@@ -43,7 +43,8 @@ export type FormControlComponentType = typeof FormControlInputComponent | typeof
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
 export interface FormControlComponentValue {
-  getValue<T>(): T
+  getValue<T>(): T,
+  reset(): void
 }
 
 // user generated components

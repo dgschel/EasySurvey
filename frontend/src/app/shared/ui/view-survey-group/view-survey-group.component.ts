@@ -28,8 +28,13 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
   }
 
   getFormControlComponentValue() {
-    // TODO: Add correct type to get rid of any
+    // TODO: Add correct type to get rid of any. GetValue-method is defined in an interface that is implemented by all form control components
     return (this.componentRef?.instance as any).getValue();
+  }
+
+  resetFormControlComponent() {
+    // TODO: Add correct type to get rid of any. Reset-method is defined in an interface that is implemented by all form control components
+    (this.componentRef?.instance as any).reset();
   }
 
   ngAfterViewInit(): void {
