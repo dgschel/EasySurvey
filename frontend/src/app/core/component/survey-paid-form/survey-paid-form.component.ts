@@ -1,6 +1,6 @@
 import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, createComponent, ElementRef, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { catchError, delay, EMPTY, exhaustMap, fromEvent, map, Subscription, tap } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, fromEvent, map, Subscription, tap } from 'rxjs';
 
 import { SurveyModel } from '../../../util/type/survey-type';
 import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/view-survey-group.component";
@@ -56,17 +56,17 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
         this.formSubmitted = true;
       }),
       map(() => this.createSubmission("success")),
-      exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission)
-        .pipe(
-          delay(10000),
-          catchError(error => {
-            // TODO: Handle error by showing a message to the user that the submission failed using modal service
-            console.error("Error submitting survey form:", error);
-            return EMPTY; // Return an empty observable to prevent the error from propagating
-          })
-        )
-      ),
-      map(() => this.resetControls())
+      exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission).pipe(
+        catchError(error => {
+          // Handle error by showing a message to the user that the submission failed using modal service
+          console.error("Error submitting survey form:", error);
+          return EMPTY; // Return an empty observable to prevent the error from propagating
+        })
+      )),
+      tap(() => {
+        this.resetControls()
+        this.isFormSubmitting = false
+      })
     ).subscribe();
   }
 
@@ -117,6 +117,7 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 
+  // Resets the form controls of each survey group component
   private resetControls(): void {
     this.surveyGroups.forEach(group => group.resetFormControlComponent());
   }
