@@ -1,1 +1,6 @@
-<p>survey-paid-form works!</p>
+<form class="grid gap-4" [formGroup]="form">
+  @for (model of surveyModels(); track $index) {
+    <app-view-survey-group [model]="model" />
+  }
+  <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
+</form>
