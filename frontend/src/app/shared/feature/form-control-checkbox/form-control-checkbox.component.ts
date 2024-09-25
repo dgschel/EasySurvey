@@ -46,7 +46,7 @@ export class FormControlCheckboxComponent implements OnInit, FormControlComponen
   }
 
   reset(): void {
-    this.control?.reset();
+    this.control?.reset([]);
   }
 
   getValue<T>(): T {

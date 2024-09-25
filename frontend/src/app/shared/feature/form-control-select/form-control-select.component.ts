@@ -43,7 +43,6 @@ export class FormControlSelectComponent implements OnInit, FormControlComponentV
 
   ngOnInit(): void {
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
-    this.control?.setValue("Auswählen");
   }
 
   getValue<T>(): T {
@@ -51,6 +50,6 @@ export class FormControlSelectComponent implements OnInit, FormControlComponentV
   }
 
   reset(): void {
-    this.control?.reset("Auswählen");
+    this.control?.reset("");
   }
 }
