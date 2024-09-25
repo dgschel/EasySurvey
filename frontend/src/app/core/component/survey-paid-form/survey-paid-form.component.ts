@@ -36,6 +36,7 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   submitFormSub: Subscription | undefined;
   form = new FormGroup({});
   formSubmitted: boolean = false;
+  isFormSubmitting: boolean = false;
   /*
   * The start date when the component is initialized
   * Currently this will not reset when the form is submitted and the user wants to fill it again
@@ -43,9 +44,17 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   */
   startSurveyDate: Date = new Date();
 
+  // Checks if the form is valid and has not been submitted
+  get isValidAndNotSubmitted(): boolean {
+    return this.form.valid && !this.isFormSubmitting;
+  }
+
   ngAfterViewInit(): void {
     this.submitFormSub = fromEvent(this.submitForm.nativeElement, 'click').pipe(
-      tap(() => this.formSubmitted = true), // Once the form is submitted, set the formSubmitted flag to true to prevent submission as failure after leaving or destroys the application
+      tap(() => {
+        this.isFormSubmitting = true;
+        this.formSubmitted = true;
+      }),
       map(() => this.createSubmission("success")),
       exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission)
         .pipe(

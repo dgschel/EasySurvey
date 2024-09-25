@@ -16,6 +16,6 @@
   }
   <div class="flex justify-between">
     <button type="button" class="btn btn-ghost" (click)="showResetDialog()">Alle Antworten löschen</button>
-    <button #submitForm type="submit" class="btn btn-primary w-32" [disabled]="!form.valid">Senden</button>
+    <button #submitForm type="submit" class="btn btn-primary w-32" [disabled]="!isValidAndNotSubmitted">Senden</button>
   </div>
 </form>
