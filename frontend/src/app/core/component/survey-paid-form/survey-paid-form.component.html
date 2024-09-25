@@ -1,3 +1,15 @@
+<!-- TODO: Use user input for header and message and only use these as fallback -->
+<div class="my-10">
+  <app-general-message>
+    <ng-container header> Umfrage </ng-container>
+    <ng-container message>
+      Bitte beantworten Sie die folgenden Fragen, um Ihre Teilnahme an der Umfrage abzuschließen
+    </ng-container>
+  </app-general-message>
+</div>
+
+<div class="text-error text-xs mb-1">* Markierte Felder sind Pflichtfelder</div>
+
 <form class="grid gap-4" [formGroup]="form">
   @for (model of surveyModels(); track $index) {
     <app-view-survey-group [model]="model" />

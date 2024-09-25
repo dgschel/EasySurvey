@@ -8,11 +8,12 @@ import { HttpService } from '../../service/http.service';
 import { environment } from '../../../../environments/environment';
 import { ModalService } from '../../service/modal.service';
 import { SurveyResetConfirmComponent } from '../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
+import { GeneralMessageComponent } from "../../../shared/ui/general-message/general-message.component";
 
 @Component({
   selector: 'app-survey-paid-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ViewSurveyGroupComponent],
+  imports: [ReactiveFormsModule, ViewSurveyGroupComponent, GeneralMessageComponent],
   templateUrl: './survey-paid-form.component.html',
   styleUrl: './survey-paid-form.component.scss'
 })
