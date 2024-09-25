@@ -62,6 +62,10 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     return submission;
   }
 
+  remove(): void {
+    this.surveyGroups.forEach(group => group.resetFormControlComponent());
+  }
+
   submit(): void {
     const submission = this.createSubmission("success");
 
