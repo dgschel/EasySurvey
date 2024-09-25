@@ -33,6 +33,7 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   surveyModels = input.required<SurveyModel[]>();
   surveyId = input.required<string>();
 
+  submitFormSub: Subscription | undefined;
   form = new FormGroup({});
   formSubmitted: boolean = false;
   /*
@@ -41,6 +42,24 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   * although it should reset when the form is submitted and the user wants to fill it again to calculate the time taken to fill the form
   */
   startSurveyDate: Date = new Date();
+
+  ngAfterViewInit(): void {
+    this.submitFormSub = fromEvent(this.submitForm.nativeElement, 'click').pipe(
+      tap(() => this.formSubmitted = true), // Once the form is submitted, set the formSubmitted flag to true to prevent submission as failure after leaving or destroys the application
+      map(() => this.createSubmission("success")),
+      exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission)
+        .pipe(
+          delay(10000),
+          catchError(error => {
+            // TODO: Handle error by showing a message to the user that the submission failed using modal service
+            console.error("Error submitting survey form:", error);
+            return EMPTY; // Return an empty observable to prevent the error from propagating
+          })
+        )
+      ),
+      map(() => this.resetControls())
+    ).subscribe();
+  }
 
   ngAfterContentChecked(): void {
     // We need to manually trigger change detection to update the view when the form is updated using data binding
@@ -93,26 +112,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     this.surveyGroups.forEach(group => group.resetFormControlComponent());
   }
 
-  submit(): void {
-    const submission = this.createSubmission("success");
-
-    // TODO: Try to use rxJs to handle the submission. Maybe the operator 'exhaustMap' can be useful here and disable button while submitting
-
-    // dont allow multiple submissions
-    // example scenario: user clicks submit and then leaves the page or destroys the window. then a success and failure submit will be sent
-    this.formSubmitted = true;
-
-    this.httpService.post(environment.endpoints.saveSubmission, submission).subscribe({
-      next: (response) => {
-        console.log("Response", response);
-      },
-      error(err) {
-        console.log("Error", err);
-      },
-    })
-  }
-
-
   private sendSubmissionBeacon(submission: Submission) {
     // Send the submission data to the backend using the Beacon API
     // This is useful for sending data to the server even if the user navigates away or close the browser / tab
@@ -134,5 +133,7 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   ngOnDestroy() {
     const surveyFormData = this.createSubmission("failure");
     this.sendSubmissionBeacon(surveyFormData);
+
+    this.submitFormSub?.unsubscribe();
   }
 }
