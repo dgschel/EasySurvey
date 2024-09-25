@@ -35,6 +35,11 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
 
   form = new FormGroup({});
   formSubmitted: boolean = false;
+  /*
+  * The start date when the component is initialized
+  * Currently this will not reset when the form is submitted and the user wants to fill it again
+  * although it should reset when the form is submitted and the user wants to fill it again to calculate the time taken to fill the form
+  */
   startSurveyDate: Date = new Date();
 
   ngAfterContentChecked(): void {
@@ -119,9 +124,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     navigator.sendBeacon(saveSubmissionUrl, JSON.stringify(submission));
   }
 
-  // TODO: Only allow a failure submission if the survey has been paid. Perhaps its fixed when we define a new component to only show when survey is paid. Move logic inside this component
-
-
   // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
@@ -129,7 +131,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     this.sendSubmissionBeacon(surveyFormData);
   }
 
-  // This method is called when the component is destroyed
   ngOnDestroy() {
     const surveyFormData = this.createSubmission("failure");
     this.sendSubmissionBeacon(surveyFormData);
