@@ -1,0 +1,15 @@
+<div class="hero">
+  <div class="hero-content p-0 text-center">
+    <div class="max-w-lg">
+      <h2 class="text-lg font-bold my-2">
+        <ng-content select="[header]" />
+      </h2>
+
+      <p class="my-4">
+        <ng-content select="[message]" />
+      </p>
+
+      <ng-content select="[footer]" />
+    </div>
+  </div>
+</div>

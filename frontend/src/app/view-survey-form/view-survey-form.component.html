@@ -1,6 +1,54 @@
-<form class="grid gap-4" [formGroup]="form">
-  @for (model of models; track $index) {
-  <app-view-survey-group [model]="model"></app-view-survey-group>
+@if (surveyHandler$ | async; as currentSurvey) {
+  @switch (currentSurvey.status) {
+    @case ("paid") {
+      <div class="container max-w-screen-sm mx-auto">
+        <!-- Display survey when status is paid  -->
+        <app-survey-paid-form [surveyModels]="currentSurvey.models" [surveyId]="surveyId" />
+      </div>
+    }
+    @case ("not paid") {
+      <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
+        <app-general-message>
+          <ng-container header> Ihr Formular ist fast bereit! </ng-container>
+          <ng-container message>
+            Um Ihr Formular zu aktivieren und freizuschalten, ist eine Zahlung erforderlich. Folgen Sie den unten
+            stehenden Button, um den Zahlungsprozess zu abzuschließen
+          </ng-container>
+          <div footer>
+            <a class="btn btn-primary" [routerLink]="['/survey', surveyId, 'checkout']"> Zur Zahlung fortfahren </a>
+          </div>
+        </app-general-message>
+
+      </div>
+    }
+    @default {
+      <!-- This case should never happen -->
+      <div class="container max-w-screen-sm mx-auto">
+        <app-display-error-message errorMessage="Fehler beim Laden des Formulars. Bitte versuche es später erneut" />
+        <a class="btn btn-outline max-w-xs mx-auto" routerLink="/">Zurück zur Startseite</a>
+      </div>
+    }
   }
-  <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
-</form>
+} @else if (isLoading) {
+  <app-loading />
+} @else {
+  <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
+    <app-general-message>
+      <ng-container header> Fehler beim Laden des Formulars </ng-container>
+      <ng-container message>
+        Das Formular existiert nicht, wurde bereits archiviert oder konnte nicht geladen werden. Kontaktiere den Support
+        oder kehre zur Startseite zurück
+      </ng-container>
+      <div footer>
+        <a class="btn btn-primary" [routerLink]="['/']"> Zurück zur Startseite </a>
+      </div>
+    </app-general-message>
+
+    <app-basic-card>
+      <div class="card-body">
+        <h3 class="text-sm font-medium text-left ml-3 mb-1">Formular-ID</h3>
+        <app-copy-to-clipboard [textToCopy]="surveyId" />
+      </div>
+    </app-basic-card>
+  </div>
+}
