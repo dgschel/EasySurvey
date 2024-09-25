@@ -45,6 +45,10 @@ export class FormControlCheckboxComponent implements OnInit, FormControlComponen
     this.surveyFormControl = new SurveyFormCheckboxControl(this.parentFormGroup, this.validator(), this.options(), this.controlKeyName());
   }
 
+  reset(): void {
+    this.control?.reset();
+  }
+
   getValue<T>(): T {
     return this.surveyFormControl?.selectedValues as T;
   }

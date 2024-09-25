@@ -48,4 +48,8 @@ export class FormControlSelectComponent implements OnInit, FormControlComponentV
   getValue<T>(): T {
     return this.control?.value as T
   }
+
+  reset(): void {
+    this.control?.reset();
+  }
 }

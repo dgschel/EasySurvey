@@ -46,6 +46,10 @@ export class FormControlRadioComponent implements OnInit, FormControlComponentVa
     this.surveyFormControl = new SurveyFormControl(this.parentFormGroup, this.validator(), this.controlKeyName());
   }
 
+  reset(): void {
+    this.control?.reset();
+  }
+
   getValue<T>(): T {
     return this.control?.value as T
   }
