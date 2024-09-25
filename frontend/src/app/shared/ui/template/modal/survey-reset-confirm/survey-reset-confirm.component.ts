@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-survey-reset-confirm',
@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './survey-reset-confirm.component.scss'
 })
 export class SurveyResetConfirmComponent {
-
+  reset = output<void>();
 }
