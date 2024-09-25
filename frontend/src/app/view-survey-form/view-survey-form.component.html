@@ -1,12 +1,8 @@
 @if (surveyHandler$ | async; as currentSurvey) {
   @switch (currentSurvey.status) {
     @case ("paid") {
-      <form class="grid gap-4" [formGroup]="form">
-        @for (model of survey.models; track $index) {
-          <app-view-survey-group [model]="model" />
-        }
-        <button type="submit" class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Save</button>
-      </form>
+      <!-- Display survey when status is paid  -->
+      <app-survey-paid-form [surveyModels]="currentSurvey.models" [surveyId]="surveyId" />
     }
     @case ("not paid") {
       <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
