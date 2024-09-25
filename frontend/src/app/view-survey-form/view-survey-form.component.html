@@ -1,5 +1,5 @@
-@if (surveyHandler$ | async; as survey) {
-  @switch (survey.status) {
+@if (surveyHandler$ | async; as currentSurvey) {
+  @switch (currentSurvey.status) {
     @case ("paid") {
       <form class="grid gap-4" [formGroup]="form">
         @for (model of survey.models; track $index) {
