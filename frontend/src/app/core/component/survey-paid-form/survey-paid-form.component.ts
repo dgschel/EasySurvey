@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, createComponent, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { SurveyModel } from '../../../util/type/survey-type';
@@ -6,6 +6,8 @@ import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/v
 import { Submission } from '../../../util/type/submission';
 import { HttpService } from '../../service/http.service';
 import { environment } from '../../../../environments/environment';
+import { ModalService } from '../../service/modal.service';
+import { SurveyResetConfirmComponent } from '../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
 
 @Component({
   selector: 'app-survey-paid-form',
@@ -17,6 +19,8 @@ import { environment } from '../../../../environments/environment';
 export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
   private httpService = inject(HttpService);
   private changeDetector = inject(ChangeDetectorRef);
+  private modalService = inject(ModalService);
+  private environmentInjector = inject(EnvironmentInjector);
 
   surveyModels = input.required<SurveyModel[]>();
   surveyId = input.required<string>();
@@ -62,7 +66,25 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     return submission;
   }
 
-  resetControls(): void {
+  private createModal() {
+    const cmp = createComponent(SurveyResetConfirmComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.instance.reset.subscribe(() => {
+      this.resetControls();
+      this.modalService.close();
+    })
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
+  };
+
+  confirmReset(): void {
+    this.createModal();
+  }
+
+  private resetControls(): void {
     this.surveyGroups.forEach(group => group.resetFormControlComponent());
   }
 
