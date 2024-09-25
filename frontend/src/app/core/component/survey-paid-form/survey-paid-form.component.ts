@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { SurveyModel } from '../../../util/type/survey-type';
@@ -14,8 +14,9 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './survey-paid-form.component.html',
   styleUrl: './survey-paid-form.component.scss'
 })
-export class SurveyPaidFormComponent implements OnDestroy {
+export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
   private httpService = inject(HttpService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   surveyModels = input.required<SurveyModel[]>();
   surveyId = input.required<string>();
@@ -23,6 +24,12 @@ export class SurveyPaidFormComponent implements OnDestroy {
   form = new FormGroup({});
   formSubmitted: boolean = false;
   startSurveyDate: Date = new Date();
+
+  ngAfterContentChecked(): void {
+    // We need to manually trigger change detection to update the view when the form is updated using data binding
+    // Since every survey group is a separate component that can have a form control which updates on blur, we need to manually trigger change detection to update the view
+    this.changeDetector.detectChanges();
+  }
 
   // ViewChildren is used to query each ViewSurveyGroupComponent instance
   // This is useful for getting the form values from each survey group
