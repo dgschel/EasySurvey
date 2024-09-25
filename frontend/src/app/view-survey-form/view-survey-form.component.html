@@ -1,8 +1,10 @@
 @if (surveyHandler$ | async; as currentSurvey) {
   @switch (currentSurvey.status) {
     @case ("paid") {
-      <!-- Display survey when status is paid  -->
-      <app-survey-paid-form [surveyModels]="currentSurvey.models" [surveyId]="surveyId" />
+      <div class="container max-w-screen-sm mx-auto">
+        <!-- Display survey when status is paid  -->
+        <app-survey-paid-form [surveyModels]="currentSurvey.models" [surveyId]="surveyId" />
+      </div>
     }
     @case ("not paid") {
       <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
