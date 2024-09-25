@@ -1,5 +1,6 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, createComponent, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, createComponent, ElementRef, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { catchError, delay, EMPTY, exhaustMap, fromEvent, map, Subscription, tap } from 'rxjs';
 
 import { SurveyModel } from '../../../util/type/survey-type';
 import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/view-survey-group.component";
@@ -17,7 +18,7 @@ import { GeneralMessageComponent } from "../../../shared/ui/general-message/gene
   templateUrl: './survey-paid-form.component.html',
   styleUrl: './survey-paid-form.component.scss'
 })
-export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
+export class SurveyPaidFormComponent implements AfterViewInit, AfterContentChecked, OnDestroy {
   private httpService = inject(HttpService);
   private changeDetector = inject(ChangeDetectorRef);
   private modalService = inject(ModalService);
