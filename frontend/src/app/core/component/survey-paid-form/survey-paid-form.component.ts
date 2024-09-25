@@ -62,7 +62,7 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     return submission;
   }
 
-  remove(): void {
+  resetControls(): void {
     this.surveyGroups.forEach(group => group.resetFormControlComponent());
   }
 
