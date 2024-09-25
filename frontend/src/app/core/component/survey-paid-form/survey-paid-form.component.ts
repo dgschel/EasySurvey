@@ -67,7 +67,7 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     return submission;
   }
 
-  private createModal() {
+  showResetDialog(): void {
     const cmp = createComponent(SurveyResetConfirmComponent, {
       environmentInjector: this.environmentInjector,
     });
@@ -79,10 +79,6 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
 
     const modal = this.modalService.open(cmp);
     modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
-  };
-
-  confirmReset(): void {
-    this.createModal();
   }
 
   private resetControls(): void {
