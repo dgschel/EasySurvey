@@ -14,6 +14,7 @@ import { HttpService } from '../core/service/http.service';
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
 import { CopyToClipboardComponent } from "../shared/feature/copy-to-clipboard/copy-to-clipboard.component";
 import { GeneralMessageComponent } from '../shared/ui/general-message/general-message.component';
+import { DisplayErrorMessageComponent } from "../shared/ui/display-error-message/display-error-message.component";
 
 @Component({
   selector: 'app-view-survey-form',
@@ -28,8 +29,9 @@ import { GeneralMessageComponent } from '../shared/ui/general-message/general-me
     RouterLink,
     LoadingComponent,
     CopyToClipboardComponent,
-    BasicCardComponent
-  ],
+    BasicCardComponent,
+    DisplayErrorMessageComponent
+],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
 })

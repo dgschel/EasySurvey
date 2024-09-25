@@ -30,7 +30,11 @@
       </div>
     }
     @default {
-      Unknown Status
+      <!-- This case should never happen -->
+      <div class="container max-w-screen-sm mx-auto">
+        <app-display-error-message errorMessage="Fehler beim Laden des Formulars. Bitte versuche es später erneut" />
+        <a class="btn btn-outline max-w-xs mx-auto" routerLink="/">Zurück zur Startseite</a>
+      </div>
     }
   }
 } @else if (isLoading) {
