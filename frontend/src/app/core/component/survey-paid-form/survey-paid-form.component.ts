@@ -24,6 +24,12 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   private modalService = inject(ModalService);
   private environmentInjector = inject(EnvironmentInjector);
 
+  // ViewChildren is used to query each ViewSurveyGroupComponent instance
+  // This is useful for getting the form values from each survey group
+  @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
+
+  @ViewChild('submitForm') submitForm!: ElementRef<HTMLFormElement>;
+
   surveyModels = input.required<SurveyModel[]>();
   surveyId = input.required<string>();
 
@@ -36,10 +42,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     // Since every survey group is a separate component that can have a form control which updates on blur, we need to manually trigger change detection to update the view
     this.changeDetector.detectChanges();
   }
-
-  // ViewChildren is used to query each ViewSurveyGroupComponent instance
-  // This is useful for getting the form values from each survey group
-  @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
 
   // Creates a survey form data object from the survey groups
   private createSurveyFormData(): Record<string, string | string[]> {
