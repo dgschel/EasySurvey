@@ -76,7 +76,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
       )),
       switchMap(() => qrCodeResponse$),
       map(qrCode => this.handleSubmissionSuccess(qrCode)),
-      catchError((error => this.handleSubmissionError(error)))
     );
 
     this.submitFormSub = saveSubmission$.pipe(
@@ -96,6 +95,9 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   private handleSubmissionError(error: HttpErrorResponse): Observable<never> {
     // TODO: Log all errors with application insights
     console.error("Error submitting survey form:", error);
+
+    // Reset the form submitting state to allow the user to submit the form again
+    this.isFormSubmitting = false;
 
     const cmp = createComponent(SubmissionFailedComponent, {
       environmentInjector: this.environmentInjector,
