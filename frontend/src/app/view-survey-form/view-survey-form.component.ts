@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
-import { catchError, EMPTY, filter, map, merge, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { catchError, EMPTY, filter, map, merge, Observable, shareReplay, Subscription, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { BasicCardComponent } from "../shared/ui/basic-card/basic-card.component";
 import { SurveyModel, SurveyPaymentStatus } from '../util/type/survey-type';
@@ -13,6 +13,7 @@ import { CopyToClipboardComponent } from "../shared/feature/copy-to-clipboard/co
 import { GeneralMessageComponent } from '../shared/ui/general-message/general-message.component';
 import { DisplayErrorMessageComponent } from "../shared/ui/display-error-message/display-error-message.component";
 import { SurveyPaidFormComponent } from "../core/component/survey-paid-form/survey-paid-form.component";
+import { SubNavigationService } from '../core/service/sub-navigation.service';
 
 @Component({
   selector: 'app-view-survey-form',
@@ -26,13 +27,15 @@ import { SurveyPaidFormComponent } from "../core/component/survey-paid-form/surv
     CopyToClipboardComponent,
     DisplayErrorMessageComponent,
     SurveyPaidFormComponent
-],
+  ],
   templateUrl: './view-survey-form.component.html',
   styleUrl: './view-survey-form.component.scss',
 })
-export class ViewSurveyFormComponent implements OnInit {
+export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   private httpService = inject(HttpService);
   private activatedRoute = inject(ActivatedRoute);
+  private subNavigationService = inject(SubNavigationService);
+  private subNavigationSubscription: Subscription | undefined;
 
   surveyHandler$: Observable<{ status: SurveyPaymentStatus['status'], models: SurveyModel[] }> = EMPTY;
   surveyId: string = "";
@@ -43,6 +46,17 @@ export class ViewSurveyFormComponent implements OnInit {
       map(params => params.get('id') || ''),
       tap(surveyId => this.surveyId = surveyId), // Store the surveyId
     )
+
+    this.subNavigationSubscription = surveyId$.pipe(
+      map(surveyId => `survey/${surveyId}`),
+      map(route => this.subNavigationService.updateSubNavConfig({
+        show: true,
+        tabs: [
+          { label: 'Fragen', route: `${route}/viewform` },
+          { label: 'Ergebnisse', route: `${route}/statistic` }
+        ]
+      }))
+    ).subscribe();
 
     const surveyPaymentStatus$ = surveyId$.pipe(
       map(surveyId => environment.endpoints.surveyPaymentStatus.replace('{surveyId}', surveyId)),
@@ -82,4 +96,7 @@ export class ViewSurveyFormComponent implements OnInit {
     this.surveyHandler$ = merge(paidSurvey$, notPaidSurvey$);
   }
 
+  ngOnDestroy(): void {
+    this.subNavigationSubscription?.unsubscribe();
+  }
 }
