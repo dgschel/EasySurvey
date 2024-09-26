@@ -97,6 +97,7 @@ export class ViewSurveyFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.subNavigationService.clearSubNavConfig();
     this.subNavigationSubscription?.unsubscribe();
   }
 }

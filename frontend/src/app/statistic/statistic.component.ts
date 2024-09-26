@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -24,7 +24,7 @@ import { SubNavigationService } from '../core/service/sub-navigation.service';
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
-export class StatisticComponent implements OnInit {
+export class StatisticComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private httpService = inject(HttpService);
   private subNavigationService = inject(SubNavigationService);
@@ -140,5 +140,9 @@ export class StatisticComponent implements OnInit {
   fetchSurveyStatistic(surveyId: string) {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', surveyId);
     return this.httpService.get<SurveyStatisticResponse>(url);
+  }
+
+  ngOnDestroy() {
+    this.subNavigationService.clearSubNavConfig();
   }
 }
