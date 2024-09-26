@@ -1,0 +1,22 @@
+<div class="hero">
+  <div class="hero-content p-0 text-center">
+    <div class="max-w-lg">
+      <h2 class="text-lg font-bold my-2">Vielen Dank für Ihre Teilnahme</h2>
+
+      <p class="my-4 sm:my-6">
+        Ihre Antworten wurden erfolgreich eingereicht. Scannen Sie den QR-Code, um die Statistiken einzusehen
+      </p>
+
+      <!-- Display QR-Code  -->
+      <div class="w-60 mx-auto">
+        <app-display-qr-code [qrCode]="svg" />
+      </div>
+
+      <div class="divider">oder</div>
+
+      <button [routerLink]="['survey', surveyId, 'statistic']" class="btn btn-primary mt-6">
+        Weiter zur Statistik
+      </button>
+    </div>
+  </div>
+</div>

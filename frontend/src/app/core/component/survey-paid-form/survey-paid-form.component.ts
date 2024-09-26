@@ -1,5 +1,6 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, createComponent, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, createComponent, ElementRef, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { catchError, EMPTY, exhaustMap, fromEvent, map, Observable, Subscription, switchMap, tap } from 'rxjs';
 
 import { SurveyModel } from '../../../util/type/survey-type';
 import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/view-survey-group.component";
@@ -9,6 +10,9 @@ import { environment } from '../../../../environments/environment';
 import { ModalService } from '../../service/modal.service';
 import { SurveyResetConfirmComponent } from '../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
 import { GeneralMessageComponent } from "../../../shared/ui/general-message/general-message.component";
+import { SubmissionSuccesfullySavedComponent } from '../../../shared/ui/template/modal/submission-succesfully-saved/submission-succesfully-saved.component';
+import { SubmissionFailedComponent } from '../../../shared/ui/template/modal/submission-failed/submission-failed.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-survey-paid-form',
@@ -17,18 +21,70 @@ import { GeneralMessageComponent } from "../../../shared/ui/general-message/gene
   templateUrl: './survey-paid-form.component.html',
   styleUrl: './survey-paid-form.component.scss'
 })
-export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
+export class SurveyPaidFormComponent implements AfterViewInit, AfterContentChecked, OnDestroy {
   private httpService = inject(HttpService);
   private changeDetector = inject(ChangeDetectorRef);
   private modalService = inject(ModalService);
   private environmentInjector = inject(EnvironmentInjector);
 
+  // ViewChildren is used to query each ViewSurveyGroupComponent instance
+  // This is useful for getting the form values from each survey group
+  @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
+
+  @ViewChild('submitForm') submitForm!: ElementRef<HTMLFormElement>;
+
   surveyModels = input.required<SurveyModel[]>();
   surveyId = input.required<string>();
 
+  submitFormSub: Subscription | undefined;
   form = new FormGroup({});
   formSubmitted: boolean = false;
+  isFormSubmitting: boolean = false;
+  /*
+  * The start date when the component is initialized
+  * Currently this will not reset when the form is submitted and the user wants to fill it again
+  * although it should reset when the form is submitted and the user wants to fill it again to calculate the time taken to fill the form
+  */
   startSurveyDate: Date = new Date();
+
+  // Checks if the form is valid and has not been submitted
+  get isValidAndNotSubmitted(): boolean {
+    return this.form.valid && !this.isFormSubmitting;
+  }
+
+  ngAfterViewInit(): void {
+    const formSubmitClick$ = fromEvent(this.submitForm.nativeElement, 'click').pipe(
+      tap(() => {
+        this.isFormSubmitting = true;
+        this.formSubmitted = true;
+      })
+    );
+
+    const createSubmission$ = formSubmitClick$.pipe(
+      map(() => this.createSubmission("success"))
+    );
+
+    const path = `survey/${this.surveyId()}/statistic`;
+    const qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
+      map(({ data }) => data.svg),
+      catchError(error => this.handleSubmissionError(error))
+    )
+
+    const saveSubmission$ = createSubmission$.pipe(
+      exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission).pipe(
+        catchError(error => this.handleSubmissionError(error))
+      )),
+      switchMap(() => qrCodeResponse$),
+      map(qrCode => this.handleSubmissionSuccess(qrCode)),
+    );
+
+    this.submitFormSub = saveSubmission$.pipe(
+      tap(() => {
+        this.resetControls();
+        this.isFormSubmitting = false;
+      })
+    ).subscribe();
+  }
 
   ngAfterContentChecked(): void {
     // We need to manually trigger change detection to update the view when the form is updated using data binding
@@ -36,9 +92,36 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     this.changeDetector.detectChanges();
   }
 
-  // ViewChildren is used to query each ViewSurveyGroupComponent instance
-  // This is useful for getting the form values from each survey group
-  @ViewChildren(ViewSurveyGroupComponent) surveyGroups!: QueryList<ViewSurveyGroupComponent>
+  private handleSubmissionError(error: HttpErrorResponse): Observable<never> {
+    // TODO: Log all errors with application insights
+    console.error("Error submitting survey form:", error);
+
+    // Reset the form submitting state to allow the user to submit the form again
+    this.isFormSubmitting = false;
+
+    const cmp = createComponent(SubmissionFailedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('surveyId', this.surveyId());
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
+
+    return EMPTY;
+  }
+
+  private handleSubmissionSuccess(qrCode: string): void {
+    const cmp = createComponent(SubmissionSuccesfullySavedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('surveyId', this.surveyId());
+    cmp.setInput('svg', qrCode);
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
+  }
 
   // Creates a survey form data object from the survey groups
   private createSurveyFormData(): Record<string, string | string[]> {
@@ -67,7 +150,7 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     return submission;
   }
 
-  private createModal() {
+  showResetDialog(): void {
     const cmp = createComponent(SurveyResetConfirmComponent, {
       environmentInjector: this.environmentInjector,
     });
@@ -79,35 +162,12 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
 
     const modal = this.modalService.open(cmp);
     modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
-  };
-
-  confirmReset(): void {
-    this.createModal();
   }
 
+  // Resets the form controls of each survey group component
   private resetControls(): void {
     this.surveyGroups.forEach(group => group.resetFormControlComponent());
   }
-
-  submit(): void {
-    const submission = this.createSubmission("success");
-
-    // TODO: Try to use rxJs to handle the submission. Maybe the operator 'exhaustMap' can be useful here and disable button while submitting
-
-    // dont allow multiple submissions
-    // example scenario: user clicks submit and then leaves the page or destroys the window. then a success and failure submit will be sent
-    this.formSubmitted = true;
-
-    this.httpService.post(environment.endpoints.saveSubmission, submission).subscribe({
-      next: (response) => {
-        console.log("Response", response);
-      },
-      error(err) {
-        console.log("Error", err);
-      },
-    })
-  }
-
 
   private sendSubmissionBeacon(submission: Submission) {
     // Send the submission data to the backend using the Beacon API
@@ -120,9 +180,6 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     navigator.sendBeacon(saveSubmissionUrl, JSON.stringify(submission));
   }
 
-  // TODO: Only allow a failure submission if the survey has been paid. Perhaps its fixed when we define a new component to only show when survey is paid. Move logic inside this component
-
-
   // This method is called when the user tries to navigate away from the page either through the browser navigation or by closing the tab
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: Event) {
@@ -130,9 +187,11 @@ export class SurveyPaidFormComponent implements AfterContentChecked, OnDestroy {
     this.sendSubmissionBeacon(surveyFormData);
   }
 
-  // This method is called when the component is destroyed
   ngOnDestroy() {
     const surveyFormData = this.createSubmission("failure");
     this.sendSubmissionBeacon(surveyFormData);
+
+    this.submitFormSub?.unsubscribe();
+    this.modalService.close();
   }
 }

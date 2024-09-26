@@ -47,7 +47,7 @@ export class FormControlRadioComponent implements OnInit, FormControlComponentVa
   }
 
   reset(): void {
-    this.control?.reset();
+    this.control?.reset("");
   }
 
   getValue<T>(): T {
