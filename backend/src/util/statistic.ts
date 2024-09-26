@@ -22,16 +22,19 @@ export function summarizeSurveyStatistic(parsedSubmission: {
       // If the answer is an array, increment the count for each answer
       if (Array.isArray(answer)) {
 
-        // Increment the count for each answer
-        // Empty answers are ignored
-        answer.forEach((value) => {
-          if (!acc[question][value]) {
-            acc[question][value] = 0; // Initialize the answer count if not already initialized
+        // Helper function to increment the count for the answer
+        const incrementCount = (key: string) => {
+          if (!acc[question][key]) {
+            acc[question][key] = 0; // Initialize the answer count if not already initialized
           }
+          acc[question][key] += 1; // Increment the count for this answer
+        };
 
-          // Increment the count for this answer
-          acc[question][value] += 1;
-        });
+        if (answer.length === 0) {
+          incrementCount("No answer");
+        } else {
+          answer.forEach((value) => incrementCount(value));
+        }
       }
 
       else {
