@@ -1,6 +1,6 @@
 import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, createComponent, ElementRef, EnvironmentInjector, HostListener, inject, input, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { catchError, EMPTY, exhaustMap, fromEvent, map, Subscription, tap } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, fromEvent, map, Observable, Subscription, switchMap, tap } from 'rxjs';
 
 import { SurveyModel } from '../../../util/type/survey-type';
 import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/view-survey-group.component";
@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 import { ModalService } from '../../service/modal.service';
 import { SurveyResetConfirmComponent } from '../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
 import { GeneralMessageComponent } from "../../../shared/ui/general-message/general-message.component";
+import { SubmissionSuccesfullySavedComponent } from '../../../shared/ui/template/modal/submission-succesfully-saved/submission-succesfully-saved.component';
 
 @Component({
   selector: 'app-survey-paid-form',
@@ -61,6 +62,15 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
       map(() => this.createSubmission("success"))
     );
 
+    const path = `survey/${this.surveyId()}/statistic`;
+    const qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
+      map(({ data }) => data.svg),
+      catchError(error => {
+        console.error("Error fetching QR-Code for survey:", error);
+        return EMPTY;
+      })
+    )
+
     const saveSubmission$ = createSubmission$.pipe(
       exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission).pipe(
         catchError(error => {
@@ -68,7 +78,9 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
           console.error("Error submitting survey form:", error);
           return EMPTY; // Return an empty observable to prevent the error from propagating
         })
-      ))
+      )),
+      switchMap(() => qrCodeResponse$),
+      map(qrCode => this.handleSubmissionSuccess(qrCode))
     );
 
     this.submitFormSub = saveSubmission$.pipe(
@@ -83,6 +95,20 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     // We need to manually trigger change detection to update the view when the form is updated using data binding
     // Since every survey group is a separate component that can have a form control which updates on blur, we need to manually trigger change detection to update the view
     this.changeDetector.detectChanges();
+  }
+
+  private handleSubmissionSuccess(qrCode: string): Observable<never> {
+    const cmp = createComponent(SubmissionSuccesfullySavedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('surveyId', this.surveyId());
+    cmp.setInput('svg', qrCode);
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
+
+    return EMPTY;
   }
 
   // Creates a survey form data object from the survey groups
