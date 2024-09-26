@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+
+import { SubNavigationService } from '../../service/sub-navigation.service';
 
 @Component({
   selector: 'app-sub-navigation',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './sub-navigation.component.html',
   styleUrl: './sub-navigation.component.scss'
 })
 export class SubNavigationComponent {
-
+  protected subNavService = inject(SubNavigationService);
 }
