@@ -50,22 +50,31 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
   }
 
   ngAfterViewInit(): void {
-    this.submitFormSub = fromEvent(this.submitForm.nativeElement, 'click').pipe(
+    const formSubmitClick$ = fromEvent(this.submitForm.nativeElement, 'click').pipe(
       tap(() => {
         this.isFormSubmitting = true;
         this.formSubmitted = true;
-      }),
-      map(() => this.createSubmission("success")),
+      })
+    );
+
+    const createSubmission$ = formSubmitClick$.pipe(
+      map(() => this.createSubmission("success"))
+    );
+
+    const saveSubmission$ = createSubmission$.pipe(
       exhaustMap(submission => this.httpService.post<undefined>(environment.endpoints.saveSubmission, submission).pipe(
         catchError(error => {
           // Handle error by showing a message to the user that the submission failed using modal service
           console.error("Error submitting survey form:", error);
           return EMPTY; // Return an empty observable to prevent the error from propagating
         })
-      )),
+      ))
+    );
+
+    this.submitFormSub = saveSubmission$.pipe(
       tap(() => {
-        this.resetControls()
-        this.isFormSubmitting = false
+        this.resetControls();
+        this.isFormSubmitting = false;
       })
     ).subscribe();
   }
