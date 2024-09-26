@@ -13,7 +13,7 @@
       -->
       <div class="grid gap-4 container max-w-screen-sm mx-auto">
         <app-display-error-message errorMessage="Die Zahlung ist fehlgeschlagen oder wurde storniert. Bitte versuche es erneut, um dein Formular zu aktivieren" />
-        <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+        <a class="btn btn-primary max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
       </div>
     }
   }
@@ -21,7 +21,7 @@
 } @else if (errorMessage) {
   <div class="grid gap-4 container max-w-screen-sm mx-auto">
     <app-display-error-message [errorMessage]="errorMessage" />
-    <a class="btn btn-outline max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
+    <a class="btn btn-primary max-w-xs mx-auto" [routerLink]="['/home']">Zurück zur Startseite</a>
   </div>
 }
 
