@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
+import { map, filter, switchMap, catchError, EMPTY, tap } from 'rxjs';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
 import { SubmissionInputs, SubmissionCountResponse, SurveyStatisticResponse, SubmissionCount } from '../util/type/statistic';
@@ -15,6 +15,7 @@ import { ChartListComponent } from './component/chart-list/chart-list.component'
 import { LoadingComponent } from '../shared/ui/loading/loading.component';
 import { HttpService } from '../core/service/http.service';
 import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
+import { SubNavigationService } from '../core/service/sub-navigation.service';
 
 @Component({
   selector: 'app-statistic',
@@ -23,9 +24,10 @@ import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
-export class StatisticComponent implements OnInit {
+export class StatisticComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private httpService = inject(HttpService);
+  private subNavigationService = inject(SubNavigationService);
 
   isLoading: boolean = true;
   errorMessage: string = '';
@@ -37,7 +39,16 @@ export class StatisticComponent implements OnInit {
     this.activatedRoute.paramMap.pipe(
       filter(params => params.has('id')),
       map(params => params.get('id') as string),
-      switchMap(id => this.fetchSurveyStatistic(id).pipe(
+      tap(surveyId => {
+        this.subNavigationService.updateSubNavConfig({
+          show: true,
+          tabs: [
+            { label: 'Fragen', route: `survey/${surveyId}/viewform` },
+            { label: 'Ergebnisse', route: `survey/${surveyId}/statistic` }
+          ]
+        })
+      }),
+      switchMap(surveyId => this.fetchSurveyStatistic(surveyId).pipe(
         catchError((error: HttpErrorResponse) => {
           // Handle the from the server
           this.isLoading = false;
@@ -129,5 +140,9 @@ export class StatisticComponent implements OnInit {
   fetchSurveyStatistic(surveyId: string) {
     const url = environment.endpoints.getSurveyStatistic.replace('{surveyId}', surveyId);
     return this.httpService.get<SurveyStatisticResponse>(url);
+  }
+
+  ngOnDestroy() {
+    this.subNavigationService.clearSubNavConfig();
   }
 }
