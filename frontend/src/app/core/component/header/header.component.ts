@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { SubNavigationComponent } from "../sub-navigation/sub-navigation.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [SubNavigationComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
