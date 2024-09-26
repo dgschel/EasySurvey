@@ -1,6 +1,6 @@
 @if (subNavService.subNavConfig$ | async; as nav) {
   @if (nav.show) {
-    <div role="tablist" class="container max-w-xs mx-auto tabs tabs-bordered">
+    <div role="tablist" class="container max-w-xs mx-auto tabs tabs-bordered tabs-sm">
       @for (tab of nav.tabs; track $index) {
         <a role="tab" class="tab" [routerLink]="tab.route" routerLinkActive="tab-active">{{ tab.label }}</a>
       }
