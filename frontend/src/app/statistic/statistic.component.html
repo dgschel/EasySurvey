@@ -6,7 +6,13 @@
   }
 
   @if (errorMessage) {
-  <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
+  <!-- Container for error message -->
+  <div class="flex flex-col max-w-screen-sm mx-auto">
+    <app-display-error-message [errorMessage]="errorMessage" />
+    <a class="btn btn-primary w-full sm:w-fit mt-10 mx-auto" routerLink="/">
+      Zurück zur Startseite
+    </a>
+  </div>
   }
 
   @if (!isLoading && !errorMessage) {

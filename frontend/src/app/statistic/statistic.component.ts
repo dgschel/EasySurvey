@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map, filter, switchMap, catchError, EMPTY } from 'rxjs';
 
 import { SurveyStatisticDiagrammComponent } from './component/survey-statistic-diagramm/survey-statistic-diagramm.component';
@@ -19,7 +19,7 @@ import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message
 @Component({
   selector: 'app-statistic',
   standalone: true,
-  imports: [SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent, LoadingComponent, DisplayErrorMessageComponent],
+  imports: [RouterLink, SurveyStatisticDiagrammComponent, DisplayStatisticComponent, TableStatisticComponent, ChartListComponent, LoadingComponent, DisplayErrorMessageComponent],
   templateUrl: './statistic.component.html',
   styleUrl: './statistic.component.scss'
 })
