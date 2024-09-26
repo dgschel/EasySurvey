@@ -192,5 +192,6 @@ export class SurveyPaidFormComponent implements AfterViewInit, AfterContentCheck
     this.sendSubmissionBeacon(surveyFormData);
 
     this.submitFormSub?.unsubscribe();
+    this.modalService.close();
   }
 }
