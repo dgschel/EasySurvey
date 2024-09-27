@@ -42,6 +42,8 @@ export type FormControlComponentType = typeof FormControlInputComponent | typeof
 
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
+export type FormControlTypeValidatorMap = Record<FormControlType, SurveyValidatorType[]>;
+
 export interface FormControlComponentValue {
   getValue<T>(): T,
   reset(): void
