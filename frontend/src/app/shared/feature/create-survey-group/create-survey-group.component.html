@@ -31,6 +31,10 @@
           <input type="checkbox" class="checkbox checkbox-sm" [(ngModel)]="hasDescription">
         </label>
       </div>
+
+      <app-dynamic-validator [validators]="validators" />
+
+      <!--  -->
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text mr-1">Mindestlänge</span>
@@ -54,6 +58,8 @@
             [ngModel]="surveyBaseModel.state().validator.required" (change)="setRequiredValidator(required.checked)" />
         </label>
       </div>
+      <!--  -->
+
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="size-5">

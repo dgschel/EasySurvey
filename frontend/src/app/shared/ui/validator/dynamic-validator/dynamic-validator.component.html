@@ -1,1 +1,3 @@
-<p>dynamic-validator works!</p>
+@for (validator of validators; track $index) {
+  <div class="text-red-400">{{ validator }}</div>
+}

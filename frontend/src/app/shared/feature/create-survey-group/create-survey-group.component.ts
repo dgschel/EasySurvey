@@ -11,11 +11,12 @@ import { SurveyBase } from '../../../core/model/survey-base';
 import { createFormComponent } from '../../../util/component/create';
 import { validatorFactory } from '../../../core/provider/validator';
 import { AbstractValidator } from '../../../core/model/validator';
+import { DynamicValidatorComponent } from "../../ui/validator/dynamic-validator/dynamic-validator.component";
 
 @Component({
   selector: 'app-create-survey-group',
   standalone: true,
-  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder],
+  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder, DynamicValidatorComponent],
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
