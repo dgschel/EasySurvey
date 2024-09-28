@@ -1,7 +1,7 @@
 import { NgComponentOutlet } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { SurveyValidatorType, ValidatorComponentType } from '../../../../util/type/survey-type';
+import { SurveyValidatorType, ValidatorComponentType, ValidatorValueChange } from '../../../../util/type/survey-type';
 import { validatorComponentTypeMap } from '../../../form-validator/validators';
 
 @Component({
@@ -13,6 +13,12 @@ import { validatorComponentTypeMap } from '../../../form-validator/validators';
 })
 export class DynamicValidatorComponent {
   @Input() validators: SurveyValidatorType[] = [];
+  @Output() validatorValueChange = new EventEmitter<ValidatorValueChange>();
+
+  // Callback function pass down to the child component using the @Input() decorator
+  onValidatorValueChange = (change: ValidatorValueChange) => {
+    this.validatorValueChange.emit({ validatorType: change.validatorType, value: change.value });
+  }
 
   getValidatorComponent(validator: SurveyValidatorType): ValidatorComponentType {
     return validatorComponentTypeMap[validator];
