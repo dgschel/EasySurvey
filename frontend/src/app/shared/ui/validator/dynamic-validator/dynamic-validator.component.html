@@ -1,3 +1,3 @@
 @for (validator of validators; track $index) {
-  <div class="text-red-400">{{ validator }}</div>
+  <ng-container *ngComponentOutlet="getValidatorComponent(validator)"></ng-container>
 }
