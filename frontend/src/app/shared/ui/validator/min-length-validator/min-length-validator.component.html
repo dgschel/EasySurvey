@@ -1,1 +1,13 @@
-<p>min-length-validator works!</p>
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text mr-1">Mindestlänge</span>
+    <input
+      type="number"
+      min="0"
+      max="10"
+      class="input input-xs input-bordered w-16"
+      #minlength
+      (change)="onValueChange(minlength.valueAsNumber)"
+    />
+  </label>
+</div>

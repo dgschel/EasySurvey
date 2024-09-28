@@ -1,1 +1,6 @@
-<p>required-validator works!</p>
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text mr-1">Pflichtfrage</span>
+    <input type="checkbox" class="toggle toggle-sm" #required (change)="onValueChange(required.checked)" />
+  </label>
+</div>
