@@ -49,8 +49,14 @@ export type FormControlTypeValidatorMap = Record<FormControlType, SurveyValidato
 export type ValidatorComponentType = typeof MinLengthValidatorComponent | typeof RequiredValidatorComponent | typeof MinSelectedValidatorComponent;
 export type ValidatorComponentTypeMap = Record<SurveyValidatorType, ValidatorComponentType>;
 
+// This will be used for the @Input() decorator to pass a function as callback
 export interface ValidatorComponentInput<T = unknown> {
-  onValueChange: (value: T) => T
+  onValidatorValueChange: (change: ValidatorValueChange<T>) => void;
+}
+
+export type ValidatorValueChange<T = unknown> = {
+  validatorType: SurveyValidatorType,
+  value: T
 }
 
 export interface FormControlComponentValue {
