@@ -49,6 +49,10 @@ export type FormControlTypeValidatorMap = Record<FormControlType, SurveyValidato
 export type ValidatorComponentType = typeof MinLengthValidatorComponent | typeof RequiredValidatorComponent | typeof MinSelectedValidatorComponent;
 export type ValidatorComponentTypeMap = Record<SurveyValidatorType, ValidatorComponentType>;
 
+export interface ValidatorComponentInput<T = unknown> {
+  onValueChange: (value: T) => T
+}
+
 export interface FormControlComponentValue {
   getValue<T>(): T,
   reset(): void
