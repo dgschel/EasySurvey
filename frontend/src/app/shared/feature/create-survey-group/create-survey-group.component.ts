@@ -59,6 +59,10 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     }
   }
 
+  onValidatorValueChange(value: any) {
+    console.log(value);
+  }
+
   private createFormInputComponent() {
     const surveyInput = this.getDefaultSurveyInputModel();
     this.surveyComponentModel.set(surveyInput);

@@ -32,33 +32,8 @@
         </label>
       </div>
 
-      <app-dynamic-validator [validators]="validators" />
-
-      <!--  -->
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Mindestlänge</span>
-          <input type="number" max="10" class="input input-xs input-bordered w-16" #minlength
-            [ngModel]="surveyBaseModel.state().validator.minLength?.value"
-            (change)="setMinlengthValidator(minlength.valueAsNumber)" />
-        </label>
-      </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Mindestanzahl</span>
-          <input type="number" max="3" class="input input-xs input-bordered w-16" #minselected
-            [ngModel]="surveyBaseModel.state().validator.minSelected?.value"
-            (change)="setMinSelectedValidator(minselected.valueAsNumber)" />
-        </label>
-      </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Pflichtfrage</span>
-          <input type="checkbox" class="toggle toggle-sm" #required
-            [ngModel]="surveyBaseModel.state().validator.required" (change)="setRequiredValidator(required.checked)" />
-        </label>
-      </div>
-      <!--  -->
+      <!-- Handly dynamic validator change and update the validators object -->
+      <app-dynamic-validator [validators]="validators" (validatorValueChange)="onValidatorValueChange($event)" />
 
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
