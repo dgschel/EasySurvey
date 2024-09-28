@@ -4,7 +4,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel } from '../../../util/type/survey-type';
+import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
 import { SurveyBase } from '../../../core/model/survey-base';
@@ -33,7 +33,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   remove = output<void>();
   clonedSurvey = output<SurveyModel>();
 
-  validators: string[] = [];
+  validators: SurveyValidatorType[] = [];
 
   // Input model from parent component. Default value is a SurveyModel object
   @Input('model') model: SurveyModel = this.surveyModel();

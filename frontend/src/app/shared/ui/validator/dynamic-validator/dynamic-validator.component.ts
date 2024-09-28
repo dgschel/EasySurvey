@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+import { SurveyValidatorType, ValidatorComponentType } from '../../../../util/type/survey-type';
 @Component({
   selector: 'app-dynamic-validator',
   standalone: true,
@@ -9,4 +10,5 @@ import { Component, Input } from '@angular/core';
 })
 export class DynamicValidatorComponent {
   @Input() validators: string[] = [];
+  @Input() validators: SurveyValidatorType[] = [];
 }
