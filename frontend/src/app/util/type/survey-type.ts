@@ -7,6 +7,9 @@ import { FormControlInputComponent } from "../../shared/feature/form-control-inp
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormControlRadioComponent } from "../../shared/feature/form-control-radio/form-control-radio.component";
 import { FormControlCheckboxComponent } from "../../shared/feature/form-control-checkbox/form-control-checkbox.component";
+import { MinLengthValidatorComponent } from "../../shared/ui/validator/min-length-validator/min-length-validator.component";
+import { RequiredValidatorComponent } from "../../shared/ui/validator/required-validator/required-validator.component";
+import { MinSelectedValidatorComponent } from "../../shared/ui/validator/min-selected-validator/min-selected-validator.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -43,6 +46,8 @@ export type FormControlComponentType = typeof FormControlInputComponent | typeof
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
 
 export type FormControlTypeValidatorMap = Record<FormControlType, SurveyValidatorType[]>;
+export type ValidatorComponentType = typeof MinLengthValidatorComponent | typeof RequiredValidatorComponent | typeof MinSelectedValidatorComponent;
+export type ValidatorComponentTypeMap = Record<SurveyValidatorType, ValidatorComponentType>;
 
 export interface FormControlComponentValue {
   getValue<T>(): T,

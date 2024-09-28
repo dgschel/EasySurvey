@@ -1,5 +1,8 @@
 import { AbstractControl, FormArray, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { FormControlTypeValidatorMap, SurveyValidatorMap, SurveyValidatorType, ValidatorConfig } from "../../util/type/survey-type";
+import { FormControlTypeValidatorMap, SurveyValidatorMap, SurveyValidatorType, ValidatorComponentTypeMap, ValidatorConfig } from "../../util/type/survey-type";
+import { RequiredValidatorComponent } from "../ui/validator/required-validator/required-validator.component";
+import { MinLengthValidatorComponent } from "../ui/validator/min-length-validator/min-length-validator.component";
+import { MinSelectedValidatorComponent } from "../ui/validator/min-selected-validator/min-selected-validator.component";
 
 export const customRequiredValidator = (message: string = "This field is required"): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -50,4 +53,10 @@ export const formControlTypeValidatorMap: FormControlTypeValidatorMap = {
   select: ['required'],
   radio: ['required'],
   checkbox: ['minSelected']
+}
+
+export const validatorComponentTypeMap: ValidatorComponentTypeMap = {
+  required: RequiredValidatorComponent,
+  minLength: MinLengthValidatorComponent,
+  minSelected: MinSelectedValidatorComponent
 }
