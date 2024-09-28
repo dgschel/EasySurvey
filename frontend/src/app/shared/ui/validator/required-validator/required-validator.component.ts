@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ValidatorComponentInput } from '../../../../util/type/survey-type';
+import { ValidatorComponentInput, ValidatorValueChange } from '../../../../util/type/survey-type';
 
 @Component({
   selector: 'app-required-validator',
@@ -9,5 +9,11 @@ import { ValidatorComponentInput } from '../../../../util/type/survey-type';
   styleUrl: './required-validator.component.scss'
 })
 export class RequiredValidatorComponent implements ValidatorComponentInput<boolean> {
-  @Input() onValueChange = (value: boolean) => value;
+  // Callback function to send the value to the parent component
+  // The parameter will indeed be used as it contains the object with the validatorType and value
+  @Input() onValidatorValueChange = (value: ValidatorValueChange): void => { };
+
+  valueChanged(value: boolean) {
+    this.onValidatorValueChange({ validatorType: 'required', value });
+  }
 }
