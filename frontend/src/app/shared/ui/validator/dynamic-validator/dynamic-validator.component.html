@@ -1,3 +1,3 @@
 @for (validator of validators; track $index) {
-  <ng-container *ngComponentOutlet="getValidatorComponent(validator); inputs: { onValidatorValueChange }"></ng-container>
+  <ng-container *ngComponentOutlet="getValidatorComponent(validator); inputs: getInputs(validator)"></ng-container>
 }

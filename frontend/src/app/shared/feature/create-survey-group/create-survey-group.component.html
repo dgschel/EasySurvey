@@ -33,7 +33,7 @@
       </div>
 
       <!-- Handly dynamic validator change and update the validators object -->
-      <app-dynamic-validator [validators]="validators" (validatorValueChange)="onValidatorValueChange($event)" />
+      <app-dynamic-validator [validators]="validators" [state]="surveyBaseModel.state().validator" (validatorValueChange)="onValidatorValueChange($event)" />
 
       <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
