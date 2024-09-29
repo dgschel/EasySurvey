@@ -11,6 +11,7 @@ export class EdekaSurveyTemplate implements SurveyTemplateContract {
         "placeholder": "Bitte geben Sie Ihren Namen ein",
         "validator": {
           "required": {
+            "value": true,
             "message": "Name ist erforderlich"
           }
         }
@@ -75,7 +76,7 @@ export class EdekaSurveyTemplate implements SurveyTemplateContract {
   createPredefinedSurvey(): SurveyModel[] {
     const initialSurveyInput = this.createSurveyInput();
     const secondSurveyInput = this.createSurveyInput({
-      ...initialSurveyInput, title: "Zusätzliches Feedback", placeholder: "Haben Sie noch Anmerkungen?", "validator": { "required": { message: 'Feedback ist erforderlich' }, "minLength": { "value": 10 } }
+      ...initialSurveyInput, title: "Zusätzliches Feedback", placeholder: "Haben Sie noch Anmerkungen?", "validator": { "required": { value: true, message: 'Feedback ist erforderlich' }, "minLength": { "value": 10 } }
     });
 
     const initialSurveySelect = this.createSurveySelect();

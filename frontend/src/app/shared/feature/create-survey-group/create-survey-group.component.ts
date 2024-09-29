@@ -123,7 +123,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
   setRequiredValidator(checked: boolean) {
     checked
-      ? this.surveyBaseModel.updateValidator({ required: { message: 'Dieses Feld ist erforderlich' } })
+      ? this.surveyBaseModel.updateValidator({ required: { value: checked, message: 'Dieses Feld ist erforderlich' } })
       : this.surveyBaseModel.deleteValidator('required');
   }
 

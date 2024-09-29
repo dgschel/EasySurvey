@@ -35,7 +35,7 @@ export type ValidatorFunction<T> = (data: T) => ValidatorFn;
 
 export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
 export type ValidatorConfig = {
-  required: { message: string },
+  required: { value: boolean, message: string },
   minLength: { value: number },
   minSelected: { value: number }
 }
