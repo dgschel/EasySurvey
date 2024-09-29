@@ -52,6 +52,7 @@ export type ValidatorComponentTypeMap = Record<SurveyValidatorType, ValidatorCom
 // This will be used for the @Input() decorator to pass a function as callback
 export interface ValidatorComponentInput<T = unknown> {
   onValidatorValueChange: (change: ValidatorValueChange<T>) => void;
+  value: T; // This will be used to set the value of the input field. Currently typed as number | boolean | undefined
 }
 
 export type ValidatorValueChange<T = unknown> = {
