@@ -45,6 +45,8 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   }
 
   onControlTypeChanged(controlType: FormControlType) {
+    this.surveyBaseModel.resetValidator(); // Reset the validators when the control type changes
+
     // Configure the validators for the new control type
     this.configureValidators(controlType);
 
