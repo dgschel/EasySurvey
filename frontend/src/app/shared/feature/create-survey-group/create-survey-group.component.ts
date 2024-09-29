@@ -4,7 +4,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel, SurveyValidatorType } from '../../../util/type/survey-type';
+import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel, SurveyValidatorType, ValidatorValueChange } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
 import { SurveyBase } from '../../../core/model/survey-base';
@@ -59,8 +59,14 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     }
   }
 
-  onValidatorValueChange(value: any) {
-    console.log(value);
+  onValidatorValueChange(change: ValidatorValueChange) {
+    if (change.validatorType === 'required') {
+      this.setRequiredValidator(change.value as boolean);
+    } else if (change.validatorType === 'minLength') {
+      this.setMinlengthValidator(change.value as number);
+    } else if (change.validatorType === 'minSelected') {
+      this.setMinSelectedValidator(change.value as number);
+    }
   }
 
   private createFormInputComponent() {
