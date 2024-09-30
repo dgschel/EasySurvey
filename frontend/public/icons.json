@@ -29,8 +29,8 @@
       "iconPath": "svg/stopwatch.svg"
     },
     {
-      "iconName": "stripe_wordmark",
-      "iconPath": "svg/stripe_wordmark.svg"
+      "iconName": "stripe-wordmark",
+      "iconPath": "svg/stripe-wordmark.svg"
     },
     {
       "iconName": "x",
