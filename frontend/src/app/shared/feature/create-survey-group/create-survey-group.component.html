@@ -7,10 +7,11 @@
     <svg-icon name="grip-horizontal" svgClass="size-5" />
   </div>
 
-  <div class="card-body grid gap-4">
-    <div class="flex w-full">
-      <input type="text" class="input w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title" />
-      <div class="divider divider-horizontal"></div>
+  <div class="card-body p-1 grid gap-4">
+    <div class="flex flex-col sm:flex-row w-full gap-4">
+      <input type="text" class="input font-medium w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title" />
+
+      <!-- Create Dropdown component to select the control type-->
       <app-create-component [controlType]="model.type" (controlTypeChanged)="onControlTypeChanged($event)" />
     </div>
 
@@ -24,37 +25,34 @@
     }
 
     <!-- Render component based on the control type -->
-    <ng-container #component></ng-container>
+    <div class="px-4">
+      <ng-container #component></ng-container>
+    </div>
 
-    <div class="card-actions items-start justify-between border-t pt-2">
+    <!-- Handly dynamic validator change and update the validators object -->
+    <div class="flex flex-col mt-4 pl-4 -ms-1 max-w-40">
+      <app-dynamic-validator
+        [validators]="validators"
+        [validatorState]="surveyBaseModel.state().validator"
+        (validatorValueChange)="onValidatorValueChange($event)"
+      />
+    </div>
 
-      <!-- Handly dynamic validator change and update the validators object -->
-      <div class="flex flex-col gap-2">
-        <app-dynamic-validator
-          [validators]="validators"
-          [validatorState]="surveyBaseModel.state().validator"
-          (validatorValueChange)="onValidatorValueChange($event)"
-        />
-      </div>
-
-      <div>
+    <div class="card-actions justify-end border-t pt-2">
+      <div class="flex gap-1 items-center">
         <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text mr-1">Beschreibung</span>
-            <input type="checkbox" class="checkbox checkbox-sm" [(ngModel)]="hasDescription" />
+          <label class="label py-1 cursor-pointer">
+            <svg-icon name="abc" svgClass="size-5" />
+            <input type="checkbox" class="checkbox checkbox-sm ml-2" [(ngModel)]="hasDescription" />
           </label>
         </div>
-        <div class="flex gap-1 justify-end">
-          <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()">
-            <svg-icon name="trash" svgClass="size-5" />
-          </button>
-          <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="clone()">
-            <svg-icon name="copy" svgClass="size-5" />
-          </button>
-        </div>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="clone()">
+          <svg-icon name="copy" svgClass="size-5" />
+        </button>
+        <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()">
+          <svg-icon name="trash" svgClass="size-5" />
+        </button>
       </div>
-
     </div>
   </div>
-
 </app-basic-card>
