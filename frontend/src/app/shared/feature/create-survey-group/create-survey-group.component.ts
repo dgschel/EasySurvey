@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
+import { SvgIconComponent } from 'angular-svg-icon';
+
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
 import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel, SurveyValidatorType, ValidatorValueChange } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
@@ -16,7 +18,7 @@ import { DynamicValidatorComponent } from "../../ui/validator/dynamic-validator/
 @Component({
   selector: 'app-create-survey-group',
   standalone: true,
-  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder, DynamicValidatorComponent],
+  imports: [FormsModule, BasicCardComponent, SvgIconComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder, DynamicValidatorComponent],
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
