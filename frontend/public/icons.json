@@ -1,0 +1,41 @@
+{
+  "iconImageFiles": [
+    {
+      "iconName": "abc",
+      "iconPath": "svg/abc.svg"
+    },
+    {
+      "iconName": "arrow-up-right",
+      "iconPath": "svg/arrow-up-right.svg"
+    },
+    {
+      "iconName": "check",
+      "iconPath": "svg/check.svg"
+    },
+    {
+      "iconName": "clipboard",
+      "iconPath": "svg/clipboard.svg"
+    },
+    {
+      "iconName": "rosette-discount-check-off",
+      "iconPath": "svg/rosette-discount-check-off.svg"
+    },
+    {
+      "iconName": "rosette-discount-check",
+      "iconPath": "svg/rosette-discount-check.svg"
+    },
+    {
+      "iconName": "stopwatch",
+      "iconPath": "svg/stopwatch.svg"
+    },
+    {
+      "iconName": "stripe_wordmark",
+      "iconPath": "svg/stripe_wordmark.svg"
+    },
+    {
+      "iconName": "x",
+      "iconPath": "svg/x.svg"
+    }
+  ],
+  "customIcons": []
+}
