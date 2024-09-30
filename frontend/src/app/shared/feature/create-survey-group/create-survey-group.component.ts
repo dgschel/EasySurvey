@@ -1,22 +1,26 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Injector, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 
 import { BasicCardComponent } from '../../ui/basic-card/basic-card.component';
-import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel } from '../../../util/type/survey-type';
+import { FormComponentType, FormControlType, SurveyCheckboxModel, SurveyInputModel, SurveyModel, SurveyRadioModel, SurveySelectModel, SurveyValidatorType, ValidatorValueChange } from '../../../util/type/survey-type';
 import { CreateComponentComponent } from "../../ui/create-component/create-component.component";
 import { FormSelectComponent } from '../form-select/form-select.component';
 import { SurveyBase } from '../../../core/model/survey-base';
 import { createFormComponent } from '../../../util/component/create';
+import { validatorFactory } from '../../../core/provider/validator';
+import { AbstractValidator } from '../../../core/model/validator';
+import { DynamicValidatorComponent } from "../../ui/validator/dynamic-validator/dynamic-validator.component";
 
 @Component({
   selector: 'app-create-survey-group',
   standalone: true,
-  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder],
+  imports: [FormsModule, BasicCardComponent, CreateComponentComponent, FormSelectComponent, NgComponentOutlet, CdkDrag, CdkDragHandle, CdkDragPlaceholder, DynamicValidatorComponent],
   templateUrl: './create-survey-group.component.html',
   styleUrl: './create-survey-group.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [validatorFactory('input')], // Provide the default validator for the input control
 })
 export class CreateSurveyGroupComponent implements AfterViewInit {
   surveyBaseModel = new SurveyBase();
@@ -29,6 +33,8 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   remove = output<void>();
   clonedSurvey = output<SurveyModel>();
 
+  validators: SurveyValidatorType[] = [];
+
   // Input model from parent component. Default value is a SurveyModel object
   @Input('model') model: SurveyModel = this.surveyModel();
   @ViewChild('component', { read: ViewContainerRef }) componentRef!: ViewContainerRef;
@@ -39,6 +45,11 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
   }
 
   onControlTypeChanged(controlType: FormControlType) {
+    this.surveyBaseModel.resetValidator(); // Reset the validators when the control type changes
+
+    // Configure the validators for the new control type
+    this.configureValidators(controlType);
+
     this.componentRef.clear();
     const cmpType = createFormComponent<FormComponentType>(controlType);
     const cmpRef = this.componentRef.createComponent(cmpType);
@@ -50,9 +61,30 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     }
   }
 
+  onValidatorValueChange(change: ValidatorValueChange) {
+    if (change.validatorType === 'required') {
+      this.setRequiredValidator(change.value as boolean);
+    } else if (change.validatorType === 'minLength') {
+      this.setMinlengthValidator(change.value as number);
+    } else if (change.validatorType === 'minSelected') {
+      this.setMinSelectedValidator(change.value as number);
+    }
+  }
+
   private createFormInputComponent() {
     const surveyInput = this.getDefaultSurveyInputModel();
     this.surveyComponentModel.set(surveyInput);
+  }
+
+  private configureValidators(controlType: FormControlType) {
+    // The validator factory is a function that returns a new instance of the validator class
+    // There is a different validator class for each control type
+    // No need to cleanup the injector because it will be garbage collected
+    const validatorInjector = Injector.create({
+      providers: [validatorFactory(controlType)]
+    })
+
+    this.validators = validatorInjector.get(AbstractValidator).getValidators();
   }
 
   private createFormChoiceComponent(modelType: Exclude<FormControlType, 'input'>, cmpRef: ComponentRef<FormComponentType>) {
@@ -93,7 +125,7 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
   setRequiredValidator(checked: boolean) {
     checked
-      ? this.surveyBaseModel.updateValidator({ required: { message: 'Dieses Feld ist erforderlich' } })
+      ? this.surveyBaseModel.updateValidator({ required: { value: checked, message: 'Dieses Feld ist erforderlich' } })
       : this.surveyBaseModel.deleteValidator('required');
   }
 

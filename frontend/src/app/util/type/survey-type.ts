@@ -7,6 +7,9 @@ import { FormControlInputComponent } from "../../shared/feature/form-control-inp
 import { FormControlSelectComponent } from "../../shared/feature/form-control-select/form-control-select.component";
 import { FormControlRadioComponent } from "../../shared/feature/form-control-radio/form-control-radio.component";
 import { FormControlCheckboxComponent } from "../../shared/feature/form-control-checkbox/form-control-checkbox.component";
+import { MinLengthValidatorComponent } from "../../shared/ui/validator/min-length-validator/min-length-validator.component";
+import { RequiredValidatorComponent } from "../../shared/ui/validator/required-validator/required-validator.component";
+import { MinSelectedValidatorComponent } from "../../shared/ui/validator/min-selected-validator/min-selected-validator.component";
 
 export type SurveyBaseType = {
   title: string;
@@ -32,7 +35,7 @@ export type ValidatorFunction<T> = (data: T) => ValidatorFn;
 
 export type SurveyValidatorMap<T> = Record<SurveyValidatorType, ValidatorFunction<T>>;
 export type ValidatorConfig = {
-  required: { message: string },
+  required: { value: boolean, message: string },
   minLength: { value: number },
   minSelected: { value: number }
 }
@@ -41,6 +44,21 @@ export type FormComponentType = typeof CreateFormInputComponent | typeof FormSel
 export type FormControlComponentType = typeof FormControlInputComponent | typeof FormControlSelectComponent | typeof FormControlRadioComponent | typeof FormControlCheckboxComponent;
 
 export type FormControlType = 'input' | 'select' | 'radio' | 'checkbox'
+
+export type FormControlTypeValidatorMap = Record<FormControlType, SurveyValidatorType[]>;
+export type ValidatorComponentType = typeof MinLengthValidatorComponent | typeof RequiredValidatorComponent | typeof MinSelectedValidatorComponent;
+export type ValidatorComponentTypeMap = Record<SurveyValidatorType, ValidatorComponentType>;
+
+// This will be used for the @Input() decorator to pass a function as callback
+export interface ValidatorComponentInput<T = unknown> {
+  onValidatorValueChange: (change: ValidatorValueChange<T>) => void;
+  value: T; // This will be used to set the value of the input field. Currently typed as number | boolean | undefined
+}
+
+export type ValidatorValueChange<T = unknown> = {
+  validatorType: SurveyValidatorType,
+  value: T
+}
 
 export interface FormControlComponentValue {
   getValue<T>(): T,

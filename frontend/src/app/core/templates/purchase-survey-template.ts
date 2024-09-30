@@ -35,12 +35,12 @@ export class PurchaseSurveyTemplate implements SurveyTemplateContract {
 
   createPredefinedSurvey(): SurveyModel[] {
     const initialSurveyInput = this.createSurveyInput();
-    const secondSurveyInput = this.createSurveyInput({ ...initialSurveyInput, title: 'Second Purchase Input Title', validator: { required: { message: 'Dieses Feld ist erforderlich' } } });
+    const secondSurveyInput = this.createSurveyInput({ ...initialSurveyInput, title: 'Second Purchase Input Title', validator: { required: { value: true, message: 'Dieses Feld ist erforderlich' } } });
     const thirdSurveyInput = this.createSurveyInput({ ...secondSurveyInput, title: 'Third Purchase Input Title', placeholder: 'Third Purchase Input Placeholder', validator: { ...secondSurveyInput.validator, minLength: { value: 5 } } });
 
     const initialSurveySelect = this.createSurveySelect();
     const secondSurveySelect = this.createSurveySelect({ ...initialSurveySelect, title: 'Second Purchase Select Title' });
-    const thirdSurveySelect = this.createSurveySelect({ ...secondSurveySelect, title: 'Third Purchase Select Title', options: ['Option 1', 'Option 2', 'Option 3'], validator: { required: { message: 'Dieses Feld ist erforderlich' } } });
+    const thirdSurveySelect = this.createSurveySelect({ ...secondSurveySelect, title: 'Third Purchase Select Title', options: ['Option 1', 'Option 2', 'Option 3'], validator: { required: { value: true, message: 'Dieses Feld ist erforderlich' } } });
 
     const inputs = [initialSurveyInput, secondSurveyInput, thirdSurveyInput];
     const selects = [initialSurveySelect, secondSurveySelect, thirdSurveySelect];

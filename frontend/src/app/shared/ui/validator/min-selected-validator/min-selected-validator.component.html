@@ -1,0 +1,14 @@
+<div class="form-control">
+  <label class="label cursor-pointer">
+    <span class="label-text mr-1">Mindestanzahl</span>
+    <input
+      type="number"
+      min="0"
+      max="3"
+      class="input input-xs input-bordered w-10"
+      #minselected
+      [value]="value"
+      (change)="valueChanged(minselected.valueAsNumber)"
+    />
+  </label>
+</div>

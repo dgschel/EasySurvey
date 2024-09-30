@@ -1,9 +1,21 @@
 <app-basic-card cdkDrag class="flex">
   <div *cdkDragPlaceholder class="border-4 border-dotted bg-slate-500 min-h-20 transition-transform"></div>
-  <div class="flex justify-center text-gray-500 hover:cursor-move transition-colors hover:bg-primary hover:text-white"
-    cdkDragHandle>
-    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5"
-      stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <div
+    class="flex justify-center text-gray-500 hover:cursor-move transition-colors hover:bg-primary hover:text-white"
+    cdkDragHandle
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="size-5"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M5 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
       <path d="M5 15m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
@@ -15,59 +27,71 @@
   </div>
   <div class="card-body grid gap-4">
     <div class="flex w-full">
-      <input type="text" class="input w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title">
+      <input type="text" class="input w-full" placeholder="Frage" [(ngModel)]="surveyBaseModel.title" />
       <div class="divider divider-horizontal"></div>
       <app-create-component [controlType]="model.type" (controlTypeChanged)="onControlTypeChanged($event)" />
     </div>
     @if (hasDescription) {
-    <input type="text" class="input input-sm ps-4 pe-4 w-full" placeholder="Beschreibung"
-      [(ngModel)]="surveyBaseModel.description">
+      <input
+        type="text"
+        class="input input-sm ps-4 pe-4 w-full"
+        placeholder="Beschreibung"
+        [(ngModel)]="surveyBaseModel.description"
+      />
     }
     <ng-container #component></ng-container>
-    <div class="card-actions items-center justify-end border-t pt-2">
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Beschreibung</span>
-          <input type="checkbox" class="checkbox checkbox-sm" [(ngModel)]="hasDescription">
-        </label>
+    <div class="card-actions items-start justify-between border-t pt-2">
+      <!-- Handly dynamic validator change and update the validators object -->
+      <div class="flex flex-col gap-2">
+        <app-dynamic-validator
+          [validators]="validators"
+          [validatorState]="surveyBaseModel.state().validator"
+          (validatorValueChange)="onValidatorValueChange($event)"
+        />
       </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Mindestlänge</span>
-          <input type="number" max="10" class="input input-xs input-bordered w-16" #minlength
-            [ngModel]="surveyBaseModel.state().validator.minLength?.value"
-            (change)="setMinlengthValidator(minlength.valueAsNumber)" />
-        </label>
+
+      <div>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <span class="label-text mr-1">Beschreibung</span>
+            <input type="checkbox" class="checkbox checkbox-sm" [(ngModel)]="hasDescription" />
+          </label>
+        </div>
+        <div class="flex gap-1 justify-end">
+          <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              />
+            </svg>
+          </button>
+          <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="clone()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Mindestanzahl</span>
-          <input type="number" max="3" class="input input-xs input-bordered w-16" #minselected
-            [ngModel]="surveyBaseModel.state().validator.minSelected?.value"
-            (change)="setMinSelectedValidator(minselected.valueAsNumber)" />
-        </label>
-      </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text mr-1">Pflichtfrage</span>
-          <input type="checkbox" class="toggle toggle-sm" #required
-            [ngModel]="surveyBaseModel.state().validator.required" (change)="setRequiredValidator(required.checked)" />
-        </label>
-      </div>
-      <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="remove.emit()"><svg
-          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="size-5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-        </svg>
-      </button>
-      <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="clone()"><svg
-          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="size-5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-        </svg>
-      </button>
     </div>
   </div>
 </app-basic-card>

@@ -22,6 +22,10 @@ export class SurveyBase<T extends SurveyBaseType> {
     this.validatorMap.update((prev) => ({ ...prev, ...validator }));
   }
 
+  resetValidator() {
+    this.validatorMap.set({})
+  }
+
   deleteValidator(key: SurveyValidatorType) {
     const validator = this.validatorMap();
     delete validator[key];
