@@ -35,6 +35,26 @@
     {
       "iconName": "x",
       "iconPath": "svg/x.svg"
+    },
+    {
+      "iconName": "grip-horizontal",
+      "iconPath": "svg/grip-horizontal.svg"
+    },
+    {
+      "iconName": "copy",
+      "iconPath": "svg/copy.svg"
+    },
+    {
+      "iconName": "trash",
+      "iconPath": "svg/trash.svg"
+    },
+    {
+      "iconName": "circle-plus",
+      "iconPath": "svg/circle-plus.svg"
+    },
+    {
+      "iconName": "circle-x",
+      "iconPath": "svg/circle-x.svg"
     }
   ],
   "customIcons": []
