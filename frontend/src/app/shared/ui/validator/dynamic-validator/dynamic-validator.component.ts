@@ -13,7 +13,7 @@ import { validatorComponentTypeMap } from '../../../form-validator/validators';
 })
 export class DynamicValidatorComponent {
   @Input() validators: SurveyValidatorType[] = [];
-  @Input() state: Partial<ValidatorConfig> = {};
+  @Input() validatorState: Partial<ValidatorConfig> = {};
   @Output() validatorValueChange = new EventEmitter<ValidatorValueChange>();
 
   // Callback function pass down to the child component using the @Input() decorator
@@ -27,7 +27,7 @@ export class DynamicValidatorComponent {
     // We are returning an object to satisfy the interface of ngComponentOutlet
     return {
       onValidatorValueChange: this.onValidatorValueChange,
-      value: this.state[validator]?.value
+      value: this.validatorState[validator]?.value
     }
   }
 
