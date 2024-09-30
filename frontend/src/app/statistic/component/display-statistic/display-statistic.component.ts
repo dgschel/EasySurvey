@@ -1,5 +1,5 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+import { Component, Input } from '@angular/core';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StatisticalInfo } from '../../model/statistic';
 
@@ -10,22 +10,6 @@ import { StatisticalInfo } from '../../model/statistic';
   templateUrl: './display-statistic.component.html',
   styleUrl: './display-statistic.component.scss'
 })
-export class DisplayStatisticComponent implements OnInit, OnDestroy {
-  private iconReg = inject(SvgIconRegistryService);
-
+export class DisplayStatisticComponent{
   @Input('statistics') statistics: StatisticalInfo[] = [];
-
-  ngOnInit(): void {
-    this.iconReg.loadSvg('/svg/stopwatch.svg', 'stopwatch')?.subscribe();
-    this.iconReg.loadSvg('/svg/check.svg', 'check')?.subscribe();
-    this.iconReg.loadSvg('/svg/arrow-up-right.svg', 'arrow-up-right')?.subscribe();
-    this.iconReg.loadSvg('/svg/x.svg', 'x')?.subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('stopwatch');
-    this.iconReg.unloadSvg('check');
-    this.iconReg.unloadSvg('arrow-up-right');
-    this.iconReg.unloadSvg('x');
-  }
 }
