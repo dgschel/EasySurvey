@@ -1,7 +1,7 @@
-import { Component, inject, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 import { CopyToClipboardComponent } from '../../../../feature/copy-to-clipboard/copy-to-clipboard.component';
 
@@ -12,15 +12,6 @@ import { CopyToClipboardComponent } from '../../../../feature/copy-to-clipboard/
   templateUrl: './survey-successfully-saved.component.html',
   styleUrl: './survey-successfully-saved.component.scss'
 })
-export class SurveySuccessfullySavedComponent implements OnInit, OnDestroy {
+export class SurveySuccessfullySavedComponent {
   @Input('surveyId') surveyId: string = '';
-  private iconReg = inject(SvgIconRegistryService);
-
-  ngOnInit(): void {
-    this.iconReg.loadSvg('/svg/rosette-discount-check.svg', 'rosette-discount-check')?.subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('rosette-discount-check');
-  }
 }

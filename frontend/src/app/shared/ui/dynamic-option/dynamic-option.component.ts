@@ -1,10 +1,12 @@
 import { Component, Input, output } from '@angular/core';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-dynamic-option',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [FormsModule, SvgIconComponent],
   templateUrl: './dynamic-option.component.html',
   styleUrl: './dynamic-option.component.scss'
 })

@@ -1,9 +1,9 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
 import { EMPTY, from, switchMap, Observable, catchError, of } from 'rxjs';
-import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
 import { SurveyCheckoutComponent } from '../../../survey-checkout/survey-checkout.component';
@@ -19,17 +19,15 @@ import { LoadingComponent } from "../../../shared/ui/loading/loading.component";
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
-export class StripeCheckoutComponent implements OnInit, OnDestroy {
+export class StripeCheckoutComponent implements OnInit {
   @Input('surveyId') surveyId: string = '';
 
-  private iconReg = inject(SvgIconRegistryService);
   private stripeService = inject(StripeCheckoutService);
 
   checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
 
   ngOnInit() {
-    this.iconReg.loadSvg('/svg/stripe_wordmark.svg', 'stripe_wordmark')?.subscribe();
 
     // Fetch client secret for Stripe Checkout
     const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
@@ -75,9 +73,5 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
         return EMPTY; // Stop further processing if checkout process fails
       })
     );
-  }
-
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('stripe_wordmark');
   }
 }

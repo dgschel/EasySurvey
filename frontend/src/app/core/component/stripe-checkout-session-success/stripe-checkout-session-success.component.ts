@@ -3,7 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { catchError, delay, EMPTY, map, Observable, take } from 'rxjs';
-import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StripeCheckoutSessionStatus } from '../../../util/type/stripe';
 import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
@@ -26,7 +26,6 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
 
   private confettiService = inject(ConfettiService);
-  private iconReg = inject(SvgIconRegistryService);
   private httpService = inject(HttpService);
   private modalService = inject(ModalService);
   private environmentInjector = inject(EnvironmentInjector);
@@ -34,8 +33,6 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
   qrCodeResponse$: Observable<string> = EMPTY;
 
   ngOnInit(): void {
-    this.iconReg.loadSvg('/svg/rosette-discount-check.svg', 'rosette-discount-check')?.subscribe();
-
     // Fetch the QR-Code for the survey
     const path = `survey/${this.stripeCheckoutSession.surveyId}/viewform`;
     this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
@@ -86,9 +83,5 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
       });
 
     }, 250);
-  }
-
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('rosette-discount-check');
   }
 }

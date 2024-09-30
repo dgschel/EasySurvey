@@ -1,6 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, EnvironmentInjector, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef, createComponent } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
+import { SvgIconComponent } from 'angular-svg-icon';
+
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
 import { HttpService } from '../../../core/service/http.service';
@@ -11,7 +13,7 @@ import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey
 @Component({
   selector: 'app-survey-form',
   standalone: true,
-  imports: [CreateSurveyGroupComponent, CdkDropList],
+  imports: [CreateSurveyGroupComponent, CdkDropList, SvgIconComponent],
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

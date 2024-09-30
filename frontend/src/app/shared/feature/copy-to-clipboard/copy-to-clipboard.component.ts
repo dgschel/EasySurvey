@@ -1,5 +1,5 @@
-import { Component, computed, inject, Input, OnInit, signal } from '@angular/core';
-import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
+import { Component, computed, Input, signal } from '@angular/core';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
   selector: 'app-copy-to-clipboard',
@@ -8,20 +8,11 @@ import { SvgIconComponent, SvgIconRegistryService } from 'angular-svg-icon';
   templateUrl: './copy-to-clipboard.component.html',
   styleUrl: './copy-to-clipboard.component.scss'
 })
-export class CopyToClipboardComponent implements OnInit {
+export class CopyToClipboardComponent {
   @Input({ required: true }) textToCopy: string = '';
-  private iconReg = inject(SvgIconRegistryService);
   private isCopySuccess = signal<boolean>(false);
 
   tooltipText = computed(() => this.isCopySuccess() ? 'Kopiert!' : 'Kopieren');
-
-  ngOnInit(): void {
-    this.iconReg.loadSvg('/svg/clipboard.svg', 'clipboard')?.subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.iconReg.unloadSvg('clipboard');
-  }
 
   copyToClipboard(): void {
     this.isCopySuccess.set(true);
