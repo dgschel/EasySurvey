@@ -52,6 +52,18 @@ export class ChartListComponent implements OnInit {
         toolbar: {
           offsetX: -8,
           offsetY: 8,
+          export: {
+            csv: {
+              filename: key,
+              headerCategory: "Antwort",
+            },
+            svg: {
+              filename: key
+            },
+            png: {
+              filename: key
+            }
+          }
         }
       },
       series,
