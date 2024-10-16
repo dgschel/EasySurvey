@@ -42,7 +42,10 @@ export class ViewSurveyGroupComponent implements AfterViewInit {
     this.componentContainer.clear();
     this.componentRef = this.componentContainer.createComponent(cmpType);
 
-    this.componentRef.setInput('controlKeyName', this.model.title);
+    // A dot in the key name will cause an error when trying to access the object property
+    const title = this.model.title.replace(".", "");
+
+    this.componentRef.setInput('controlKeyName', title);
     this.componentRef.setInput('validator', this.model.validator);
 
     if (this.model.type === 'input') {
