@@ -15,7 +15,7 @@
     <app-view-survey-group [model]="model" />
   }
   <div class="flex justify-between">
-    <button type="button" class="btn btn-ghost" (click)="showResetDialog()">Alle Antworten löschen</button>
+    <button type="button" class="btn btn-ghost font-normal" (click)="showResetDialog()">Alle Antworten löschen</button>
     <button #submitForm type="submit" class="btn btn-primary w-32" [disabled]="!isValidAndNotSubmitted">
       @if (isFormSubmitting) {
         <span class="loading loading-spinner size-4"></span>
