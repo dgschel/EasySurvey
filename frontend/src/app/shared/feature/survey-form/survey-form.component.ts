@@ -28,6 +28,10 @@ export class SurveyFormComponent implements AfterViewInit {
 
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
 
+  get hasComponents() {
+    return this.cmpRefs.length;
+  }
+
   ngAfterViewInit(): void {
     this.models.forEach((model) => {
       this.addSurveySection(model);
@@ -115,7 +119,9 @@ export class SurveyFormComponent implements AfterViewInit {
 
   removeSurveySection(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
     const index = this.cmpRefs.indexOf(cmpRef);
-    if (index !== -1) {
+
+    // Only remove the component if there is atleast one component
+    if (index !== -1 && this.hasComponents > 1) {
       this.cmpRefs.splice(index, 1);
       cmpRef.destroy();
     }
