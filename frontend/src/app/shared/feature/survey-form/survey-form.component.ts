@@ -36,6 +36,14 @@ export class SurveyFormComponent implements AfterViewInit {
     this.models.forEach((model) => {
       this.addSurveySection(model);
     });
+    // If there are no models, add a default survey section
+    if (this.models.length === 0) {
+      this.addSurveySection({ type: 'input', description: '', title: '', validator: {} });
+    } else {
+      this.models.forEach((model) => {
+        this.addSurveySection(model);
+      });
+    }
   }
 
   /**
