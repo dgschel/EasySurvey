@@ -65,10 +65,6 @@ export class SurveyFormComponent implements AfterViewInit {
     });
   }
 
-  addSection() {
-    this.addSurveySection({ type: 'input', description: '', title: '', validator: {} });
-  }
-
   addSurveySection(model: SurveyModel) {
     const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
     this.setupComponent(cmpRef);
