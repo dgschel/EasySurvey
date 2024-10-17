@@ -2,7 +2,12 @@
   <ng-container #component />
 </div>
 
-<button class="btn btn-circle" type="button" (click)="addSection()">
-  <svg-icon name="circle-plus" svgClass="size-6" />
-</button>
-<button type="button" class="btn btn-success" (click)="save()">Save data</button>
+<div class="flex justify-between mt-4">
+  <button #addSection type="button" class="btn btn-circle">
+    <svg-icon name="circle-plus" svgClass="size-6" />
+  </button>
+  
+  <button type="button" class="btn btn-primary" [disabled]="!hasComponents" (click)="save()">
+    Speichern
+  </button>
+</div>
