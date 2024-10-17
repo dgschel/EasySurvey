@@ -61,6 +61,9 @@ export class SurveyFormComponent implements AfterViewInit {
 
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
 
+  // Subject to destroy the subscriptions
+  private readonly destroy$ = new Subject<void>();
+
   get hasComponents() {
     return this.cmpRefs.length;
   }
@@ -93,6 +96,7 @@ export class SurveyFormComponent implements AfterViewInit {
         ),
         filter(isValidResponseGuard), // Filter out invalid responses (null)
         map(({ data }) => this.openSuccessModal(data.surveyId)), // Open modal with survey id
+        takeUntil(this.destroy$),
       )
       .subscribe();
 
@@ -220,6 +224,9 @@ export class SurveyFormComponent implements AfterViewInit {
   ngOnDestroy() {
     this.cmpRefs.forEach((comp) => comp.destroy());
     this.cmpRefs = [];
+
+    this.destroy$.next();
+    this.destroy$.complete();
 
     this.modalService.close();
   }
