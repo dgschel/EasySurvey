@@ -39,6 +39,7 @@ import { ModalService } from '../../../core/service/modal.service';
 import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey-successfully-saved/survey-successfully-saved.component';
 import { HttpWrapper } from '../../../util/type/http';
 import { isValidResponseGuard } from '../../../util/guard/http';
+import { SurveyCreationFailedComponent } from '../../ui/template/modal/survey-creation-failed/survey-creation-failed.component';
 
 @Component({
   selector: 'app-survey-form',
@@ -100,6 +101,7 @@ export class SurveyFormComponent implements AfterViewInit {
           this.postSurveyModels(models).pipe(
             catchError((error) => {
               console.error('Error saving survey', error);
+              this.openFailureModal();
               return of(null); // Return a null observable to filter out the invalid response
             }),
           ),
@@ -174,6 +176,15 @@ export class SurveyFormComponent implements AfterViewInit {
       environment.endpoints.saveSurvey,
       models,
     );
+  }
+
+  openFailureModal(): void {
+    const cmp = createComponent(SurveyCreationFailedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 
   openSuccessModal(surveyId: string): void {
