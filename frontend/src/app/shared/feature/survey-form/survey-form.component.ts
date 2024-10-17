@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, EnvironmentInjector, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef, createComponent } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, EnvironmentInjector, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef, createComponent, ElementRef } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { SvgIconComponent } from 'angular-svg-icon';
+import { fromEvent } from 'rxjs';
 
 import { CreateSurveyGroupComponent } from '../create-survey-group/create-survey-group.component';
 import { SurveyModel, SurveyRadioModel } from '../../../util/type/survey-type';
@@ -24,6 +25,7 @@ export class SurveyFormComponent implements AfterViewInit {
   private environmentInjector = inject(EnvironmentInjector);
 
   @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
+  @ViewChild('addSection') addSectionBtn!: ElementRef<HTMLButtonElement>;
   @Input() models: SurveyModel[] = [];
 
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
@@ -33,9 +35,11 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.models.forEach((model) => {
-      this.addSurveySection(model);
-    });
+    fromEvent(this.addSectionBtn.nativeElement, 'click')
+      .subscribe(
+        () => this.addSurveySection({ type: 'input', description: '', title: '', validator: {} })
+      );
+    
     // If there are no models, add a default survey section
     if (this.models.length === 0) {
       this.addSurveySection({ type: 'input', description: '', title: '', validator: {} });
@@ -82,7 +86,6 @@ export class SurveyFormComponent implements AfterViewInit {
     this.generateRadioNames(radioModels);
 
     const surveyId$ = this.httpService.post<{ surveyId: string }>(environment.endpoints.saveSurvey, surveyModels);
-
 
     surveyId$.subscribe(({ data }) => {
       const cmp = createComponent(SurveySuccessfullySavedComponent, {
