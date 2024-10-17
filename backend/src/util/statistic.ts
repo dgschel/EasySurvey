@@ -31,7 +31,7 @@ export function summarizeSurveyStatistic(parsedSubmission: {
         };
 
         if (answer.length === 0) {
-          incrementCount("No answer");
+          incrementCount("Keine Antwort");
         } else {
           answer.forEach((value) => incrementCount(value));
         }
@@ -39,7 +39,7 @@ export function summarizeSurveyStatistic(parsedSubmission: {
 
       else {
         // If the answer was not provided, use "No answer" as the key
-        const key = answer === "" ? "No answer" : answer;
+        const key = answer === "" ? "Keine Antwort" : answer;
 
         // Initialize the answer count if not already initialized
         if (!acc[question][key]) {
