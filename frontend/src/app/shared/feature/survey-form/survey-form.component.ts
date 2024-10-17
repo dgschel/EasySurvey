@@ -20,6 +20,7 @@ import {
 import { SvgIconComponent } from 'angular-svg-icon';
 import {
   catchError,
+  exhaustMap,
   filter,
   fromEvent,
   map,
@@ -97,7 +98,7 @@ export class SurveyFormComponent implements AfterViewInit {
           const radioModels = this.getRadioModels(models);
           this.generateRadioNames(radioModels);
         }),
-        switchMap((models) =>
+        exhaustMap((models) => // Use exhaustMap to ignore multiple clicks
           this.postSurveyModels(models).pipe(
             catchError((error) => {
               console.error('Error saving survey', error);
