@@ -54,6 +54,7 @@ export class SurveyFormComponent implements AfterViewInit {
   @ViewChild('component', { read: ViewContainerRef })
   componentContainer!: ViewContainerRef;
   @ViewChild('addSection') addSectionBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('save') saveBtn!: ElementRef<HTMLButtonElement>;
   @Input() models: SurveyModel[] = [];
 
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
@@ -71,6 +72,27 @@ export class SurveyFormComponent implements AfterViewInit {
         validator: {},
       }),
     );
+
+    fromEvent(this.saveBtn.nativeElement, 'click')
+      .pipe(
+        switchMap(() => this.getSurveyModels()),
+        tap((models) => {
+          // Get a *reference* of the radio models and iterate over their names
+          const radioModels = this.getRadioModels(models);
+          this.generateRadioNames(radioModels);
+        }),
+        switchMap((models) =>
+          this.postSurveyModels(models).pipe(
+            catchError((error) => {
+              console.error('Error saving survey', error);
+              return of(null); // Return a null observable to filter out the invalid response
+            }),
+          ),
+        ),
+        filter(isValidResponseGuard), // Filter out invalid responses (null)
+        map(({ data }) => this.openSuccessModal(data.surveyId)), // Open modal with survey id
+      )
+      .subscribe();
 
     // If there are no models, add a default survey section
     if (this.models.length === 0) {
@@ -113,6 +135,42 @@ export class SurveyFormComponent implements AfterViewInit {
     this.setupComponent(cmpRef);
     cmpRef.setInput('model', model);
     this.cmpRefs.push(cmpRef);
+  }
+
+  getSurveyModels(): Observable<SurveyModel[]> {
+    const surveyModels = this.cmpRefs.map((cmpRef) =>
+      cmpRef.instance.surveyModel(),
+    );
+    return of(surveyModels);
+  }
+
+  getRadioModels(models: SurveyModel[]): SurveyRadioModel[] {
+    return models.filter(
+      (model) => model.type === 'radio',
+    ) as SurveyRadioModel[];
+  }
+
+  postSurveyModels(models: SurveyModel[]): Observable<
+    HttpWrapper<{
+      surveyId: string;
+    }>
+  > {
+    return this.httpService.post<{ surveyId: string }>(
+      environment.endpoints.saveSurvey,
+      models,
+    );
+  }
+
+  openSuccessModal(surveyId: string): void {
+    const cmp = createComponent(SurveySuccessfullySavedComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('surveyId', surveyId);
+
+    const modal = this.modalService.open(cmp);
+    modal.setInput('isBackdropClosable', false);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 
   save() {
