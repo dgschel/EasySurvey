@@ -173,37 +173,6 @@ export class SurveyFormComponent implements AfterViewInit {
     modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 
-  save() {
-    const surveyModels = this.cmpRefs.map((cmpRef) =>
-      cmpRef.instance.surveyModel(),
-    );
-
-    if (surveyModels.length === 0) return;
-
-    // Get a *reference* of the radio models and iterate over their names
-    const radioModels = surveyModels.filter(
-      (model) => model.type === 'radio',
-    ) as SurveyRadioModel[];
-    this.generateRadioNames(radioModels);
-
-    const surveyId$ = this.httpService.post<{ surveyId: string }>(
-      environment.endpoints.saveSurvey,
-      surveyModels,
-    );
-
-    surveyId$.subscribe(({ data }) => {
-      const cmp = createComponent(SurveySuccessfullySavedComponent, {
-        environmentInjector: this.environmentInjector,
-      });
-
-      cmp.setInput('surveyId', data.surveyId);
-
-      const modal = this.modalService.open(cmp);
-      modal.setInput('isBackdropClosable', false);
-      modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
-    });
-  }
-
   generateRadioNames(models: SurveyRadioModel[]) {
     models.forEach((model, index) => {
       model.name = `radio-${index + 1}`;
