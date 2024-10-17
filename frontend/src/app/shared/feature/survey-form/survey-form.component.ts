@@ -25,7 +25,9 @@ import {
   map,
   Observable,
   of,
+  Subject,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs';
 
@@ -59,20 +61,33 @@ export class SurveyFormComponent implements AfterViewInit {
 
   cmpRefs: ComponentRef<CreateSurveyGroupComponent>[] = [];
 
+  // Subject to destroy the subscriptions
+  private readonly destroy$ = new Subject<void>();
+
   get hasComponents() {
     return this.cmpRefs.length;
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.addSectionBtn.nativeElement, 'click').subscribe(() =>
-      this.addSurveySection({
-        type: 'input',
-        description: '',
-        title: '',
-        validator: {},
-      }),
-    );
+    this.handleClickAddSection();
+    this.handleSaveButtonClick();
 
+    this.initializeSurveySections();
+  }
+
+  initializeSurveySections() {
+    // If no models are provided, add a default survey section
+    this.models.length === 0
+      ? this.addSurveySection({
+          type: 'input',
+          description: '',
+          title: '',
+          validator: {},
+        })
+      : this.models.forEach((model) => this.addSurveySection(model));
+  }
+
+  handleSaveButtonClick(): void {
     fromEvent(this.saveBtn.nativeElement, 'click')
       .pipe(
         switchMap(() => this.getSurveyModels()),
@@ -91,22 +106,22 @@ export class SurveyFormComponent implements AfterViewInit {
         ),
         filter(isValidResponseGuard), // Filter out invalid responses (null)
         map(({ data }) => this.openSuccessModal(data.surveyId)), // Open modal with survey id
+        takeUntil(this.destroy$),
       )
       .subscribe();
+  }
 
-    // If there are no models, add a default survey section
-    if (this.models.length === 0) {
-      this.addSurveySection({
-        type: 'input',
-        description: '',
-        title: '',
-        validator: {},
-      });
-    } else {
-      this.models.forEach((model) => {
-        this.addSurveySection(model);
-      });
-    }
+  handleClickAddSection(): void {
+    fromEvent(this.addSectionBtn.nativeElement, 'click')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =>
+        this.addSurveySection({
+          type: 'input',
+          description: '',
+          title: '',
+          validator: {},
+        }),
+      );
   }
 
   /**
@@ -218,6 +233,9 @@ export class SurveyFormComponent implements AfterViewInit {
   ngOnDestroy() {
     this.cmpRefs.forEach((comp) => comp.destroy());
     this.cmpRefs = [];
+
+    this.destroy$.next();
+    this.destroy$.complete();
 
     this.modalService.close();
   }
