@@ -69,15 +69,25 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.addSectionBtn.nativeElement, 'click').subscribe(() =>
-      this.addSurveySection({
-        type: 'input',
-        description: '',
-        title: '',
-        validator: {},
-      }),
-    );
+    this.handleClickAddSection();
+    this.handleSaveButtonClick();
 
+    this.initializeSurveySections();
+  }
+
+  initializeSurveySections() {
+    // If no models are provided, add a default survey section
+    this.models.length === 0
+      ? this.addSurveySection({
+          type: 'input',
+          description: '',
+          title: '',
+          validator: {},
+        })
+      : this.models.forEach((model) => this.addSurveySection(model));
+  }
+
+  handleSaveButtonClick(): void {
     fromEvent(this.saveBtn.nativeElement, 'click')
       .pipe(
         switchMap(() => this.getSurveyModels()),
@@ -99,20 +109,19 @@ export class SurveyFormComponent implements AfterViewInit {
         takeUntil(this.destroy$),
       )
       .subscribe();
+  }
 
-    // If there are no models, add a default survey section
-    if (this.models.length === 0) {
-      this.addSurveySection({
-        type: 'input',
-        description: '',
-        title: '',
-        validator: {},
-      });
-    } else {
-      this.models.forEach((model) => {
-        this.addSurveySection(model);
-      });
-    }
+  handleClickAddSection(): void {
+    fromEvent(this.addSectionBtn.nativeElement, 'click')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() =>
+        this.addSurveySection({
+          type: 'input',
+          description: '',
+          title: '',
+          validator: {},
+        }),
+      );
   }
 
   /**
