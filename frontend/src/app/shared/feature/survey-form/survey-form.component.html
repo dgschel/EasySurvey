@@ -1,4 +1,9 @@
-<div class="grid gap-4 overflow-hidden" cdkDropList cdkDropListLockAxis="y" (cdkDropListDropped)="drop($event)">
+<div
+  class="grid gap-4 overflow-hidden"
+  cdkDropList
+  cdkDropListLockAxis="y"
+  (cdkDropListDropped)="drop($event)"
+>
   <ng-container #component />
 </div>
 
@@ -6,8 +11,13 @@
   <button #addSection type="button" class="btn btn-circle">
     <svg-icon name="circle-plus" svgClass="size-6" />
   </button>
-  
-  <button type="button" class="btn btn-primary" [disabled]="!hasComponents" (click)="save()">
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="!hasComponents"
+    (click)="save()"
+  >
     Speichern
   </button>
 </div>

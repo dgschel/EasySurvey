@@ -1,5 +1,21 @@
-import { AfterViewInit, ChangeDetectionStrategy, EnvironmentInjector, Component, ComponentRef, inject, Input, ViewChild, ViewContainerRef, createComponent, ElementRef } from '@angular/core';
-import { CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  EnvironmentInjector,
+  Component,
+  ComponentRef,
+  inject,
+  Input,
+  ViewChild,
+  ViewContainerRef,
+  createComponent,
+  ElementRef,
+} from '@angular/core';
+import {
+  CdkDragDrop,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 
 import { SvgIconComponent } from 'angular-svg-icon';
 import { fromEvent } from 'rxjs';
@@ -17,14 +33,15 @@ import { SurveySuccessfullySavedComponent } from '../../ui/template/modal/survey
   imports: [CreateSurveyGroupComponent, CdkDropList, SvgIconComponent],
   templateUrl: './survey-form.component.html',
   styleUrl: './survey-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SurveyFormComponent implements AfterViewInit {
-  private httpService = inject(HttpService)
-  private modalService = inject(ModalService)
+  private httpService = inject(HttpService);
+  private modalService = inject(ModalService);
   private environmentInjector = inject(EnvironmentInjector);
 
-  @ViewChild('component', { read: ViewContainerRef }) componentContainer!: ViewContainerRef;
+  @ViewChild('component', { read: ViewContainerRef })
+  componentContainer!: ViewContainerRef;
   @ViewChild('addSection') addSectionBtn!: ElementRef<HTMLButtonElement>;
   @Input() models: SurveyModel[] = [];
 
@@ -35,14 +52,23 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.addSectionBtn.nativeElement, 'click')
-      .subscribe(
-        () => this.addSurveySection({ type: 'input', description: '', title: '', validator: {} })
-      );
-    
+    fromEvent(this.addSectionBtn.nativeElement, 'click').subscribe(() =>
+      this.addSurveySection({
+        type: 'input',
+        description: '',
+        title: '',
+        validator: {},
+      }),
+    );
+
     // If there are no models, add a default survey section
     if (this.models.length === 0) {
-      this.addSurveySection({ type: 'input', description: '', title: '', validator: {} });
+      this.addSurveySection({
+        type: 'input',
+        description: '',
+        title: '',
+        validator: {},
+      });
     } else {
       this.models.forEach((model) => {
         this.addSurveySection(model);
@@ -64,28 +90,37 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   updateView() {
-    this.cmpRefs.forEach(componentRef => {
+    this.cmpRefs.forEach((componentRef) => {
       this.componentContainer.insert(componentRef.hostView);
     });
   }
 
   addSurveySection(model: SurveyModel) {
-    const cmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent);
+    const cmpRef = this.componentContainer.createComponent(
+      CreateSurveyGroupComponent,
+    );
     this.setupComponent(cmpRef);
     cmpRef.setInput('model', model);
     this.cmpRefs.push(cmpRef);
   }
 
   save() {
-    const surveyModels = this.cmpRefs.map((cmpRef) => cmpRef.instance.surveyModel())
+    const surveyModels = this.cmpRefs.map((cmpRef) =>
+      cmpRef.instance.surveyModel(),
+    );
 
     if (surveyModels.length === 0) return;
 
     // Get a *reference* of the radio models and iterate over their names
-    const radioModels = surveyModels.filter((model) => model.type === 'radio') as SurveyRadioModel[];
+    const radioModels = surveyModels.filter(
+      (model) => model.type === 'radio',
+    ) as SurveyRadioModel[];
     this.generateRadioNames(radioModels);
 
-    const surveyId$ = this.httpService.post<{ surveyId: string }>(environment.endpoints.saveSurvey, surveyModels);
+    const surveyId$ = this.httpService.post<{ surveyId: string }>(
+      environment.endpoints.saveSurvey,
+      surveyModels,
+    );
 
     surveyId$.subscribe(({ data }) => {
       const cmp = createComponent(SurveySuccessfullySavedComponent, {
@@ -107,17 +142,25 @@ export class SurveyFormComponent implements AfterViewInit {
   }
 
   setupComponent(cmpRef: ComponentRef<CreateSurveyGroupComponent>) {
-    cmpRef.instance.clonedSurvey.subscribe((model) => this.insertComponentBeneath(cmpRef, model));
+    cmpRef.instance.clonedSurvey.subscribe((model) =>
+      this.insertComponentBeneath(cmpRef, model),
+    );
     cmpRef.instance.remove.subscribe(() => this.removeSurveySection(cmpRef));
   }
 
-  insertComponentBeneath(originalCmpRef: ComponentRef<CreateSurveyGroupComponent>, model: SurveyModel) {
+  insertComponentBeneath(
+    originalCmpRef: ComponentRef<CreateSurveyGroupComponent>,
+    model: SurveyModel,
+  ) {
     const originalCmpIndex = this.cmpRefs.indexOf(originalCmpRef);
 
     // Create a new component beneath the original component
-    const clonedCmpRef = this.componentContainer.createComponent(CreateSurveyGroupComponent, {
-      index: originalCmpIndex + 1
-    });
+    const clonedCmpRef = this.componentContainer.createComponent(
+      CreateSurveyGroupComponent,
+      {
+        index: originalCmpIndex + 1,
+      },
+    );
 
     this.setupComponent(clonedCmpRef);
     clonedCmpRef.setInput('model', model);
