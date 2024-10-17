@@ -12,12 +12,5 @@
     <svg-icon name="circle-plus" svgClass="size-6" />
   </button>
 
-  <button
-    type="button"
-    class="btn btn-primary"
-    [disabled]="!hasComponents"
-    (click)="save()"
-  >
-    Speichern
-  </button>
+  <button #save type="button" class="btn btn-primary">Speichern</button>
 </div>
