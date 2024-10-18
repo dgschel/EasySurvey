@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-type AccordionItem = {
+export type AccordionItem = {
   title: string;
   content: string;
 };

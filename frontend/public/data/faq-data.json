@@ -1,0 +1,22 @@
+[
+  {
+    "title": "What is the purpose of this website?",
+    "content": "The purpose of this website is to provide a platform for users to share their thoughts and ideas on various topics. Users can create posts, comment on posts, and upvote or downvote posts and comments."
+  },
+  {
+    "title": "How do I create a post?",
+    "content": "To create a post, click on the 'Create Post' button in the navigation bar. You will be prompted to enter a title, a category, and the content of your post. Once you have entered all the required information, click on the 'Submit' button to create your post."
+  },
+  {
+    "title": "How do I comment on a post?",
+    "content": "To comment on a post, click on the 'Comment' button below the post. You will be prompted to enter your comment in the text box provided. Once you have entered your comment, click on the 'Submit' button to post your comment."
+  },
+  {
+    "title": "How do I upvote or downvote a post or comment?",
+    "content": "To upvote or downvote a post or comment, click on the 'Upvote' or 'Downvote' button below the post or comment. Your vote will be recorded and the total number of upvotes and downvotes will be displayed next to the post or comment."
+  },
+  {
+    "title": "How do I report a post or comment?",
+    "content": "To report a post or comment, click on the 'Report' button below the post or comment. You will be prompted to enter a reason for reporting the post or comment. Once you have entered your reason, click on the 'Submit' button to report the post or comment."
+  }
+]
