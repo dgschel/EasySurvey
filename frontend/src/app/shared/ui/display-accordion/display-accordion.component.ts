@@ -1,5 +1,10 @@
 import { Component, input } from '@angular/core';
 
+type AccordionItem = {
+  title: string;
+  content: string;
+};
+
 @Component({
   selector: 'app-display-accordion',
   standalone: true,
@@ -8,5 +13,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './display-accordion.component.scss',
 })
 export class DisplayAccordionComponent {
-  accordions = input<{ title: string; content: string }[]>([]);
+  accordions = input<AccordionItem[]>([]);
 }
