@@ -1,7 +1,7 @@
 import { KeyValuePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { SubmissionInputs } from '../../../util/type/statistic';
-import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
+import { SubmissionInputs } from '../../../../../../util/type/statistic';
+import { BasicCardComponent } from '../../../../../../shared/ui/basic-card/basic-card.component';
 
 @Component({
   selector: 'app-table-statistic',

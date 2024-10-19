@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChartModel, ChartOption } from '../../model/chart';
-import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
+import { ChartModel, ChartOption } from '../../models/chart';
+import { BasicCardComponent } from '../../../../../../shared/ui/basic-card/basic-card.component';
 import { SurveyStatisticDiagrammComponent } from '../survey-statistic-diagramm/survey-statistic-diagramm.component';
-import { SubmissionCountResponse, SubmissionCount } from '../../../util/type/statistic';
-import { isSubmissionCount } from '../../../util/guard/statistic-type';
+import { SubmissionCountResponse, SubmissionCount } from '../../../../../../util/type/statistic';
+import { isSubmissionCount } from '../../../../../../util/guard/statistic-type';
 
 @Component({
   selector: 'app-chart-list',
