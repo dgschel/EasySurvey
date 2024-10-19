@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+// https://v17.angular.io/guide/standalone-components#lazy-loading-many-routes-at-once
 const routes: Routes = [
   {
     path: '',
