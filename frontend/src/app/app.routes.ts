@@ -26,29 +26,7 @@ export const routes: Routes = [
   },
   {
     path: 'survey',
-    children: [
-      {
-        path: ':id/statistic',
-        loadComponent: () =>
-          import('./statistic/statistic.component').then(
-            (m) => m.StatisticComponent,
-          ),
-      },
-      {
-        path: ':id/viewform',
-        loadComponent: () =>
-          import('./view-survey-form/view-survey-form.component').then(
-            (m) => m.ViewSurveyFormComponent,
-          ),
-      },
-      {
-        path: ':id/checkout',
-        loadComponent: () =>
-          import('./survey-checkout/survey-checkout.component').then(
-            (m) => m.SurveyCheckoutComponent,
-          ),
-      },
-    ],
+    loadChildren: () => import('./features/survey/survey.routes'), // https://v17.angular.io/guide/standalone-components#lazy-loading-many-routes-at-once
   },
   {
     path: 'checkout/return',
