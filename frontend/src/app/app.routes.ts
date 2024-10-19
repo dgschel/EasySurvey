@@ -16,7 +16,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'store',
+    path: 'store', // In development after first release. Currently conviently located in the root path to quickly create a survey from template
     loadComponent: () => import('./store-form/store-form.component').then((m) => m.StoreFormComponent),
   },
   {
