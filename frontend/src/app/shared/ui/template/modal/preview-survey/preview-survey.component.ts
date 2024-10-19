@@ -13,6 +13,7 @@ import { SurveyTemplateManager } from '../../../../../core/model/survey-template
   styleUrl: './preview-survey.component.scss'
 })
 export class PreviewSurveyComponent implements AfterViewInit {
+  // TODO: This component is currently used in survey store to preview only template survey
   surveyTemplateManager = inject(SurveyTemplateManager);
   @Input() surveyName: SurveyName = 'Standard';
   @ViewChild('container', { static: true, read: TemplateRef }) containerTemplate!: TemplateRef<any>;
