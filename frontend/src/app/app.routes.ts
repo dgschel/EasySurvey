@@ -7,22 +7,17 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
       },
       {
         path: ':template',
-        loadComponent: () =>
-          import('./home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
       },
     ],
   },
   {
     path: 'store',
-    loadComponent: () =>
-      import('./store-form/store-form.component').then(
-        (m) => m.StoreFormComponent,
-      ),
+    loadComponent: () => import('./store-form/store-form.component').then((m) => m.StoreFormComponent),
   },
   {
     path: 'survey',
@@ -31,9 +26,9 @@ export const routes: Routes = [
   {
     path: 'checkout/return',
     loadComponent: () =>
-      import(
-        './core/component/stripe-checkout-session/stripe-checkout-session.component'
-      ).then((m) => m.StripeCheckoutSessionComponent),
+      import('./core/component/stripe-checkout-session/stripe-checkout-session.component').then(
+        (m) => m.StripeCheckoutSessionComponent,
+      ),
   },
   { path: '**', redirectTo: 'home' },
 ];
