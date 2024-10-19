@@ -64,8 +64,8 @@ export class SurveyStatisticComponent implements OnInit, OnDestroy {
           this.subNavigationService.updateSubNavConfig({
             show: true,
             tabs: [
-              { label: 'Fragen', route: `survey/${surveyId}/viewform` },
-              { label: 'Ergebnisse', route: `survey/${surveyId}/statistic` },
+              { label: 'Fragen', route: `/survey/${surveyId}/view` },
+              { label: 'Ergebnisse', route: `/survey/${surveyId}/statistic` },
             ],
           });
         }),

@@ -61,12 +61,12 @@ export class SurveyViewComponent {
 
     this.subNavigationSubscription = surveyId$
       .pipe(
-        map((surveyId) => `survey/${surveyId}`),
+        map((surveyId) => `/survey/${surveyId}`),
         map((route) =>
           this.subNavigationService.updateSubNavConfig({
             show: true,
             tabs: [
-              { label: 'Fragen', route: `${route}/viewform` },
+              { label: 'Fragen', route: `${route}/view` },
               { label: 'Ergebnisse', route: `${route}/statistic` },
             ],
           }),
