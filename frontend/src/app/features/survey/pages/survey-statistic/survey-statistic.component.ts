@@ -30,7 +30,7 @@ import { TableStatisticComponent } from './components/table-statistic/table-stat
 import { StatisticalInfo } from './models/statistic';
 
 @Component({
-  selector: 'app-statistic',
+  selector: 'app-survey-statistic',
   standalone: true,
   imports: [
     RouterLink,
@@ -41,10 +41,10 @@ import { StatisticalInfo } from './models/statistic';
     LoadingComponent,
     DisplayErrorMessageComponent,
   ],
-  templateUrl: './statistic.component.html',
-  styleUrl: './statistic.component.scss',
+  templateUrl: './survey-statistic.component.html',
+  styleUrl: './survey-statistic.component.scss',
 })
-export class StatisticComponent implements OnInit, OnDestroy {
+export class SurveyStatisticComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private httpService = inject(HttpService);
   private subNavigationService = inject(SubNavigationService);
