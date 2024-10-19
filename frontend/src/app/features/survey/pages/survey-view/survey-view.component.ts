@@ -17,7 +17,7 @@ import {
 } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 
-import { SurveyPaidFormComponent } from '../../../../core/component/survey-paid-form/survey-paid-form.component';
+import { SurveyPaidFormComponent } from '../../components/survey-paid-form/survey-paid-form.component';
 import { HttpService } from '../../../../core/service/http.service';
 import { SubNavigationService } from '../../../../core/service/sub-navigation.service';
 import { CopyToClipboardComponent } from '../../../../shared/feature/copy-to-clipboard/copy-to-clipboard.component';
