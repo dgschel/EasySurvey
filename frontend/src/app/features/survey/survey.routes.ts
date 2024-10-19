@@ -5,13 +5,11 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
-  //   {
-  //     path: ':id/statistic',
-  //     loadComponent: () =>
-  //       import('./statistic/statistic.component').then(
-  //         (m) => m.StatisticComponent,
-  //       ),
-  //   },
+  {
+    path: ':id/statistic',
+    loadComponent: () =>
+      import('./pages/survey-statistic/survey-statistic.component').then((m) => m.SurveyStatisticComponent),
+  },
   {
     path: ':id/view',
     loadComponent: () => import('./pages/survey-view/survey-view.component').then((m) => m.SurveyViewComponent),
