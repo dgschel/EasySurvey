@@ -6,7 +6,6 @@ import { EMPTY, from, switchMap, Observable, catchError, of } from 'rxjs';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
-import { SurveyCheckoutComponent } from '../../../features/survey/pages/survey-checkout/survey-checkout.component';
 import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-message/display-error-message.component';
 import { BasicCardComponent } from "../../../shared/ui/basic-card/basic-card.component";
 import { StripeEmbeddedCheckoutFormComponent } from "../stripe-embedded-checkout-form/stripe-embedded-checkout-form.component";
@@ -15,7 +14,7 @@ import { LoadingComponent } from "../../../shared/ui/loading/loading.component";
 @Component({
   selector: 'app-stripe-checkout',
   standalone: true,
-  imports: [SurveyCheckoutComponent, AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent, BasicCardComponent, StripeEmbeddedCheckoutFormComponent, LoadingComponent],
+  imports: [AsyncPipe, DisplayErrorMessageComponent, SvgIconComponent, BasicCardComponent, StripeEmbeddedCheckoutFormComponent, LoadingComponent],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss'
 })
