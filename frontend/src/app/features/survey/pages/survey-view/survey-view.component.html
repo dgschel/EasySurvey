@@ -1,12 +1,12 @@
 @if (surveyHandler$ | async; as currentSurvey) {
   @switch (currentSurvey.status) {
-    @case ("paid") {
+    @case ('paid') {
       <div class="container max-w-screen-sm mx-auto">
         <!-- Display survey when status is paid  -->
         <app-survey-paid-form [surveyModels]="currentSurvey.models" [surveyId]="surveyId" />
       </div>
     }
-    @case ("not paid") {
+    @case ('not paid') {
       <div class="max-w-lg mx-auto mt-10 flex flex-col gap-10">
         <app-general-message>
           <ng-container header> Ihr Formular ist fast bereit! </ng-container>
@@ -18,7 +18,6 @@
             <a class="btn btn-primary" [routerLink]="['/survey', surveyId, 'checkout']"> Zur Zahlung fortfahren </a>
           </div>
         </app-general-message>
-
       </div>
     }
     @default {
