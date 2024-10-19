@@ -12,13 +12,10 @@ const routes: Routes = [
   //         (m) => m.StatisticComponent,
   //       ),
   //   },
-  //   {
-  //     path: ':id/viewform',
-  //     loadComponent: () =>
-  //       import('./view-survey-form/view-survey-form.component').then(
-  //         (m) => m.ViewSurveyFormComponent,
-  //       ),
-  //   },
+  {
+    path: ':id/view',
+    loadComponent: () => import('./pages/survey-view/survey-view.component').then((m) => m.SurveyViewComponent),
+  },
   {
     path: ':id/checkout',
     loadComponent: () =>
