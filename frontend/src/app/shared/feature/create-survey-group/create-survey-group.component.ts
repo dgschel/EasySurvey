@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, Injector, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ComponentRef, computed, createComponent, EnvironmentInjector, inject, Injector, Input, output, signal, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgComponentOutlet } from '@angular/common';
 import { CdkDrag, CdkDragHandle, CdkDragPlaceholder } from '@angular/cdk/drag-drop';
@@ -14,6 +14,8 @@ import { createFormComponent } from '../../../util/component/create';
 import { validatorFactory } from '../../../core/provider/validator';
 import { AbstractValidator } from '../../../core/model/validator';
 import { DynamicValidatorComponent } from "../../ui/validator/dynamic-validator/dynamic-validator.component";
+import { ModalService } from '../../../core/service/modal.service';
+import { SurveyPreviewComponent } from '../../../features/survey/components/survey-preview/survey-preview.component';
 
 @Component({
   selector: 'app-create-survey-group',
@@ -25,6 +27,9 @@ import { DynamicValidatorComponent } from "../../ui/validator/dynamic-validator/
   providers: [validatorFactory('input')], // Provide the default validator for the input control
 })
 export class CreateSurveyGroupComponent implements AfterViewInit {
+  private modalService = inject(ModalService);
+  private environmentInjector = inject(EnvironmentInjector);
+
   surveyBaseModel = new SurveyBase();
   surveyComponentModel = signal<SurveyModel>(this.getDefaultSurveyInputModel());
   surveyModel = computed(() => ({
@@ -109,6 +114,16 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
 
   clone() {
     this.clonedSurvey.emit(this.surveyModel());
+  }
+
+  preview() {
+    const cmp = createComponent(SurveyPreviewComponent, {
+      environmentInjector: this.environmentInjector,
+    });
+
+    cmp.setInput('models', [this.surveyModel()]);
+    const modal = this.modalService.open(cmp);
+    modal.instance.modalCloseEvent.subscribe(() => this.modalService.close());
   }
 
   updateOptions(options: string[]) {
