@@ -5,6 +5,10 @@
       "iconPath": "svg/abc.svg"
     },
     {
+      "iconName": "eye",
+      "iconPath": "svg/eye.svg"
+    },
+    {
       "iconName": "arrow-up-right",
       "iconPath": "svg/arrow-up-right.svg"
     },
