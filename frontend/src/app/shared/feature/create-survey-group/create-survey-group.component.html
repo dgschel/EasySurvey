@@ -39,14 +39,17 @@
       />
     </div>
 
-    <div class="card-actions justify-end border-t pt-2">
-      <div class="flex gap-1 items-center">
-        <div class="form-control">
-          <label class="label py-1 cursor-pointer">
-            <svg-icon name="abc" svgClass="size-6" />
-            <input type="checkbox" class="checkbox checkbox-sm ml-2" [(ngModel)]="hasDescription" />
-          </label>
-        </div>
+    <div class="card-actions justify-between border-t mx-4 pt-2">
+      <div class="form-control">
+        <label class="label py-1 cursor-pointer px-0">
+          <svg-icon name="abc" svgClass="size-6" />
+          <input type="checkbox" class="checkbox checkbox-sm ml-2" [(ngModel)]="hasDescription" />
+        </label>
+      </div>
+      <div class="flex gap-2 items-center">
+        <button type="button" class="btn btn-sm btn-ghost btn-circle">
+          <svg-icon name="eye" svgClass="size-5" />
+        </button>
         <button type="button" class="btn btn-sm btn-ghost btn-circle" (click)="clone()">
           <svg-icon name="copy" svgClass="size-5" />
         </button>
