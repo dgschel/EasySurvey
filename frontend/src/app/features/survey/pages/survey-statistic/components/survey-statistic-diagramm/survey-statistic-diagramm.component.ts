@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { ChartOption } from '../../model/chart';
+import { ChartOption } from '../../models/chart';
 
 @Component({
   selector: 'app-survey-statistic-diagramm',

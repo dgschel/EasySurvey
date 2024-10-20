@@ -2,16 +2,16 @@ import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, creat
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, EMPTY, exhaustMap, fromEvent, map, Observable, Subscription, switchMap, tap } from 'rxjs';
 
-import { SurveyModel } from '../../../util/type/survey-type';
-import { ViewSurveyGroupComponent } from "../../../shared/ui/view-survey-group/view-survey-group.component";
-import { Submission } from '../../../util/type/submission';
-import { HttpService } from '../../service/http.service';
-import { environment } from '../../../../environments/environment';
-import { ModalService } from '../../service/modal.service';
-import { SurveyResetConfirmComponent } from '../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
-import { GeneralMessageComponent } from "../../../shared/ui/general-message/general-message.component";
-import { SubmissionSuccesfullySavedComponent } from '../../../shared/ui/template/modal/submission-succesfully-saved/submission-succesfully-saved.component';
-import { SubmissionFailedComponent } from '../../../shared/ui/template/modal/submission-failed/submission-failed.component';
+import { SurveyModel } from '../../../../util/type/survey-type';
+import { ViewSurveyGroupComponent } from "../../../../shared/ui/view-survey-group/view-survey-group.component";
+import { Submission } from '../../../../util/type/submission';
+import { HttpService } from '../../../../core/service/http.service';
+import { environment } from '../../../../../environments/environment';
+import { ModalService } from '../../../../core/service/modal.service';
+import { SurveyResetConfirmComponent } from '../../../../shared/ui/template/modal/survey-reset-confirm/survey-reset-confirm.component';
+import { GeneralMessageComponent } from "../../../../shared/ui/general-message/general-message.component";
+import { SubmissionSuccesfullySavedComponent } from '../../../../shared/ui/template/modal/submission-succesfully-saved/submission-succesfully-saved.component';
+import { SubmissionFailedComponent } from '../../../../shared/ui/template/modal/submission-failed/submission-failed.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

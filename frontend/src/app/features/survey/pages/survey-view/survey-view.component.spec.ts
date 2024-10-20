@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewSurveyFormComponent } from './view-survey-form.component';
+import { SurveyViewComponent } from './survey-view.component';
 
-describe('ViewSurveyFormComponent', () => {
-  let component: ViewSurveyFormComponent;
-  let fixture: ComponentFixture<ViewSurveyFormComponent>;
+describe('SurveyViewComponent', () => {
+  let component: SurveyViewComponent;
+  let fixture: ComponentFixture<SurveyViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ViewSurveyFormComponent]
+      imports: [SurveyViewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ViewSurveyFormComponent);
+    fixture = TestBed.createComponent(SurveyViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

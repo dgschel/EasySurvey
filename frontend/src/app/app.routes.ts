@@ -7,55 +7,28 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
       },
       {
         path: ':template',
-        loadComponent: () =>
-          import('./home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent),
       },
     ],
   },
   {
-    path: 'store',
-    loadComponent: () =>
-      import('./store-form/store-form.component').then(
-        (m) => m.StoreFormComponent,
-      ),
+    path: 'store', // In development after first release. Currently conviently located in the root path to quickly create a survey from template
+    loadComponent: () => import('./store-form/store-form.component').then((m) => m.StoreFormComponent),
   },
   {
     path: 'survey',
-    children: [
-      {
-        path: ':id/statistic',
-        loadComponent: () =>
-          import('./statistic/statistic.component').then(
-            (m) => m.StatisticComponent,
-          ),
-      },
-      {
-        path: ':id/viewform',
-        loadComponent: () =>
-          import('./view-survey-form/view-survey-form.component').then(
-            (m) => m.ViewSurveyFormComponent,
-          ),
-      },
-      {
-        path: ':id/checkout',
-        loadComponent: () =>
-          import('./survey-checkout/survey-checkout.component').then(
-            (m) => m.SurveyCheckoutComponent,
-          ),
-      },
-    ],
+    loadChildren: () => import('./features/survey/survey.routes'), // https://v17.angular.io/guide/standalone-components#lazy-loading-many-routes-at-once
   },
   {
     path: 'checkout/return',
     loadComponent: () =>
-      import(
-        './core/component/stripe-checkout-session/stripe-checkout-session.component'
-      ).then((m) => m.StripeCheckoutSessionComponent),
+      import('./core/component/stripe-checkout-session/stripe-checkout-session.component').then(
+        (m) => m.StripeCheckoutSessionComponent,
+      ),
   },
   { path: '**', redirectTo: 'home' },
 ];

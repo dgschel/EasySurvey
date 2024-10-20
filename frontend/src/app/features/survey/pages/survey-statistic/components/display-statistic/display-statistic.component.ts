@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
 
-import { StatisticalInfo } from '../../model/statistic';
+import { StatisticalInfo } from '../../models/statistic';
 
 @Component({
   selector: 'app-display-statistic',

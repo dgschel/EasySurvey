@@ -27,7 +27,7 @@ export class DisplayAlreadyPaidComponent implements OnInit {
 
   ngOnInit(): void {
     // Fetch the QR-Code for the survey
-    const path = `survey/${this.surveyId}/viewform`;
+    const path = `survey/${this.surveyId}/view`;
     this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
       map(({ data }) => data.svg),
       catchError(error => {

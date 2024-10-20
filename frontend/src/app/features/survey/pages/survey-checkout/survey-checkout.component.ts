@@ -4,13 +4,13 @@ import { AsyncPipe, NgIf } from '@angular/common';
 
 import { catchError, EMPTY, filter, map, merge, Observable, shareReplay, switchMap, withLatestFrom } from 'rxjs';
 
-import { StripeCheckoutComponent } from '../core/component/stripe-checkout/stripe-checkout.component';
-import { HttpService } from '../core/service/http.service';
-import { environment } from '../../environments/environment';
-import { SurveyPaymentStatus } from '../util/type/survey-type';
-import { DisplayErrorMessageComponent } from '../shared/ui/display-error-message/display-error-message.component';
-import { DisplayAlreadyPaidComponent } from '../shared/ui/display-already-paid/display-already-paid.component';
-import { LoadingComponent } from '../shared/ui/loading/loading.component';
+import { StripeCheckoutComponent } from '../../../../core/component/stripe-checkout/stripe-checkout.component';
+import { HttpService } from '../../../../core/service/http.service';
+import { environment } from '../../../../../environments/environment';
+import { SurveyPaymentStatus } from '../../../../util/type/survey-type';
+import { DisplayErrorMessageComponent } from '../../../../shared/ui/display-error-message/display-error-message.component';
+import { DisplayAlreadyPaidComponent } from '../../../../shared/ui/display-already-paid/display-already-paid.component';
+import { LoadingComponent } from '../../../../shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-survey-checkout',
