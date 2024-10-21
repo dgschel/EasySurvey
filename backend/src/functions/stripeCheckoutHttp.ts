@@ -33,7 +33,8 @@ export async function createStripeCheckoutSessionHttp(request: HttpRequest, cont
                 metadata: {
                     surveyId: parsedPayload.data.id
                 }
-            }
+            },
+            automatic_tax: { enabled: true }, // Enable automatic tax calculation
         });
 
         return {
