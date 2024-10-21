@@ -1,6 +1,7 @@
 import { app, input, InvocationContext, Timer } from "@azure/functions";
-import { SurveyModel } from "../models/survey";
 import { SurveyCosmosDbSchema } from "../schemas/survey";
+
+const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 const surveyInput = input.cosmosDB({
     databaseName: 'SurveyDB',
@@ -26,11 +27,22 @@ export async function manageSurveyLifecycle(myTimer: Timer, context: InvocationC
         }
 
         context.log("Survey data", parsedSurveys.data);
-        
+
+        const isOlder = isDocumentExpired(parsedSurveys.data[parsedSurveys.data.length - 1]._ts);
         // Prüfe und lösche nicht bezahlte Formulare, die älter als 7 Tage sind
     } catch (error) {
         context.log("An error occurred while processing the survey data", error);
     }
+}
+
+function isDocumentExpired(ts: number): boolean {
+    // convert the timestamp to a date
+    const documentDate = new Date(ts * 1000);
+
+    // subtract from the current date to determine if the document is older than x days
+    const sevenDaysAgo = new Date(Date.now() - SEVEN_DAYS);
+
+    return documentDate < sevenDaysAgo;
 }
 
 app.timer('ManageSurveyLifecycle', {
