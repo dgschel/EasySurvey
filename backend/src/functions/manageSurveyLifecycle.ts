@@ -17,7 +17,7 @@ export async function manageSurveyLifecycle(myTimer: Timer, context: InvocationC
         const survey = context.extraInputs.get(surveyInput);
 
         // Try to parse the survey data
-        const parsedSurveys = SurveyCosmosDbSchema.pick({ status: true }).array().safeParse(survey);
+        const parsedSurveys = SurveyCosmosDbSchema.pick({ status: true, _ts: true }).array().safeParse(survey);
 
         // If the survey data is not valid, throw an error
         if (!parsedSurveys.success) {
