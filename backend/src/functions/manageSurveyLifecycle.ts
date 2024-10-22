@@ -41,6 +41,6 @@ export async function manageSurveyLifecycle(
 }
 
 app.timer("manageSurveyLifecycle", {
-  schedule: "*/20 * * * * *",
+  schedule: "0 0 2 * * *", // Run every day at 2:00 AM
   handler: manageSurveyLifecycle,
 });
