@@ -9,34 +9,22 @@ export async function manageSurveyLifecycle(
   myTimer: Timer,
   context: InvocationContext
 ): Promise<void> {
-  context.log("Timer function processed request at", new Date().toISOString());
+  context.log("Timer trigger function started");
 
-  const secondsSinceEpoch = Math.floor(Date.now() / 1000);
-  const expiredDocumentsQuery = buildExpiredDocumentsQuery(secondsSinceEpoch);
+  // Log timer information
+  if (myTimer.isPastDue) {
+    context.log("Timer is running late");
+  }
 
   try {
-    const aadCredentials: TokenCredential = new DefaultAzureCredential();
-    const endpoint = process.env.cosmosDbEndpoint;
-    const client = new CosmosClient({ aadCredentials, endpoint });
+    const expiredSurveyIds = await getExpiredSurveyIds(context);
 
-    const container = client
-      .database(process.env.COSMOS_DB_NAME)
-      .container(process.env.COSMOS_DB_CONTAINER);
-
-    context.log(
-      `Connected to the database ${process.env.COSMOS_DB_NAME} and container ${process.env.COSMOS_DB_CONTAINER}`
-    );
-
-    context.log("Querying expired documents with query", expiredDocumentsQuery);
-
-    const expiredSurveys: FeedResponse<SurveyCosmosDb> = await container.items
-      .query(expiredDocumentsQuery)
-      .fetchAll();
-
-    context.log("Expired documents", expiredSurveys.resources);
-
+    // Delete expired surveys and related submissions
+    for (const surveyId of expiredSurveyIds) {
+      await deleteSurveyAndRelatedSubmissions(surveyId, context);
+    }
   } catch (error) {
-    context.log("An error occurred while connecting to the database", error);
+    context.log("Error while querying expired documents:", error.message);
   }
 }
 
