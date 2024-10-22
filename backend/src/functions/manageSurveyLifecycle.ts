@@ -1,9 +1,9 @@
 import { app, InvocationContext, Timer } from "@azure/functions";
-import { CosmosClient, FeedResponse } from "@azure/cosmos";
-import { DefaultAzureCredential, TokenCredential } from "@azure/identity";
 
-import { buildExpiredDocumentsQuery } from "../util/query";
-import { SurveyCosmosDb } from "../models/survey";
+import {
+  deleteSurveyAndRelatedSubmissions,
+  getExpiredSurveyIds,
+} from "../util/helper";
 
 export async function manageSurveyLifecycle(
   myTimer: Timer,
