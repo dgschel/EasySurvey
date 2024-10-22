@@ -4,7 +4,6 @@ import { DefaultAzureCredential, TokenCredential } from "@azure/identity";
 
 import { buildExpiredDocumentsQuery } from "../util/query";
 import { SurveyCosmosDb } from "../models/survey";
-import { cosmosDB } from "@azure/functions/types/app";
 
 export async function manageSurveyLifecycle(
   myTimer: Timer,
