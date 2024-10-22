@@ -11,7 +11,7 @@ export const buildExpiredDocumentsQuery = (
     parameters: [
       {
         name: "@expiryDate",
-        value: Math.floor(currentUnixTimeInSeconds) - SEVEN_DAYS_IN_SECONDS, // Convert to seconds and subtract x days
+        value: currentUnixTimeInSeconds - SEVEN_DAYS_IN_SECONDS,
       },
     ],
   };
