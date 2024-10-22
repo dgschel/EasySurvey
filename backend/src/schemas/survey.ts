@@ -45,7 +45,8 @@ export const SurveyModelSchema = z.union([SurveyInputModelSchema, SurveySelectMo
 export const SurveyCosmosDbSchema = z.object({
   id: z.string().uuid(),
   status: z.union([z.literal('not paid'), z.literal('paid')]),
-  models: z.array(SurveyModelSchema)
+  models: z.array(SurveyModelSchema),
+  _ts: z.number(), // Azure Cosmos DB timestamp for a document in seconds
 });
 
 export const SurveyStatisticSummarySchema = z.record(z.string(), z.record(z.string(), z.number()));

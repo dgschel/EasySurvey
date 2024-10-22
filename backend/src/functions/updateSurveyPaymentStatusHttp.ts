@@ -37,8 +37,12 @@ export async function updateSurveyPaymentStatusHttp(request: HttpRequest, contex
             throw new Error("Survey data is invalid");
         }
 
-        // Update the survey status
-        context.extraOutputs.set(surveyOutput, { ...parsedSurvey.data, status: 'paid' });
+        // Update the survey payment status if it is not paid to prevent modification on the document
+        // We need to check that because of the mechanism to automatically delete documents after a certain time
+        if (parsedSurvey.data.status === 'not paid') {
+            context.log(`Updating survey payment status to "paid" for survey with id ${request.params.surveyId}`);
+            context.extraOutputs.set(surveyOutput, { ...parsedSurvey.data, status: 'paid' });
+        }
 
         return {
             jsonBody: {
