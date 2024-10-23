@@ -17,6 +17,7 @@ import {
   BehaviorSubject,
   combineLatest,
   startWith,
+  fromEvent,
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SvgIconComponent } from 'angular-svg-icon';
@@ -56,18 +57,24 @@ export class StripeCheckoutComponent implements OnInit {
   buttonText: string = '';
 
   ngOnInit() {
+    const button$ = fromEvent(this.consentButton.nativeElement, 'click').pipe(
+      takeUntilDestroyed(this.destroyRefService),
+      map(() => console.log('clicked')),
+    );
+
     const countdown$ = interval(1000).pipe(
       take(3), // Countdown from 3 to 1
-      map((value) => 3 - (value + 1)), // Reverse the countdown and increment by plus 1 since it start with 0
+      map((value) => 3 - (value + 1)), // Reverse the countdown and incremunt by plus 1 since it start with 0
       tap((value) => this.countdownValue$.next(value)),
       finalize(() => this.isButtonDisabled$.next(false)),
+      switchMap(() => button$), // switch to button click observable
       startWith(3), // start the first emission with initial value
     );
 
-    combineLatest([countdown$, this.isButtonDisabled$])
+    combineLatest([countdown$, this.countdownValue$, this.isButtonDisabled$])
       .pipe(
         takeUntilDestroyed(this.destroyRefService),
-        map(([countdownValue, isDisabled]) => (isDisabled ? `Zustimmung in ${countdownValue}` : 'Zustimmen')),
+        map(([_, countdownValue, isDisabled]) => (isDisabled ? `Zustimmung in ${countdownValue}` : 'Zustimmen')),
         tap((text) => (this.buttonText = text)),
       )
       .subscribe();
