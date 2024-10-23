@@ -18,6 +18,7 @@ import {
   combineLatest,
   startWith,
 } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
@@ -42,11 +43,17 @@ import { LoadingComponent } from '../../../shared/ui/loading/loading.component';
 })
 export class StripeCheckoutComponent implements OnInit {
   @Input('surveyId') surveyId: string = '';
+  @ViewChild('consentButton', { static: true }) consentButton!: ElementRef<HTMLButtonElement>;
 
   private stripeService = inject(StripeCheckoutService);
+  private destroyRefService = inject(DestroyRef);
 
   checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
+
+  countdownValue$ = new BehaviorSubject<number>(3);
+  isButtonDisabled$ = new BehaviorSubject<boolean>(true);
+  buttonText: string = '';
 
   ngOnInit() {
     // Fetch client secret for Stripe Checkout
