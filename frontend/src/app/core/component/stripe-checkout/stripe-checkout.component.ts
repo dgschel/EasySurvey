@@ -1,8 +1,23 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
-import { EMPTY, from, switchMap, Observable, catchError, of } from 'rxjs';
+import {
+  EMPTY,
+  from,
+  switchMap,
+  Observable,
+  catchError,
+  of,
+  map,
+  tap,
+  interval,
+  take,
+  finalize,
+  BehaviorSubject,
+  combineLatest,
+  startWith,
+} from 'rxjs';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 import { StripeCheckoutService } from '../../service/stripe-checkout.service';
