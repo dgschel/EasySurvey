@@ -11,10 +11,10 @@
         <div class="w-60 mx-auto">
           <app-display-qr-code [qrCode]="svg" />
         </div>
+      } @else if (errorMessage) {
+        <div class="text-error text-center">{{ errorMessage }}</div>
       } @else {
-        <div class="relative h-10">
-          <app-loading />
-        </div>
+        <div class="skeleton mx-auto aspect-square w-9/12"></div>
       }
 
       <div>
