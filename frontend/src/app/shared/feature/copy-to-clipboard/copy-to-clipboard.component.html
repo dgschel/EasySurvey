@@ -1,5 +1,5 @@
 <div class="join w-full">
-  <input type="text" class="input input-sm text-sm font-medium w-full disabled:text-neutral join-item" disabled [value]="textToCopy" />
+  <input type="text" class="input input-sm text-sm font-medium w-full truncate disabled:text-neutral join-item" disabled [value]="textToCopy" />
   <button type="button" class="btn btn-sm tooltip join-item" [attr.data-tip]="tooltipText()"
     (click)="copyToClipboard()">
     <svg-icon name="clipboard" svgClass="size-4"></svg-icon>
