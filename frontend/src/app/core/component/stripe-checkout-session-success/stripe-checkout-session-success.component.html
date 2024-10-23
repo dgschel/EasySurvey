@@ -5,7 +5,10 @@
 
   <!-- Display success headline message -->
   <span class="text-sm text-gray-500">Bezahlung erfolgreich abgeschlossen!</span>
-  <h2 class="text-xl font-medium">Herzlichen Glückwunsch.<br class="sm:hidden" /> Sie haben es geschafft!</h2>
+  <h2 class="text-xl font-medium">
+    Herzlichen Glückwunsch.<br class="sm:hidden" />
+    Sie haben es geschafft!
+  </h2>
 
   <!-- Display surveyid  -->
   <div class="text-xs mt-2">
@@ -15,27 +18,35 @@
 
   <div class="mt-10 w-full max-w-sm mx-auto">
     <app-basic-card>
-      <div class="card-body text-center">
-        @if (qrCodeResponse$ | async; as svg) {
+      <div class="card-body text-center gap-4">
         <div class="text-lg font-medium">QR-Code scannen</div>
-        <p class="max-w-40 mx-auto">Scannen oder teilen Sie den folgenden QR-Code </p>
+        <p class="max-w-40 mx-auto">Scannen oder teilen Sie den folgenden QR-Code</p>
 
-        <!-- Display QR-Code  -->
-        <div class="w-60 mx-auto">
-          <app-display-qr-code [qrCode]="svg" />
+        @if (qrCodeResponse$ | async; as svg) {
+          <div class="w-60 mx-auto">
+            <app-display-qr-code [qrCode]="svg" />
+          </div>
+        } @else if (errorMessage) {
+          <div class="text-error text-center">{{ errorMessage }}</div>
+        } @else {
+          <div class="skeleton mx-auto aspect-square w-9/12"></div>
+        }
+
+        <div>
+          <h3 class="text-sm font-medium text-left ml-3 mb-1">Link zum Formular</h3>
+          <app-copy-to-clipboard [textToCopy]="urlToSurvey" />
         </div>
 
-        <div class="divider mt-0">oder</div>
+        <div class="divider">oder</div>
 
         <!-- Continue to view survey -->
-        <button type="button" class="btn btn-success w-full mx-auto"
-          [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'view']">
+        <button
+          type="button"
+          class="btn btn-success w-full mx-auto"
+          [routerLink]="['/survey', stripeCheckoutSession.surveyId, 'view']"
+        >
           Weiter zum Formular
         </button>
-
-        } @else {
-        <div class="skeleton h-40 w-40 mx-auto"></div>
-        }
       </div>
     </app-basic-card>
   </div>

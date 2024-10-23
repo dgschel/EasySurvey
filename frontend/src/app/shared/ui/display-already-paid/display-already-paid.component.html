@@ -1,4 +1,3 @@
-@if (qrCodeResponse$ | async; as svg) {
 <div class="max-w-sm mx-auto">
   <app-basic-card>
     <div class="card-body grid gap-4">
@@ -8,27 +7,26 @@
         Formular anzuzeigen oder weiterzugeben
       </p>
 
-      <div class="w-60 mx-auto">
-        <app-display-qr-code [qrCode]="svg" />
+      @if (qrCodeResponse$ | async; as svg) {
+        <div class="w-60 mx-auto">
+          <app-display-qr-code [qrCode]="svg" />
+        </div>
+      } @else if (errorMessage) {
+        <div class="text-error text-center">{{ errorMessage }}</div>
+      } @else {
+        <div class="skeleton mx-auto aspect-square w-9/12"></div>
+      }
+
+      <div>
+        <h3 class="text-sm font-medium text-left ml-3 mb-1">Link zum Formular</h3>
+        <app-copy-to-clipboard [textToCopy]="urlToSurvey" />
       </div>
 
-      <div class="divider mt-0">oder</div>
+      <div class="divider">oder</div>
 
       <button type="button" class="btn btn-success" [routerLink]="['/survey', surveyId, 'view']">
         Weiter zum Formular
       </button>
     </div>
-
   </app-basic-card>
 </div>
-} @else if (errorMessage) {
-<div class="max-w-md mx-auto gap">
-  <app-display-error-message *ngIf="errorMessage" [errorMessage]="errorMessage" />
-  <button type="button" class="btn btn-primary w-full mt-10" routerLink="/home">
-    Zurück zur Startseite
-  </button>
-</div>
-}
-@else {
-<app-loading />
-}
