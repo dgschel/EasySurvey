@@ -13,11 +13,12 @@ import { environment } from '../../../../environments/environment';
 import { ConfettiService } from '../../service/confetti.service';
 import { SurveyUpdatePaymentStatusFailedComponent } from '../../../shared/ui/template/modal/survey-update-payment-status-failed/survey-update-payment-status-failed.component';
 import { ModalService } from '../../service/modal.service';
+import { CopyToClipboardComponent } from "../../../shared/feature/copy-to-clipboard/copy-to-clipboard.component";
 
 @Component({
   selector: 'app-stripe-checkout-session-success',
   standalone: true,
-  imports: [BasicCardComponent, DisplayQrCodeComponent, SvgIconComponent, AsyncPipe, RouterLink],
+  imports: [BasicCardComponent, DisplayQrCodeComponent, SvgIconComponent, AsyncPipe, RouterLink, CopyToClipboardComponent],
   templateUrl: './stripe-checkout-session-success.component.html',
   styleUrl: './stripe-checkout-session-success.component.scss'
 })
@@ -31,13 +32,17 @@ export class StripeCheckoutSessionSuccessComponent implements OnInit {
   private environmentInjector = inject(EnvironmentInjector);
 
   qrCodeResponse$: Observable<string> = EMPTY;
+  urlToSurvey: string = '';
+  errorMessage: string = '';
 
   ngOnInit(): void {
     // Fetch the QR-Code for the survey
     const path = `/survey/${this.stripeCheckoutSession.surveyId}/view`;
+    this.urlToSurvey = `${location.origin}/${path}`;
     this.qrCodeResponse$ = this.httpService.post<{ svg: string }>(environment.endpoints.createQRCode, { path }).pipe(
       map(({ data }) => data.svg),
       catchError(error => {
+        this.errorMessage = "Es ist ein fehler beim Abrufen des QR-Codes für das Formular aufgetreten. Bitte versuchen Sie es später erneut";
         console.error("Error fetching QR-Code for survey:", error);
         return EMPTY;
       })
