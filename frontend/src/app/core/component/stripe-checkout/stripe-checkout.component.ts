@@ -56,6 +56,22 @@ export class StripeCheckoutComponent implements OnInit {
   buttonText: string = '';
 
   ngOnInit() {
+    const countdown$ = interval(1000).pipe(
+      take(3), // Countdown from 3 to 1
+      map((value) => 3 - (value + 1)), // Reverse the countdown and increment by plus 1 since it start with 0
+      tap((value) => this.countdownValue$.next(value)),
+      finalize(() => this.isButtonDisabled$.next(false)),
+      startWith(3), // start the first emission with initial value
+    );
+
+    combineLatest([countdown$, this.isButtonDisabled$])
+      .pipe(
+        takeUntilDestroyed(this.destroyRefService),
+        map(([countdownValue, isDisabled]) => (isDisabled ? `Zustimmung in ${countdownValue}` : 'Zustimmen')),
+        tap((text) => (this.buttonText = text)),
+      )
+      .subscribe();
+
     // Fetch client secret for Stripe Checkout
     const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
       catchError((error) => {
