@@ -11,6 +11,10 @@
         <div class="w-60 mx-auto">
           <app-display-qr-code [qrCode]="svg" />
         </div>
+      } @else {
+        <div class="my-8">
+          <app-loading />
+        </div>
       }
 
       <div class="divider mt-0">oder</div>
