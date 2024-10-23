@@ -19,14 +19,16 @@
         <h2 class="text-lg font-medium mb-2">Zustimmungserklärung</h2>
 
         <p>
-          Ich willige ein, dass durch das Klicken auf den „Speichern“-Button das Zahlungsformular von Stripe geladen
+          Ich willige ein, dass durch das Klicken auf den „Zustimmen“-Button das Zahlungsformular von Stripe geladen
           wird. Dabei werden bestimmte Daten, einschließlich personenbezogener Daten, an Stripe gesendet, um den
           Zahlungsprozess bereitzustellen und zu verarbeiten. Weitere Informationen zur Datenverarbeitung durch Stripe
           finden Sie in den Datenschutzrichtlinien von Stripe
         </p>
 
         <div class="card-actions justify-end">
-          <button type="button" class="btn btn-primary mt-2">Speichern</button>
+          <button type="button" class="btn btn-primary mt-2" [disabled]="isButtonDisabled$ | async" #consentButton>
+            {{ buttonText }}
+          </button>
         </div>
       </div>
     </app-basic-card>
