@@ -101,6 +101,7 @@ export class StripeCheckoutComponent implements OnInit {
 
     // Subscribe to the initialized Stripe Checkout observable
     this.checkout$ = initializedStripeCheckout$.pipe(
+      takeUntilDestroyed(this.destroyRefService),
       switchMap((checkout) => {
         if (!checkout) {
           this.errorMessage =
