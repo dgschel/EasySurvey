@@ -1,42 +1,50 @@
 [
   {
     "title": "Was ist EasySurvey?",
-    "content": "EasySurvey ermöglicht es Ihnen, anonyme benutzerdefinierte Formulare zu erstellen und diese anonym mit Ihrem Publikum zu teilen. Wir legen großen Wert auf Datenschutz und erfüllen die DSGVO zu 100%"
+    "content": "EasySurvey ist eine Plattform, die es Ihnen ermöglicht, anonyme benutzerdefinierte Formulare zu erstellen. Mit EasySurvey können Sie schnell und einfach Formulare erstellen, aktivieren und mit Ihrem Publikum teilen"
   },
   {
-    "title": "Wie funktioniert die Zahlung für die Formulare?",
-    "content": "Um ein Formular zu aktivieren, müssen Sie eine einmalige Zahlung über unseren Partner Stripe tätigen. Nach der Zahlung wird Ihr Formular sofort freigeschaltet"
+    "title": "Wie erstelle ich ein Formular?",
+    "content": "Um ein neues Formular zu erstellen, klicken Sie auf den Button 'Jetzt Formular erstellen'. Anschließend können Sie die gewünschten Formularelemente hinzufügen und konfigurieren"
   },
   {
-    "title": "Wie kann ich mein aktives Formular teilen?",
-    "content": "Sobald Ihr Formular aktiviert ist, können Sie es einfach über einen generierten QR-Code oder einen Link mit Ihrem Publikum teilen"
-  },
-  {
-    "title": "Was passiert mit meinem Formular nach 7 Tagen?",
-    "content": "<Placeholder>. Aktivierte Formulare werden automatisch nach 7 Tagen gelöscht und archiviert. Sie können das Formular danach nicht mehr verwenden"
-  },
-  {
-    "title": "Werden personenbezogene Daten gespeichert?",
-    "content": "Nein, EasySurvey speichert keine personenbezogenen Daten. Alle Formulare und die damit verbundenen Daten sind anonym und entsprechen den Anforderungen der DSGVO"
+    "title": "Wie funktioniert die Aktivierung eines Formulars?",
+    "content": "Um ein Formular zu aktivieren, müssen Sie eine einmalige Zahlung über unseren Partner Stripe tätigen. Nach erfolgreicher Zahlung wird Ihr Formular aktiviert und kann mit Ihrem Publikum geteilt werden"
   },
   {
     "title": "Wie kann ich mein Formular vor der Aktivierung testen?",
-    "content": "<Placeholder>"
+    "content": "Während der Erstellung eines Formulars können Sie jedes einzelne Formularelement in Echtzeit überprüfen. Durch einen Klick auf ein entsprechendes Icon wird das Element direkt als Vorschau angezeigt. Dabei sehen Sie den eingegebenen Titel, die Beschreibung, das ausgewählte Formularelement sowie die festgelegten Validierungen. Auf diese Weise haben Sie jederzeit die Möglichkeit, Ihr Formular im Live-Betrieb zu überprüfen, bevor Sie es veröffentlichen"
+  },
+  {
+    "title": "Wie kann ich mein aktives Formular teilen?",
+    "content": "Sobald Ihr Formular aktiviert ist, erhalten Sie einen QR-Code und einen Link, die Sie mit Ihrem Publikum teilen können. Ihr Publikum kann das Formular über den QR-Code oder den Link aufrufen und ausfüllen"
   },
   {
     "title": "Kann ich ein Formular deaktivieren?",
-    "content": "Nein, ein Formular kann nicht deaktiviert werden. Jedes Formular wird nach 7 Tagen automatisch gelöscht und archiviert. Sie können jedoch ein neues Formular erstellen und aktivieren"
+    "content": "Nein, ein Formular kann nach der Aktivierung nicht mehr deaktiviert werden"
   },
   {
     "title": "Was passiert, wenn ich ein Formular nicht aktivieren möchte?",
-    "content": "Wenn Sie sich entscheiden, ein Formular nicht zu aktivieren, werden keine Gebühren erhoben. Das Formular kann jedoch nicht verwendet werden"
+    "content": "Wenn Sie sich entscheiden, ein Formular nicht zu aktivieren, wird es nach 7 Tagen automatisch gelöscht"
   },
   {
     "title": "Kann ich ein Formular nach der Aktivierung bearbeiten?",
-    "content": "Nein, nach der Aktivierung eines Formulars können Sie es nicht mehr bearbeiten. Sie können jedoch ein neues Formular erstellen und aktivieren"
+    "content": "Nein, nach der Aktivierung eines Formulars können Sie es nicht mehr bearbeiten. Sie können jedoch ein neues Formular erstellen und es erneut aktivieren"
   },
   {
     "title": "Wo sehe ich die Ergebnisse meines Formulars?",
     "content": "Die Ergebnisse Ihres Formulars werden auf der Ergebnisseite angezeigt. Sie können die Ergebnisse als SVG-, PNG- oder als CSV-Datei herunterladen"
+  },
+  {
+    "title": "Was passiert mit meinem Formular nach 7 Tagen?",
+    "content": "Wenn Sie ein Formular erstellen, bleibt es bis zu 7 Tage gespeichert und erhält den Status 'nicht bezahlt'. Während dieser Zeit können Sie entscheiden, ob Sie es aktivieren möchten. Sollten Sie sich z.B. am 4. Tag dazu entschließen, die einmalige Zahlung zu leisten, wird das Ablaufdatum zurückgesetzt, und der 7-Tage-Zeitraum beginnt erneut. Wenn das Ablaufdatum erreicht ist, wird das Formular automatisch gelöscht"
+  },
+  {
+    "title": "Kann ich ein gelöschtes Formular wiederherstellen?",
+    "content": "Nein, ein gelöschtes Formular kann nicht wiederhergestellt werden. Sie können jedoch ein neues Formular erstellen und es erneut aktivieren"
+  },
+  {
+    "title": "Werden personenbezogene Daten gespeichert?",
+    "content": "Nein, EasySurvey speichert keine personenbezogenen Daten. Alle Formulare und die damit verbundenen Daten sind anonym und entsprechen den Anforderungen der DSGVO"
   }
 ]
