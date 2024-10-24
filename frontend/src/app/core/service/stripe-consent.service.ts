@@ -7,8 +7,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class StripeConsentService {
   private stripeConsent = new BehaviorSubject<boolean>(false);
 
-  getStripeConsent = (): Observable<boolean> => this.stripeConsent.asObservable();
-  setStripeConsent = (consent: boolean) => this.stripeConsent.next(consent);
+  observeStripeConsent = (): Observable<boolean> => this.stripeConsent.asObservable();
+  setStripeConsent = (consent: boolean) => {
+    this.stripeConsent.next(consent);
+    this.setStripeConsentToLocalStorage(consent);
+  };
 
   // ----- There can be a dedicated localStorage service  -----
 
