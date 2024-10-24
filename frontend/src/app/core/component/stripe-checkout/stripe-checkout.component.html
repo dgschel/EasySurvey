@@ -13,13 +13,16 @@
 
   <div class="divider my-1"></div>
 
+  <!-- Display stripe consent when not available or false -->
+  @if (!(stripeConsent$ | async); as stripeConsent) {
+    <app-stripe-consent />
+  }
+
+  <!-- Display stripe checkout form when stripe consent is available -->
   @if (checkout$ | async; as stripeEmbeddedCheckout) {
-    success
-    <!-- <app-stripe-embedded-checkout-form [stripeEmbeddedCheckout]="stripeEmbeddedCheckout" /> -->
+    <app-stripe-embedded-checkout-form [stripeEmbeddedCheckout]="stripeEmbeddedCheckout" />
   } @else if (errorMessage) {
     <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
-  } @else {
-    <!-- <app-stripe-consent /> -->
   }
 
   <!-- Start the stripe checkout session by using async pipe -->
