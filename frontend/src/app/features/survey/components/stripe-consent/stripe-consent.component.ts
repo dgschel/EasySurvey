@@ -39,7 +39,7 @@ export class StripeConsentComponent implements OnInit {
   ngOnInit(): void {
     const button$ = fromEvent(this.consentButton.nativeElement, 'click').pipe(
       takeUntilDestroyed(this.destroyRefService),
-      map(() => localStorage.setItem('stripeConsent', 'true')),
+      map(() => this.stripeConsentService.setStripeConsent(true)),
     );
 
     const countdown$ = interval(1000).pipe(
