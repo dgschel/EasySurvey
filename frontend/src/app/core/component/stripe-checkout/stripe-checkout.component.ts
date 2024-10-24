@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, Input } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
@@ -29,7 +29,7 @@ import { StripeConsentService } from '../../service/stripe-consent.service';
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss',
 })
-export class StripeCheckoutComponent implements OnInit {
+export class StripeCheckoutComponent implements AfterViewInit {
   @Input('surveyId') surveyId: string = '';
 
   private stripeService = inject(StripeCheckoutService);
@@ -41,7 +41,7 @@ export class StripeCheckoutComponent implements OnInit {
   checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // Check if the user has given consent to use Stripe
     const stripeConsent$ = this.stripeConsentService
       .observeStripeConsent()
