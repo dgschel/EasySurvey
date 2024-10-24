@@ -43,7 +43,7 @@
       <div class="form-control">
         <label class="label py-1 cursor-pointer px-0">
           <svg-icon name="abc" svgClass="size-6" />
-          <input type="checkbox" class="checkbox checkbox-sm ml-2" [(ngModel)]="hasDescription" />
+          <input type="checkbox" class="checkbox checkbox-sm ml-2" [ngModel]="hasDescription" (ngModelChange)="resetDescriptionState($event)" />
         </label>
       </div>
       <div class="flex gap-2 items-center">

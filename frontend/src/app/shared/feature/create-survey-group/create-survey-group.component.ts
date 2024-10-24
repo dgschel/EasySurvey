@@ -78,6 +78,13 @@ export class CreateSurveyGroupComponent implements AfterViewInit {
     }
   }
 
+  resetDescriptionState(checked: boolean) {
+    this.hasDescription = checked;
+
+    // Reset the description when the checkbox is unchecked
+    if (!checked) this.surveyBaseModel.description.set('');
+  }
+
   private createFormInputComponent() {
     const surveyInput = this.getDefaultSurveyInputModel();
     this.surveyComponentModel.set(surveyInput);
