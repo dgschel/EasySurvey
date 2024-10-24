@@ -24,14 +24,4 @@
   } @else if (errorMessage) {
     <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
   }
-
-  <!-- Start the stripe checkout session by using async pipe -->
-  <!-- @if (checkout$ | async; as stripeEmbeddedCheckout) {
-  <app-stripe-embedded-checkout-form [stripeEmbeddedCheckout]="stripeEmbeddedCheckout" />
-  } @else if (errorMessage) {
-  <app-display-error-message [errorMessage]="errorMessage"></app-display-error-message>
-  }
-  @else {
-  <app-loading />
-  } -->
 </div>
