@@ -13,6 +13,11 @@ export class StripeConsentService {
     this.setStripeConsentToLocalStorage(consent);
   };
 
+  constructor() {
+    const stripeConsent = this.getStripeConsentFromLocalStorage();
+    this.stripeConsent.next(Boolean(stripeConsent));
+  }
+
   // ----- There can be a dedicated localStorage service  -----
 
   // For simplicity, we retrieve the consent from local storage
