@@ -43,9 +43,9 @@ export class StripeCheckoutComponent implements OnInit {
 
   ngOnInit() {
     // Check if the user has given consent to use Stripe
-    const stripeConsent$ = from(this.stripeConsentService.observeStripeConsent()).pipe(
-      tap((consent) => this.stripeConsent$.next(consent)),
-    );
+    const stripeConsent$ = this.stripeConsentService
+      .observeStripeConsent()
+      .pipe(tap((consent) => this.stripeConsent$.next(consent)));
 
     // Fetch client secret for Stripe Checkout when consent is approved
     const fetchClientSecretObservable$ = stripeConsent$.pipe(
