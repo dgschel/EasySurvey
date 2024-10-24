@@ -1,24 +1,8 @@
-import { Component, DestroyRef, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
-import {
-  EMPTY,
-  from,
-  switchMap,
-  Observable,
-  catchError,
-  of,
-  map,
-  tap,
-  interval,
-  take,
-  finalize,
-  BehaviorSubject,
-  combineLatest,
-  startWith,
-  fromEvent,
-} from 'rxjs';
+import { EMPTY, from, switchMap, Observable, catchError, of, map, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SvgIconComponent } from 'angular-svg-icon';
 
@@ -27,6 +11,8 @@ import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-m
 import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
 import { StripeEmbeddedCheckoutFormComponent } from '../stripe-embedded-checkout-form/stripe-embedded-checkout-form.component';
 import { LoadingComponent } from '../../../shared/ui/loading/loading.component';
+import { StripeConsentComponent } from "../../../features/survey/components/stripe-consent/stripe-consent.component";
+import { StripeConsentService } from '../../service/stripe-consent.service';
 
 @Component({
   selector: 'app-stripe-checkout',
@@ -38,46 +24,28 @@ import { LoadingComponent } from '../../../shared/ui/loading/loading.component';
     BasicCardComponent,
     StripeEmbeddedCheckoutFormComponent,
     LoadingComponent,
-  ],
+    StripeConsentComponent
+],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss',
 })
 export class StripeCheckoutComponent implements OnInit {
   @Input('surveyId') surveyId: string = '';
-  @ViewChild('consentButton', { static: true }) consentButton!: ElementRef<HTMLButtonElement>;
 
   private stripeService = inject(StripeCheckoutService);
   private destroyRefService = inject(DestroyRef);
+  
+  stripeConsentService = inject(StripeConsentService);
 
   checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
 
-  countdownValue$ = new BehaviorSubject<number>(3);
-  isButtonDisabled$ = new BehaviorSubject<boolean>(true);
-  buttonText: string = '';
-
   ngOnInit() {
-    const button$ = fromEvent(this.consentButton.nativeElement, 'click').pipe(
-      takeUntilDestroyed(this.destroyRefService),
-      map(() => console.log('clicked')),
-    );
 
-    const countdown$ = interval(1000).pipe(
-      take(3), // Countdown from 3 to 1
-      map((value) => 3 - (value + 1)), // Reverse the countdown and incremunt by plus 1 since it start with 0
-      tap((value) => this.countdownValue$.next(value)),
-      finalize(() => this.isButtonDisabled$.next(false)),
-      switchMap(() => button$), // switch to button click observable
-      startWith(3), // start the first emission with initial value
-    );
-
-    combineLatest([countdown$, this.countdownValue$, this.isButtonDisabled$])
-      .pipe(
-        takeUntilDestroyed(this.destroyRefService),
-        map(([_, countdownValue, isDisabled]) => (isDisabled ? `Zustimmung in ${countdownValue}` : 'Zustimmen')),
-        tap((text) => (this.buttonText = text)),
-      )
-      .subscribe();
+    // Check if the user has given consent to use Stripe
+    this.stripeConsentService.observeStripeConsent().subscribe((consent) => {
+      console.log('Stripe consent:', consent);
+    })
 
     // Fetch client secret for Stripe Checkout
     const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
