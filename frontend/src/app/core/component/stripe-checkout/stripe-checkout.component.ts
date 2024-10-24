@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { StripeEmbeddedCheckout } from '@stripe/stripe-js';
-import { EMPTY, from, switchMap, Observable, catchError, of, map, tap } from 'rxjs';
+import { EMPTY, from, switchMap, Observable, catchError, of, map, tap, filter, startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SvgIconComponent } from 'angular-svg-icon';
 
@@ -11,8 +11,13 @@ import { DisplayErrorMessageComponent } from '../../../shared/ui/display-error-m
 import { BasicCardComponent } from '../../../shared/ui/basic-card/basic-card.component';
 import { StripeEmbeddedCheckoutFormComponent } from '../stripe-embedded-checkout-form/stripe-embedded-checkout-form.component';
 import { LoadingComponent } from '../../../shared/ui/loading/loading.component';
-import { StripeConsentComponent } from "../../../features/survey/components/stripe-consent/stripe-consent.component";
+import { StripeConsentComponent } from '../../../features/survey/components/stripe-consent/stripe-consent.component';
 import { StripeConsentService } from '../../service/stripe-consent.service';
+
+interface StripeCheckout {
+  consent: boolean;
+  checkout: StripeEmbeddedCheckout;
+}
 
 @Component({
   selector: 'app-stripe-checkout',
@@ -24,8 +29,8 @@ import { StripeConsentService } from '../../service/stripe-consent.service';
     BasicCardComponent,
     StripeEmbeddedCheckoutFormComponent,
     LoadingComponent,
-    StripeConsentComponent
-],
+    StripeConsentComponent,
+  ],
   templateUrl: './stripe-checkout.component.html',
   styleUrl: './stripe-checkout.component.scss',
 })
@@ -34,26 +39,29 @@ export class StripeCheckoutComponent implements OnInit {
 
   private stripeService = inject(StripeCheckoutService);
   private destroyRefService = inject(DestroyRef);
-  
+
   stripeConsentService = inject(StripeConsentService);
 
   checkout$: Observable<StripeEmbeddedCheckout> = EMPTY;
   errorMessage: string = '';
 
   ngOnInit() {
-
     // Check if the user has given consent to use Stripe
-    this.stripeConsentService.observeStripeConsent().subscribe((consent) => {
-      console.log('Stripe consent:', consent);
-    })
+    const stripeConsent$ = from(this.stripeConsentService.observeStripeConsent()).pipe(startWith(false));
+
+    const stripeConsentApproval$ = stripeConsent$.pipe(filter((consent) => consent === true));
 
     // Fetch client secret for Stripe Checkout
-    const fetchClientSecretObservable$ = this.stripeService.fetchClientSecret(this.surveyId).pipe(
-      catchError((error) => {
-        this.errorMessage = 'Fehler! Beim Abrufen des Client-Secrets ist ein Fehler aufgetreten';
-        console.error('Error fetching client secret:', error);
-        return EMPTY; // Stop further processing if client secret cannot be fetched
-      }),
+    const fetchClientSecretObservable$ = stripeConsentApproval$.pipe(
+      switchMap(() =>
+        this.stripeService.fetchClientSecret(this.surveyId).pipe(
+          catchError((error) => {
+            this.errorMessage = 'Fehler! Beim Abrufen des Client-Secrets ist ein Fehler aufgetreten';
+            console.error('Error fetching client secret:', error);
+            return EMPTY; // Stop further processing if client secret cannot be fetched
+          }),
+        ),
+      ),
     );
 
     // Initialize Stripe Checkout
